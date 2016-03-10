@@ -1,13 +1,34 @@
 {%extends "base.html"%}
 {% block titulo %}Registro{% endblock %}
 {% block contenido %}
-	{%if errorContrasena%}
+	{%if errorUser or errorNumeroDocumento or errorTipoDocumento or errorContrasena or errorCorreoElectronico or errorFechaNacimiento or errorGenero or errorTelefonos %}
 	<div class="container">
 		<h3>Corrige los siguientes errores para continuar:</h3>
 		<p class="text-error">
+			{% if errorUser %}
+				El nombre de usuario ya está en uso o tiene caracteres incorrectos, puedes utilizar letras,números y guión bajo '_'.<br>
+			{% endif %}
+			{% if errorNumeroDocumento %}
+				El número de documento que seleccionaste ya está en uso o no es un número.<br>
+			{% endif %}
+			{% if errorTipoDocumento %}
+				No seleccionaste un tipo de documento correcto.<br>
+			{% endif %}
 			{% if errorContrasena %}
 				Las contraseñas no coinciden, verifica por favor.<br>
 			{% endif %}
+			{% if errorCorreoElectronico %}
+				El correo ya está en uso, intenta otro.<br>
+			{% endif %}
+			{% if errorFechaNacimiento %}
+				La fecha no es correcta, si tu navegador no muestra un campo de fecha intenta con el formato aaaa-mm-dd.<br>
+			{% endif %}
+			{% if errorGenero %}
+				No seleccionaste un género correcto.<br>
+			{% endif %}
+			{% if errorTelefonos %}
+				Los telefonos deben ser solo números y no exceder los 12 caracteres, por favor revisa los campos de teléfono fijo, celular y de contacto.<br>
+			{% endif %}		
 		</p>
 	</div>
 	{% endif %}
@@ -52,7 +73,7 @@
 				    </tr>
 				    <tr>
 				        <td><label>Correo Electronico:</label></td>
-				        <td><input type="email" name="email" required="true" value="{{correoElectronico}}"/>*</td>
+				        <td><input type="email" name="correoElectronico" required="true" value="{{correoElectronico}}"/>*</td>
 				    </tr>
 				    <tr>
 				        <td><label>Nombres:</label></td>
@@ -85,16 +106,20 @@
 				        <td><input type="text" name="barrio" required="true" value="{{barrio}}"/>*</td>
 				    </tr>
 				    <tr>
+				        <td><label>Zona:</label></td>
+				        <td><input type="text" name="zona" required="true" value="{{zona}}"/>*</td>
+				    </tr>
+				    <tr>
 				        <td><label>Comuna:</label></td>
 				        <td><input type="text" name="comuna" required="true" value="{{comuna}}"/>*</td>
 				    </tr>
 				    <tr>
-				        <td><label>Dirección:</label></td>
-				        <td><input type="text" name="direccion" required="true" value="{{direccion}}"/>*</td>
+				        <td><label>Telefono Fijo:</label></td>
+				        <td><input type="text" name="telefonos" required="true" pattern="[0-9]{7,12}" value="{{telefonoFijo}}"/>*</td>
 				    </tr>
 				    <tr>
-				        <td><label>Telefonos:</label></td>
-				        <td><input type="text" name="telefonos" required="true" pattern="[0-9]{7,12}" value="{{telefonos}}"/>*</td>
+				        <td><label>Telefonos Celular:</label></td>
+				        <td><input type="text" name="telefonos" required="true" pattern="[0-9]{7,12}" value="{{telefonoCelular}}"/>*</td>
 				    </tr>
 				    <tr>
 				        <td><label>Grupo etnico:</label></td>

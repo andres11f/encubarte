@@ -41,28 +41,34 @@ def registroControl(request):
 			barrio = request.POST['barrio']
 			zona = request.POST['zona']
 			comuna = request.POST['comuna']
-			telefonos = request.POST['telefonos']
+			telefonoFijo = request.POST['telefonoFijo']
+			telefonoCelular = request.POST['telefonoCelular']
 			grupoEtnico = request.POST['grupoEtnico']
 			condicion = request.POST['condicion']
 			seguridadSocial = request.POST['seguridadSocial']
 
 			#Validaciones
-			errorContrasena= (request.POST["contrasena"]!=request.POST["contrasena2"])
+			errorUser = (User.objects.filter(username=numeroDocumento) or  not re.match("^([0-9]{8,20})$",numeroDocumento))
+			errorNumeroDocumento = ((ClienteAlquiler.objects.filter(numDocumento=numeroDocumento)) or not re.match("^([a-zA-z0-9_-]{6,20})$",numeroDocumento))
+			errorTipoDocumento = (tipoDocumento  not in (parametros["tipoDocumentos"]))
+			errorContrasena = (request.POST["contrasena"]!=request.POST["contrasena2"])
+			errorCorreoElectronico = (User.objects.filter(email=correoElectronico) or not re.match(r"^[A-Za-z0-9\._-]+@[A-Za-z0-9]+\.[a-zA-Z]+$", correoElectronico))
+			errorFechaNacimiento = not fechaCorrecta(fechaNacimiento)
+			errorGenero = (genero not in (parametros["generos"]))
+			errorTelefonos = (not re.match("^([0-9]{7,12})$",telefonoFijo) or not re.match("^([0-9]{10,12})$",telefonoCelular))
 
 			if (errorContrasena):
 				return render_to_response('registro.html', locals(), context_instance = RequestContext(request))
 
 			#Guardar usuario
-			usuario = User.objects.create_user(username=numeroDocumento, email=correoElectronico, password=request.POST["contrasena"])
+			usuario = User.objects.create_user(username=numeroDocumento, email=correoElectronico, password=contrasena)
 			usuario.first_name = nombres
 			usuario.last_name = apellidos
 			usuario.save()
 
 			#Guardo registro
-			registro = Registro(user = usuario, nombres = nombres, apellidos = apellidos, tipo = tipo, 
-								fecha = fecha, edad = edad, genero = genero, direccion = direccion, barrio = barrio, 
-								zona = zona, comuna = comuna, telefonos = telefonos, correo = correo, 
-								grupo = grupo, condicion = condicion, seguridad = seguridad)
+			registro = Registro(user = usuario, tipoDocumento = tipoDocumento, fechaNacimiento = fechaNacimiento, genero = genero, direccion = direccion, barrio = barrio, zona = zona, comuna = comuna, telefonoFijo = telefonoFijo, telefonoCelular = telefonoCelular, grupoEtnico = grupoEtnico, condicion = condicion, seguridadSocial = seguridadSocial)
+
 			registro.save()
 
 			return inicioControl(request,registerSuccess=True)
@@ -96,3 +102,14 @@ def loginControl(request):
 	visionInicio= "red"
 	quienesSomosInicio= "yellow"
 	return render_to_response('inicio.html', locals(), context_instance = RequestContext(request))
+
+def logoutControl(request):
+    logout(request)
+    return HttpResponseRedirect('/')
+
+def fechaCorrecta(fecha):
+	try:
+		datetime.strptime(fecha, '%Y-%m-%d')
+		return True
+	except:
+		return False

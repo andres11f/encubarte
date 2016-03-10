@@ -1,25 +1,19 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-#extender de user?
-#user = models.ForeignKey(User, unique=True)
 class Registro(models.Model):
-	user = models.ForeignKey(User, unique=True)
-	#numeroDocumento = models.IntegerField(max_length=20,primary_key=True)
-	nombres = models.CharField(max_length=50)
-	apellidos = models.CharField(max_length=50)
+	#Objeto user contiene: numeroDocumento como username, correoElectronico como email, contraseña como password
+	#nombres como first_name, apellidos como last_name
+	user = models.OneToOneField(User, primary_key=True)
 	tipoDocumento = models.CharField(max_length=10)
 	fechaNacimiento = models.DateField()
-	edad = models.IntegerField(max_length=4)
 	genero = models.CharField(max_length=1)
 	direccion = models.CharField(max_length=50)
 	barrio = models.CharField(max_length=50)
 	zona = models.CharField(max_length=50)
 	comuna = models.CharField(max_length=50)
-	telefonos = models.CharField(max_length=50)
-	telefonoFijo = models.IntegerField(max_length=20)
-	telefonoCelular = models.IntegerField(max_length=20)
-	correoElectronico = models.CharField(max_length=50)
+	telefonoFijo = models.IntegerField()
+	telefonoCelular = models.IntegerField()
 	grupoEtnico = models.CharField(max_length=50)
 	condicion = models.CharField(max_length=50)
 	seguridadSocial = models.CharField(max_length=50)
@@ -29,25 +23,25 @@ class Registro(models.Model):
 	#foto = models.FileField(upload_to=url)
 
 	def __unicode__(self):
-		return self.numeroDocumento+" "+self.nombres+" "+self.apellidos
+		return self.user.username+" "+self.user.first_name+" "+self.user.last_name
 
 class DatosFamiliaMayor(models.Model):
 	id = models.AutoField(primary_key=True)
-	idRegistro = models.ForeignKey(Registro, unique=True)
+	idRegistro = models.OneToOneField(Registro)
 	nombrePadre = models.CharField(max_length=50)
 	nombreMadre = models.CharField(max_length=50)
-	telefonoPadre = models.IntegerField(max_length=20)
-	telefonoMadre = models.IntegerField(max_length=20)
+	telefonoPadre = models.IntegerField()
+	telefonoMadre = models.IntegerField()
 	desempeño = models.CharField(max_length=50)
 	lugar = models.CharField(max_length=50)
 
 class DatosFamiliaMenor(models.Model):
 	id = models.AutoField(primary_key=True)
-	idRegistro = models.ForeignKey(Registro, unique=True)
+	idRegistro = models.OneToOneField(Registro)
 	nombrePadre = models.CharField(max_length=50)
 	nombreMadre = models.CharField(max_length=50)
-	telefonoPadre = models.IntegerField(max_length=20)
-	telefonoMadre = models.IntegerField(max_length=20)
+	telefonoPadre = models.IntegerField()
+	telefonoMadre = models.IntegerField()
 	institucionEducativa = models.CharField(max_length=50)
 	grupo = models.CharField(max_length=50)
 	jornada = models.CharField(max_length=50)
@@ -57,7 +51,7 @@ class DatosFamiliaMenor(models.Model):
 class Profesor(models.Model):
 	id = models.AutoField(primary_key=True)
 	nombre = models.CharField(max_length=50)
-	edad = models.IntegerField(max_length=11)
+	edad = models.IntegerField()
 	genero = models.CharField(max_length=50)
 
 class Horario(models.Model):
@@ -72,7 +66,7 @@ class Curso(models.Model):
 
 class Grupo(models.Model):
 	id = models.AutoField(primary_key=True)
-	idRegistro = models.ForeignKey(Registro, unique=True)
-	idProfesor = models.ForeignKey(Profesor, unique=True)
-	idCurso = models.ForeignKey(Curso, unique=True)
-	idHorario = models.ForeignKey(Horario, unique=True)
+	idRegistro = models.OneToOneField(Registro)
+	idProfesor = models.OneToOneField(Profesor)
+	idCurso = models.OneToOneField(Curso)
+	idHorario = models.OneToOneField(Horario)
