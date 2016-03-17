@@ -11,6 +11,8 @@ from django.core.paginator import Paginator,EmptyPage,InvalidPage
 import re, math, os, ast
 from datetime import datetime
 
+import pdb
+
 def inicioControl(request, registerSuccess=False):
 	conectado=False
 	nombre=""
@@ -19,7 +21,7 @@ def inicioControl(request, registerSuccess=False):
 	quienesSomosInicio= "bleble"
 	if request.user.is_authenticated():
 		conectado=True
-		nombre=request.user.username
+		nombre=request.user.first_name
 	return render_to_response ('inicio.html',locals(), context_instance = RequestContext(request))
 
 def registroControl(request):
@@ -46,11 +48,12 @@ def registroControl(request):
 			grupoEtnico = request.POST['grupoEtnico']
 			condicion = request.POST['condicion']
 			seguridadSocial = request.POST['seguridadSocial']
+			enviarInfoAlCorreo = request.POST['enviarInfoAlCorreo']
 
 			#Validaciones
 			errorUser = (User.objects.filter(username=numeroDocumento) or  not re.match("^([0-9]{8,20})$",numeroDocumento))
-			errorNumeroDocumento = ((ClienteAlquiler.objects.filter(numDocumento=numeroDocumento)) or not re.match("^([a-zA-z0-9_-]{6,20})$",numeroDocumento))
-			errorTipoDocumento = (tipoDocumento  not in (parametros["tipoDocumentos"]))
+			errorNumeroDocumento = ((User.objects.filter(username=numeroDocumento)) or not re.match("^([a-zA-z0-9_-]{6,20})$",numeroDocumento))
+			errorTipoDocumento = (tipoDocumento  not in (parametros["tiposDocumento"]))
 			errorContrasena = (request.POST["contrasena"]!=request.POST["contrasena2"])
 			errorCorreoElectronico = (User.objects.filter(email=correoElectronico) or not re.match(r"^[A-Za-z0-9\._-]+@[A-Za-z0-9]+\.[a-zA-Z]+$", correoElectronico))
 			errorFechaNacimiento = not fechaCorrecta(fechaNacimiento)
@@ -67,7 +70,7 @@ def registroControl(request):
 			usuario.save()
 
 			#Guardo registro
-			registro = Registro(user = usuario, tipoDocumento = tipoDocumento, fechaNacimiento = fechaNacimiento, genero = genero, direccion = direccion, barrio = barrio, zona = zona, comuna = comuna, telefonoFijo = telefonoFijo, telefonoCelular = telefonoCelular, grupoEtnico = grupoEtnico, condicion = condicion, seguridadSocial = seguridadSocial)
+			registro = Registro(user = usuario, tipoDocumento = tipoDocumento, fechaNacimiento = fechaNacimiento, genero = genero, direccion = direccion, barrio = barrio, zona = zona, comuna = comuna, telefonoFijo = telefonoFijo, telefonoCelular = telefonoCelular, grupoEtnico = grupoEtnico, condicion = condicion, seguridadSocial = seguridadSocial, enviarInfoAlCorreo = enviarInfoAlCorreo)
 
 			registro.save()
 

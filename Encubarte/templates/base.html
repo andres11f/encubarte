@@ -10,6 +10,23 @@
 		{% block bootstrap %}
 			<link rel="stylesheet" href="/media/bootstrap/css/bootstrap.min.css">
 			<script type="text/javascript" src="/media/bootstrap/js/bootstrap.min.js"></script>
+
+			<!-- full calendar -->
+			<link rel='stylesheet' href='/media/fullcalendar/fullcalendar.css' />
+			<script src='/media/fullcalendar/lib/jquery.min.js'></script>
+			<script src='/media/fullcalendar/lib/moment.min.js'></script>
+			<script src='/media/fullcalendar/fullcalendar.js'></script>
+			<script>
+				$(document).ready(function() {
+
+    				// page is now ready, initialize the calendar...
+
+    				$('#calendar').fullCalendar({
+        			// put your options and callbacks here
+    				})
+
+				});
+			</script>
 		{% endblock %}
 		{% block scripts %}
 		{% endblock%}

@@ -17,6 +17,7 @@ class Registro(models.Model):
 	grupoEtnico = models.CharField(max_length=50)
 	condicion = models.CharField(max_length=50)
 	seguridadSocial = models.CharField(max_length=50)
+	enviarInfoAlCorreo = models.BooleanField()
 
 	#def url(self,filename):
 	#	return "fotos/carros/%s/%s/%s/%s"%(self.marca, self.referencia, self.placa , filename)
@@ -28,10 +29,8 @@ class Registro(models.Model):
 class DatosFamiliaMayor(models.Model):
 	id = models.AutoField(primary_key=True)
 	idRegistro = models.OneToOneField(Registro)
-	nombrePadre = models.CharField(max_length=50)
-	nombreMadre = models.CharField(max_length=50)
-	telefonoPadre = models.IntegerField()
-	telefonoMadre = models.IntegerField()
+	nombreContacto = models.CharField(max_length=50)
+	telefonoContacto = models.IntegerField()
 	desempeño = models.CharField(max_length=50)
 	lugar = models.CharField(max_length=50)
 
@@ -57,8 +56,8 @@ class Profesor(models.Model):
 class Horario(models.Model):
 	id = models.AutoField(primary_key=True)
 	dia = models.CharField(max_length=20)
-	horarioIni = models.CharField(max_length=20)
-	horarioFin = models.CharField(max_length=20)
+	horarioIni = models.TimeField()
+	horarioFin = models.TimeField()
 
 class Curso(models.Model):
 	id = models.AutoField(primary_key=True)

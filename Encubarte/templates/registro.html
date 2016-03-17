@@ -115,11 +115,11 @@
 				    </tr>
 				    <tr>
 				        <td><label>Telefono Fijo:</label></td>
-				        <td><input type="text" name="telefonos" required="true" pattern="[0-9]{7,12}" value="{{telefonoFijo}}"/>*</td>
+				        <td><input type="text" name="telefonoFijo" required="true" pattern="[0-9]{7,12}" value="{{telefonoFijo}}"/>*</td>
 				    </tr>
 				    <tr>
 				        <td><label>Telefonos Celular:</label></td>
-				        <td><input type="text" name="telefonos" required="true" pattern="[0-9]{7,12}" value="{{telefonoCelular}}"/>*</td>
+				        <td><input type="text" name="telefonoCelular" required="true" pattern="[0-9]{7,12}" value="{{telefonoCelular}}"/>*</td>
 				    </tr>
 				    <tr>
 				        <td><label>Grupo etnico:</label></td>
@@ -132,6 +132,10 @@
 				    <tr>
 				        <td><label>Seguridad social:</label></td>
 				        <td><input type="text" name="seguridadSocial" required="true" value="{{seguridadSocial}}"/>*</td>
+				    </tr>
+				    <tr>
+				        <td><label>Desea recibir información en su correo electronico?:</label></td>
+				        <td><input type="checkbox" name="enviarInfoAlCorreo" required="true" value="{{enviarInfoAlCorreo}}"/>*</td>
 				    </tr>
 				    <tr>
 				        <td><input type="submit" value="Regístrate" name="registrar"/>
