@@ -23,6 +23,24 @@
 
     				$('#calendar').fullCalendar({
         			// put your options and callbacks here
+
+        			//var horarios = {{ horarios|escapejs }};
+
+        			events: [
+    						    {
+    						        title  : 'event1',
+    						        start  : '2016-03-07T12:30:00'
+    						    },
+    						    {
+    						        title  : 'event2',
+    						        start  : '2016-03-08T14:00:00',
+    						    },
+    						    {
+    						        title  : 'event3',
+    						        start  : '2016-03-09T15:00:00',
+    						        allDay : false // will make the time show
+    						    }
+    						]
     				})
 
 				});

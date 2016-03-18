@@ -11,9 +11,12 @@ from django.core.paginator import Paginator,EmptyPage,InvalidPage
 import re, math, os, ast
 from datetime import datetime
 
-import pdb
+from django.core import serializers
 
 def inicioControl(request, registerSuccess=False):
+	json_serializer = serializers.get_serializer("json")()
+	horarios = json_serializer.serialize(Horario.objects.all().order_by('id')[:5], ensure_ascii=False)
+
 	conectado=False
 	nombre=""
 	misionInicio= "blabla"
