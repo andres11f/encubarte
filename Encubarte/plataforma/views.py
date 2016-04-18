@@ -8,15 +8,14 @@ from Encubarte.plataforma.models import Registro, DatosFamiliaMayor, DatosFamili
 from Encubarte.plataforma.parametros import parametros
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator,EmptyPage,InvalidPage
+from django.template.defaulttags import register
 import re, math, os, ast
-from datetime import datetime
+import pdb
+from datetime import timedelta, datetime, date
 
 from django.core import serializers
 
 def inicioControl(request, registerSuccess=False):
-	json_serializer = serializers.get_serializer("json")()
-	horarios = json_serializer.serialize(Horario.objects.all().order_by('id')[:5], ensure_ascii=False)
-
 	conectado=False
 	nombre=""
 	misionInicio= "blabla"
@@ -25,6 +24,9 @@ def inicioControl(request, registerSuccess=False):
 	if request.user.is_authenticated():
 		conectado=True
 		nombre=request.user.first_name
+		diasSemana = parametros["diasSemana"]
+		horas = parametros["horas"]
+		horario = horarioUsuario(request.user)
 	return render_to_response ('inicio.html',locals(), context_instance = RequestContext(request))
 
 def registroControl(request):
@@ -54,16 +56,15 @@ def registroControl(request):
 			enviarInfoAlCorreo = request.POST['enviarInfoAlCorreo']
 
 			#Validaciones
-			errorUser = (User.objects.filter(username=numeroDocumento) or  not re.match("^([0-9]{8,20})$",numeroDocumento))
-			errorNumeroDocumento = ((User.objects.filter(username=numeroDocumento)) or not re.match("^([a-zA-z0-9_-]{6,20})$",numeroDocumento))
+			errorNumeroDocumento = (User.objects.filter(username=numeroDocumento) or  not re.match("^([0-9]{8,20})$",numeroDocumento))
 			errorTipoDocumento = (tipoDocumento  not in (parametros["tiposDocumento"]))
 			errorContrasena = (request.POST["contrasena"]!=request.POST["contrasena2"])
 			errorCorreoElectronico = (User.objects.filter(email=correoElectronico) or not re.match(r"^[A-Za-z0-9\._-]+@[A-Za-z0-9]+\.[a-zA-Z]+$", correoElectronico))
 			errorFechaNacimiento = not fechaCorrecta(fechaNacimiento)
 			errorGenero = (genero not in (parametros["generos"]))
-			errorTelefonos = (not re.match("^([0-9]{7,12})$",telefonoFijo) or not re.match("^([0-9]{10,12})$",telefonoCelular))
+			errorTelefonos = (not re.match("^([0-9]{7,12})$",telefonoFijo) or not re.match("^([0-9]{7,12})$",telefonoCelular))
 
-			if (errorContrasena):
+			if (errorContrasena or errorNumeroDocumento or errorTipoDocumento or errorCorreoElectronico or errorFechaNacimiento or errorGenero or errorTelefonos):
 				return render_to_response('registro.html', locals(), context_instance = RequestContext(request))
 
 			#Guardar usuario
@@ -119,3 +120,41 @@ def fechaCorrecta(fecha):
 		return True
 	except:
 		return False
+
+def horarioUsuario(User):
+	horas = parametros["horas"]
+	diasSemana = parametros["diasSemana"]
+	
+	horario = dict()
+
+	for h in horas:
+		horario[h] = list()
+	
+	try:
+		registro = Registro.objects.get(user = User)
+		gruposRegistro = Grupo.objects.filter(idRegistro = registro)
+	except:
+		return {}
+
+	print(gruposRegistro)
+	print("---------------------------")
+
+	for d in diasSemana:
+		for h in horas:
+			try:
+				tmpHorario = Horario.objects.get(dia = d, hora = h)
+			except Horario.DoesNotExist:
+				tmpHorario = None
+
+			if tmpHorario is None:
+				horario[h].append('')
+			else:
+				if gruposRegistro.filter(idCurso = tmpHorario.idCurso):
+					horario[h].append(tmpHorario.idCurso.nombre)
+				else:
+					horario[h].append('')
+	return horario
+
+@register.filter
+def get_item(dictionary, key):
+    return dictionary.get(key)

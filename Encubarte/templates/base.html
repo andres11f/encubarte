@@ -11,7 +11,41 @@
 			<link rel="stylesheet" href="/media/bootstrap/css/bootstrap.min.css">
 			<script type="text/javascript" src="/media/bootstrap/js/bootstrap.min.js"></script>
 
-			<!-- full calendar -->
+			<style type="text/css">
+    			body
+    			{
+    			    font-family: arial;
+    			}
+			
+    			th,td
+    			{
+    			    margin: 0;
+    			    text-align: center;
+    			    border-collapse: collapse;
+    			    outline: 1px solid #e3e3e3;
+    			}
+			
+    			td
+    			{
+    			    padding: 5px 10px;
+    			}
+			
+    			th
+    			{
+    			    background: #666;
+    			    color: white;
+    			    padding: 5px 10px;
+    			}
+			
+    			td:hover
+    			{
+    			    cursor: pointer;
+    			    background: #666;
+    			    color: white;
+    			}
+    		</style>
+
+			<!-- full calendar
 			<link rel='stylesheet' href='/media/fullcalendar/fullcalendar.css' />
 			<script src='/media/fullcalendar/lib/jquery.min.js'></script>
 			<script src='/media/fullcalendar/lib/moment.min.js'></script>
@@ -21,30 +55,26 @@
 
     				// page is now ready, initialize the calendar...
 
+        			var horarios = '{{ horarios|escapejs }}';
+        			var eventos = '{{ eventos|escapejs }}';
+        			var test = JSON.parse(horarios);
+        			console.log(test[0].fields);
+        			console.log(eventos[0].nombre);
     				$('#calendar').fullCalendar({
         			// put your options and callbacks here
 
-        			//var horarios = {{ horarios|escapejs }};
-
         			events: [
     						    {
-    						        title  : 'event1',
-    						        start  : '2016-03-07T12:30:00'
-    						    },
-    						    {
-    						        title  : 'event2',
-    						        start  : '2016-03-08T14:00:00',
-    						    },
-    						    {
-    						        title  : 'event3',
-    						        start  : '2016-03-09T15:00:00',
+    						        title  : test[0].fields.dia,
+    						        start  : '2016-04-07T' + test[0].fields.horarioIni,
+    						        end    : '2016-04-07T' + test[0].fields.horarioFin,
     						        allDay : false // will make the time show
     						    }
     						]
     				})
 
 				});
-			</script>
+			</script> -->
 		{% endblock %}
 		{% block scripts %}
 		{% endblock%}

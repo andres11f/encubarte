@@ -23,7 +23,7 @@ class Registro(models.Model):
 	#	return "fotos/carros/%s/%s/%s/%s"%(self.marca, self.referencia, self.placa , filename)
 	#foto = models.FileField(upload_to=url)
 
-	def __unicode__(self):
+	def __str__(self):
 		return self.user.username+" "+self.user.first_name+" "+self.user.last_name
 
 class DatosFamiliaMayor(models.Model):
@@ -33,6 +33,9 @@ class DatosFamiliaMayor(models.Model):
 	telefonoContacto = models.IntegerField()
 	desempeño = models.CharField(max_length=50)
 	lugar = models.CharField(max_length=50)
+
+	class Meta:
+		verbose_name_plural=u'Datos Familias Mayor'
 
 class DatosFamiliaMenor(models.Model):
 	id = models.AutoField(primary_key=True)
@@ -47,25 +50,42 @@ class DatosFamiliaMenor(models.Model):
 	nombreAcudiente = models.CharField(max_length=50)
 	cedulaAcudiente = models.CharField(max_length=50)
 
-class Profesor(models.Model):
-	id = models.AutoField(primary_key=True)
-	nombre = models.CharField(max_length=50)
-	edad = models.IntegerField()
-	genero = models.CharField(max_length=50)
-
-class Horario(models.Model):
-	id = models.AutoField(primary_key=True)
-	dia = models.CharField(max_length=20)
-	horarioIni = models.TimeField()
-	horarioFin = models.TimeField()
+	class Meta:
+		verbose_name_plural=u'Datos Familias Menor'
 
 class Curso(models.Model):
 	id = models.AutoField(primary_key=True)
 	nombre = models.CharField(max_length=50)
 
+	def __str__(self):
+		return self.nombre
+
+class Profesor(models.Model):
+	id = models.AutoField(primary_key=True)
+	idCurso = models.ForeignKey(Curso)
+	nombre = models.CharField(max_length=50)
+	edad = models.IntegerField()
+	genero = models.CharField(max_length=50)
+
+	def __str__(self):
+		return self.nombre
+
+	class Meta:
+		verbose_name_plural=u'Profesores'
+
+class Horario(models.Model):
+	id = models.AutoField(primary_key=True)
+	idCurso = models.ForeignKey(Curso)
+	dia = models.CharField(max_length=20)
+	hora = models.TimeField()
+	
+	def __str__(self):
+		return self.dia + " " + self.horario.strftime("%H:%M")
+
 class Grupo(models.Model):
 	id = models.AutoField(primary_key=True)
-	idRegistro = models.OneToOneField(Registro)
-	idProfesor = models.OneToOneField(Profesor)
-	idCurso = models.OneToOneField(Curso)
-	idHorario = models.OneToOneField(Horario)
+	idRegistro = models.ForeignKey(Registro)
+	idCurso = models.ForeignKey(Curso)
+
+	def __str__(self):
+		return "Registro: " + self.idRegistro.user.username + " Curso: " + self.idCurso.nombre

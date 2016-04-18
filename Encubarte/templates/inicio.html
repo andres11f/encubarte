@@ -6,9 +6,29 @@
 			<p class="text-info">Registro exitoso! Puedes iniciar sesión.</p>
 		{% endif %}
 		{%if conectado%}
+			<div class="span10">
+			<table width="80%" align="center" >
+			    <div id="head_nav">
+			    	<th>Hora</th>
+				    {% for d in diasSemana%}
+				        <th>{{d}}</th>
+				    {% endfor %}
+				</div> 
+				
+				{% for h in horas%}
+					<tr>
+			        	<th>{{h}}</th>
 
-			<!-- full calendar -->
-			<div class="span10" id='calendar'></div>
+			        		{% for d in horario|get_item:h%}
+				        		<td>{{d}}</td>
+				    		{% endfor %}
+
+			    	</tr>
+				{% endfor %}
+				</table>
+			</div>
+			<!-- full calendar 
+			<div class="span10" id='calendar'></div> -->
 
 			<div class="span3">
 				<form action="/logout/" name="logout">
@@ -19,8 +39,8 @@
 				        <label>Cerrar sesión:</label>
 				        <input type="submit" value="Log out" name="logout"/>
 				    </div>
-			</form>
-			</div>
+				</form>
+			</div> 
 
 			
 		{%else %}

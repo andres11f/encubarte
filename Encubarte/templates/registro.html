@@ -1,13 +1,10 @@
 {%extends "base.html"%}
 {% block titulo %}Registro{% endblock %}
 {% block contenido %}
-	{%if errorUser or errorNumeroDocumento or errorTipoDocumento or errorContrasena or errorCorreoElectronico or errorFechaNacimiento or errorGenero or errorTelefonos %}
+	{%if errorNumeroDocumento or errorTipoDocumento or errorContrasena or errorCorreoElectronico or errorFechaNacimiento or errorGenero or errorTelefonos %}
 	<div class="container">
 		<h3>Corrige los siguientes errores para continuar:</h3>
 		<p class="text-error">
-			{% if errorUser %}
-				El nombre de usuario ya está en uso o tiene caracteres incorrectos, puedes utilizar letras,números y guión bajo '_'.<br>
-			{% endif %}
 			{% if errorNumeroDocumento %}
 				El número de documento que seleccionaste ya está en uso o no es un número.<br>
 			{% endif %}
@@ -51,7 +48,7 @@
 				<tbody>
 					<tr>
 				        <td><label>Numero Documento:</label></td>
-				        <td><input type="text" name="numeroDocumento" required="true" pattern="[0-9]{5,20}" value="{{numeroDocumento}}"/>*</td>
+				        <td><input type="text" name="numeroDocumento" required="true" pattern="[0-9]{8,20}" value="{{numeroDocumento}}"/>*</td>
 				    </tr>
 				    <tr>
 				        <td><label>Tipo de Documento:</label></td>
