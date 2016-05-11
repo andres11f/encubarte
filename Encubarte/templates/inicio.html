@@ -5,7 +5,8 @@
 		{% if registerSuccess %}
 			<p class="text-info">Registro exitoso! Puedes iniciar sesión.</p>
 		{% endif %}
-		{%if conectado%}
+		{%if conectado %}
+			{% if estudiante %}
 			<div class="span10">
 			<table width="80%" align="center" >
 			    <div id="head_nav">
@@ -27,6 +28,7 @@
 				{% endfor %}
 				</table>
 			</div>
+			{% endif %}
 			<!-- full calendar 
 			<div class="span10" id='calendar'></div> -->
 

@@ -1,5 +1,5 @@
 {%extends "base.html"%}
-{% block titulo %}Registro{% endblock %}
+{% block titulo %}Registro Estudiante{% endblock %}
 {% block contenido %}
 	{%if errorNumeroDocumento or errorTipoDocumento or errorContrasena or errorCorreoElectronico or errorFechaNacimiento or errorGenero or errorTelefonos %}
 	<div class="container">
@@ -40,7 +40,7 @@
 		    </div>
 		</form>
 	{%else %}
-		<form method="POST" action="/registro/" name="registro">
+		<form method="POST" action="/registroEstudiante/" name="registroEstudiante">
 			{% csrf_token %}
 			<div class="container">
 			<h3>Ingresa tus datos</hs3>
@@ -135,7 +135,7 @@
 				        <td><input type="checkbox" name="enviarInfoAlCorreo" required="true" value="{{enviarInfoAlCorreo}}"/>*</td>
 				    </tr>
 				    <tr>
-				        <td><input type="submit" value="Regístrate" name="registrar"/>
+				        <td><input type="submit" value="Regístrate" name="registrarEstudiante"/>
 				    </tr>
 				</tbody>
 			</table>

@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-class Registro(models.Model):
+class Estudiante(models.Model):
 	#Objeto user contiene: numeroDocumento como username, correoElectronico como email, contraseña como password
 	#nombres como first_name, apellidos como last_name
 	user = models.OneToOneField(User, primary_key=True)
@@ -28,7 +28,7 @@ class Registro(models.Model):
 
 class DatosFamiliaMayor(models.Model):
 	id = models.AutoField(primary_key=True)
-	idRegistro = models.OneToOneField(Registro)
+	idEstudiante = models.OneToOneField(Estudiante)
 	nombreContacto = models.CharField(max_length=50)
 	telefonoContacto = models.IntegerField()
 	desempeño = models.CharField(max_length=50)
@@ -39,7 +39,7 @@ class DatosFamiliaMayor(models.Model):
 
 class DatosFamiliaMenor(models.Model):
 	id = models.AutoField(primary_key=True)
-	idRegistro = models.OneToOneField(Registro)
+	idEstudiante = models.OneToOneField(Estudiante)
 	nombrePadre = models.CharField(max_length=50)
 	nombreMadre = models.CharField(max_length=50)
 	telefonoPadre = models.IntegerField()
@@ -53,39 +53,54 @@ class DatosFamiliaMenor(models.Model):
 	class Meta:
 		verbose_name_plural=u'Datos Familias Menor'
 
-class Curso(models.Model):
-	id = models.AutoField(primary_key=True)
-	nombre = models.CharField(max_length=50)
-
-	def __str__(self):
-		return self.nombre
-
 class Profesor(models.Model):
-	id = models.AutoField(primary_key=True)
-	idCurso = models.ForeignKey(Curso)
-	nombre = models.CharField(max_length=50)
-	edad = models.IntegerField()
+	#Objeto user contiene: numeroDocumento como username, correoElectronico como email, contraseña como password
+	#nombres como first_name, apellidos como last_name
+	user = models.OneToOneField(User, primary_key=True)
+	fechaNacimiento = models.DateField()
+	tipoDocumento = models.CharField(max_length=10)
 	genero = models.CharField(max_length=50)
 
 	def __str__(self):
-		return self.nombre
+		#no cambiar esto o se vera afectado el comportamiento de registroCursoControl
+		return self.user.username+" - "+self.user.first_name+" "+self.user.last_name
 
 	class Meta:
 		verbose_name_plural=u'Profesores'
+
+class Curso(models.Model):
+	id = models.AutoField(primary_key=True)
+	nombre = models.CharField(max_length=50)
+	idProfesor = models.ForeignKey(Profesor)
+
+	def __str__(self):
+		return self.nombre + " - " + self.idProfesor.user.first_name + " " + self.idProfesor.user.last_name 
 
 class Horario(models.Model):
 	id = models.AutoField(primary_key=True)
 	idCurso = models.ForeignKey(Curso)
 	dia = models.CharField(max_length=20)
-	hora = models.TimeField()
+	horaInicio = models.TimeField()
+	horaFin = models.TimeField()
 	
 	def __str__(self):
-		return self.dia + " " + self.horario.strftime("%H:%M")
+		return self.dia + " " + self.horaInicio.strftime("%H:%M") + " - " + self.horaFin.strftime("%H:%M")
 
 class Grupo(models.Model):
 	id = models.AutoField(primary_key=True)
-	idRegistro = models.ForeignKey(Registro)
+	idEstudiante = models.ForeignKey(Estudiante)
 	idCurso = models.ForeignKey(Curso)
 
 	def __str__(self):
-		return "Registro: " + self.idRegistro.user.username + " Curso: " + self.idCurso.nombre
+		return "Estudiante: " + self.idEstudiante.user.username + " Curso: " + self.idCurso.nombre
+
+#class ProfesorCurso(models.Model):
+#	id = models.AutoField(primary_key=True)
+#	idCurso = models.ForeignKey(Curso)
+#	idProfesor = models.ForeignKey(Profesor)
+#
+#	def __str__(self):
+#		return "Curso: " + self.idCurso.nombre + " Profesor: " + self.idProfesor.user.username
+#
+#	class Meta:
+#		verbose_name_plural=u'Profesores - Cursos'

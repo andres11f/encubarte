@@ -22,8 +22,28 @@ li{
 	display:inline;
 }
 
-td { min-width: 80px;
-	 text-align:center;
+th,td{
+    margin: 0;
+    min-width: 80px;
+    text-align: center;
+    border-collapse: collapse;
+    outline: 1px solid #e3e3e3;
+}
+
+td{
+	padding: 5px 10px;
+}
+
+th{
+	background: #666;
+	color: white;
+	padding: 5px 10px;
+}
+
+td:hover{
+	cursor: pointer;
+	background: #666;
+	color: white;
 }
 
 img{
@@ -32,5 +52,4 @@ img{
 
 footer{
 	color: blue;
-	
 }

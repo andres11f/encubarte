@@ -10,71 +10,6 @@
 		{% block bootstrap %}
 			<link rel="stylesheet" href="/media/bootstrap/css/bootstrap.min.css">
 			<script type="text/javascript" src="/media/bootstrap/js/bootstrap.min.js"></script>
-
-			<style type="text/css">
-    			body
-    			{
-    			    font-family: arial;
-    			}
-			
-    			th,td
-    			{
-    			    margin: 0;
-    			    text-align: center;
-    			    border-collapse: collapse;
-    			    outline: 1px solid #e3e3e3;
-    			}
-			
-    			td
-    			{
-    			    padding: 5px 10px;
-    			}
-			
-    			th
-    			{
-    			    background: #666;
-    			    color: white;
-    			    padding: 5px 10px;
-    			}
-			
-    			td:hover
-    			{
-    			    cursor: pointer;
-    			    background: #666;
-    			    color: white;
-    			}
-    		</style>
-
-			<!-- full calendar
-			<link rel='stylesheet' href='/media/fullcalendar/fullcalendar.css' />
-			<script src='/media/fullcalendar/lib/jquery.min.js'></script>
-			<script src='/media/fullcalendar/lib/moment.min.js'></script>
-			<script src='/media/fullcalendar/fullcalendar.js'></script>
-			<script>
-				$(document).ready(function() {
-
-    				// page is now ready, initialize the calendar...
-
-        			var horarios = '{{ horarios|escapejs }}';
-        			var eventos = '{{ eventos|escapejs }}';
-        			var test = JSON.parse(horarios);
-        			console.log(test[0].fields);
-        			console.log(eventos[0].nombre);
-    				$('#calendar').fullCalendar({
-        			// put your options and callbacks here
-
-        			events: [
-    						    {
-    						        title  : test[0].fields.dia,
-    						        start  : '2016-04-07T' + test[0].fields.horarioIni,
-    						        end    : '2016-04-07T' + test[0].fields.horarioFin,
-    						        allDay : false // will make the time show
-    						    }
-    						]
-    				})
-
-				});
-			</script> -->
 		{% endblock %}
 		{% block scripts %}
 		{% endblock%}
@@ -85,15 +20,25 @@
 		<div class="container">
 			<nav class="navbar navbar-inverse">
 				<li><a class="btn btn-primary" href="/">Inicio</a></li>
+				{% if request.user.is_superuser %}
+					<li><a class="btn btn-warning" href="/registroProfesor">Registrar Profesor</a></li>
+					<li><a class="btn btn-warning" href="/registroCurso">Registrar Curso</a></li>
+					<li><a class="btn btn-warning" href="/registroHorario">Registrar Horario</a></li>
+					<li><a class="btn btn-warning" href="/admin">Pagina admin</a></li>
+				{% endif %}
 				{% if request.user.is_staff %}
-					<li><a class="btn btn-info" href="/vehiculos/historialMantenimiento">Test1</a></li>
-					<li><a class="btn btn-info" href="/voucher">Test2</a></li>
+					<li><a class="btn btn-info" href="/">lista de cursos</a></li>
+					<li><a class="btn btn-info" href="/">Matriculados a sus cursos</a></li>
+					<li><a class="btn btn-info" href="/">Matricular estudiante</a></li>
 				{% endif %}
 				{% if request.user.is_authenticated %}
-					<li><a class="btn btn-primary" href="/reservas">Test3</a></li>
-					<li><a class="btn btn-inverse" href="/logout">Cerrar sesión</a></li>
+					<li><a class="btn btn-primary" href="/">Ver Horario</a></li>
+					<li><a class="btn btn-primary" href="/">Modificar información Personal</a></li>
+					<li><a class="btn btn-primary" href="/">Cambiar Contraseña</a></li>
+					<li><a class="btn btn-primary" href="/">Matricular Curso</a></li>
+					<li><a class="btn btn-danger" href="/logout">Cerrar sesión</a></li>
 				{% else %}
-					<li><a class="btn btn-success"href="/registro">Regístrate</a></li>
+					<li><a class="btn btn-success"href="/registroEstudiante">Regístrate</a></li>
 				{% endif %}
 			</nav>
 		</div>
