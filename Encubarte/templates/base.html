@@ -3,7 +3,7 @@
 <!DOCTYPE HTML>
 <html>
 	<head>
-		<title>{% block titulo %}Inicio{% endblock %}</title>
+		<title>{% block titulo %} Inicio {% endblock %}</title>
 		{%block css%}
 		<link rel="stylesheet" type="text/css" href="/media/css/estilos.css"/>
 		{% endblock%}
@@ -12,10 +12,10 @@
 			<script type="text/javascript" src="/media/bootstrap/js/bootstrap.min.js"></script>
 		{% endblock %}
 		{% block scripts %}
-		{% endblock%}
+		{% endblock %}
 
 	</head>
-		<center><h1>Encubarte</h1></center><br>	
+		<center><h1> Encubarte </h1></center><br>	
 	<body>
 		<div class="container">
 			<nav class="navbar navbar-inverse">
@@ -25,20 +25,25 @@
 					<li><a class="btn btn-warning" href="/registroCurso">Registrar Curso</a></li>
 					<li><a class="btn btn-warning" href="/registroHorario">Registrar Horario</a></li>
 					<li><a class="btn btn-warning" href="/admin">Pagina admin</a></li>
-				{% endif %}
-				{% if request.user.is_staff %}
-					<li><a class="btn btn-info" href="/">lista de cursos</a></li>
-					<li><a class="btn btn-info" href="/">Matriculados a sus cursos</a></li>
-					<li><a class="btn btn-info" href="/">Matricular estudiante</a></li>
-				{% endif %}
-				{% if request.user.is_authenticated %}
-					<li><a class="btn btn-primary" href="/">Ver Horario</a></li>
-					<li><a class="btn btn-primary" href="/">Modificar información Personal</a></li>
-					<li><a class="btn btn-primary" href="/">Cambiar Contraseña</a></li>
-					<li><a class="btn btn-primary" href="/">Matricular Curso</a></li>
 					<li><a class="btn btn-danger" href="/logout">Cerrar sesión</a></li>
 				{% else %}
-					<li><a class="btn btn-success"href="/registroEstudiante">Regístrate</a></li>
+					{% if request.user.is_staff %}
+						<li> <a class="btn btn-info" href="/">lista de cursos</a> </li>
+						<li> <a class="btn btn-info" href="/">Matriculados a sus cursos</a> </li>
+						<li> <a class="btn btn-info" href="/">Matricular estudiante</a> </li>
+						<li><a class="btn btn-danger" href="/logout">Cerrar sesión</a></li>
+					{% else %}
+						{% if request.user.is_authenticated %}
+							<li><a class="btn btn-primary" href="/LogEstudiante/VerHorario">Ver Horario</a></li>
+							<li><a class="btn btn-primary" href="/LogEstudiante/ModificarInfo">Modificar información Personal</a></li>
+							<li><a class="btn btn-primary" href="/LogEstudiante/CambiarContraseña">Cambiar Contraseña</a></li>
+							<li><a class="btn btn-primary" href="/LogEstudiante/MatricularCurso">Matricular Curso</a></li>
+							<li><a class="btn btn-danger" href="/logout">Cerrar sesión</a></li>
+						{% else %}
+						<li><a class="btn btn-success"href="/registroEstudiante">Regístrate</a></li>
+						<li><a class="btn btn-success"href="/LogEstudiante">Estudiante</a></li>
+						{% endif %}
+					{% endif %}
 				{% endif %}
 			</nav>
 		</div>

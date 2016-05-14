@@ -1,11 +1,12 @@
 {%extends "base.html"%}
+
 {% block titulo %}Inicio{% endblock %}
 {% block contenido %}
 	<div class="container-fluid offset1">
 		{% if registerSuccess %}
 			<p class="text-info">Registro exitoso! Puedes iniciar sesión.</p>
 		{% endif %}
-		{%if conectado %}
+		{% if conectado %}
 			{% if estudiante %}
 			<div class="span10">
 			<table width="80%" align="center" >
@@ -31,7 +32,6 @@
 			{% endif %}
 			<!-- full calendar 
 			<div class="span10" id='calendar'></div> -->
-
 			<div class="span3">
 				<form action="/logout/" name="logout">
 				{% csrf_token %}
@@ -59,9 +59,11 @@
 				<p align="justify">Info</p>
 			</div>
 			<div class="span3">
+				<center>
+					<h3>Inicio de Sesión</h3>
+				</center>
 				<form method="POST" action="/login/" name="login">
 				{% csrf_token %}
-					<h3>Inicio de Sesión</h3>
 					<table class ="table-hover">
 						<tbody>
 							<tr>
@@ -74,15 +76,18 @@
 						    </tr>
 					    </tbody>
 					</table>
+					<br>
+					<center>
 				    <div>
 				        <input type="submit" value="Entrar" name="login"/>
 				    </div>
-				    {%if loginFailed%}
+				    </center>
+				    {% if loginFailed%}
 						<p class="text-error">El nombre de usuario (o correo) y la contraseña no coinciden</p>
-					{%endif%}
+					{% endif%}
 				</form>
 			</div>
-		{%endif %}
+		{% endif %}
 	</div>
 {% endblock %}
 

@@ -1,0 +1,92 @@
+{%extends "base.html"%}
+{% block titulo %}Registro Profesor{% endblock %}
+{% block contenido %}
+	{%if errorNumeroDocumento or errorCorreoElectronico or errorContrasena or errorFechaNacimiento or errorTipoDocumento or errorGenero %}
+	<div class="container">
+		<h3>Corrige los siguientes errores para continuar:</h3>
+		<p class="text-error">
+			{% if errorNumeroDocumento %}
+				El número de documento que seleccionaste ya está en uso o no es un número.<br>
+			{% endif %}
+			{% if errorCorreoElectronico %}
+				El correo ya está en uso, intenta otro.<br>
+			{% endif %}
+			{% if errorContrasena %}
+				Las contraseñas no coinciden, verifica por favor.<br>
+			{% endif %}
+			{% if errorFechaNacimiento %}
+				La fecha no es correcta, si tu navegador no muestra un campo de fecha intenta con el formato aaaa-mm-dd.<br>
+			{% endif %}
+			{% if errorTipoDocumento %}
+				No seleccionaste un tipo de documento correcto.<br>
+			{% endif %}
+			{% if errorGenero %}
+				No seleccionaste un género correcto.<br>
+			{% endif %}
+		</p>
+	</div>
+	{% endif %}
+
+	<form method="POST" action="/registroProfesor/" name="registroProfesor">
+		{% csrf_token %}
+		<div class="container">
+		<h3>Ingresa los datos del profesor</hs3>
+			<table class="table-bordered table-striped table-hover">
+				<tbody>
+					<tr>
+				        <td><label>Numero Documento:</label></td>
+				        <td><input type="text" name="numeroDocumento" required="true" pattern="[0-9]{8,20}" value="{{numeroDocumento}}"/>*</td>
+				    </tr>
+				    <tr>
+				        <td><label>Tipo de Documento:</label></td>
+				        <td>
+				        	<select name="tipoDocumento" value="{{tipoDocumento}}">
+				        		{% for t in  tiposDocumento%}
+				        			<option>{{t}}</option>
+				        		{% endfor %}
+				        	</select>
+				    	</td>
+				    </tr>
+				    <tr>
+				        <td><label>Contraseña:</label></td>
+				        <td><input type="password" name="contrasena" required="true"/>*</td>
+				    </tr>
+				    <tr>
+				        <td><label>Repita su Contraseña:</label></td>
+				        <td><input type="password" name="contrasena2" required="true"/>*</td>
+				    </tr>
+				    <tr>
+				        <td><label>Correo Electronico:</label></td>
+				        <td><input type="email" name="correoElectronico" required="true" value="{{correoElectronico}}"/>*</td>
+				    </tr>
+				    <tr>
+				        <td><label>Nombres:</label></td>
+				        <td><input type="text" name="nombres" required="true" value="{{nombres}}"/>*</td>
+				    </tr>
+				    <tr>
+				        <td><label>Apellidos:</label></td>
+				        <td><input type="text" name="apellidos" required="true" value="{{apellidos}}"/>*</td>
+				    </tr>
+				    <tr>
+				        <td><label>Fecha de nacimiento:</label></td>
+				        <td><input type="date" name="fechaNacimiento" required="true" value="{{fechaNacimiento}}"/>*</td>
+				    </tr>
+				    <tr>
+				        <td><label>Género:</label></td>
+				        <td>
+				        	<select name="genero" value="{{genero}}">
+				        		{% for g in  generos%}
+				        			<option>{{g}}</option>
+				        		{% endfor %}
+				        	</select>
+				    	</td>
+				    </tr>
+				    <tr>
+				        <td><input type="submit" value="Regístrate" name="registrar"/>
+				    </tr>
+				</tbody>
+			</table>
+		<p class="text-info"><h5>Por favor ingrese todos los campos requeridos (*)</h5></p>
+		</div>
+	</form>
+{% endblock %}
