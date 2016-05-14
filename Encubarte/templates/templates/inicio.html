@@ -1,0 +1,93 @@
+{%extends "base.html"%}
+
+{% block titulo %}Inicio{% endblock %}
+{% block contenido %}
+	<div class="container-fluid offset1">
+		{% if registerSuccess %}
+			<p class="text-info">Registro exitoso! Puedes iniciar sesión.</p>
+		{% endif %}
+		{% if conectado %}
+			{% if estudiante %}
+			<div class="span10">
+			<table width="80%" align="center" >
+			    <div id="head_nav">
+			    	<th>Hora</th>
+				    {% for d in diasSemana%}
+				        <th>{{d}}</th>
+				    {% endfor %}
+				</div> 
+				
+				{% for h in horas%}
+					<tr>
+			        	<th>{{h}}</th>
+
+			        		{% for d in horario|get_item:h%}
+				        		<td>{{d}}</td>
+				    		{% endfor %}
+
+			    	</tr>
+				{% endfor %}
+				</table>
+			</div>
+			{% endif %}
+			<!-- full calendar 
+			<div class="span10" id='calendar'></div> -->
+			<div class="span3">
+				<form action="/logout/" name="logout">
+				{% csrf_token %}
+					<h3>Inicio de Sesión</h3>
+					<div>
+						<p>Estás logueado como {{nombre}}, quieres iniciar sesión como alguien más?</p>
+				        <label>Cerrar sesión:</label>
+				        <input type="submit" value="Log out" name="logout"/>
+				    </div>
+				</form>
+			</div> 
+
+			
+		{%else %}
+			<div class="span3">
+				<h2>Misión</h2>
+				<p align="justify">Info</p>
+			</div>
+			<div class="span3">
+				<h2>Visión</h2>
+				<p align="justify">Info</p>
+			</div>
+			<div class="span3">
+				<h2>Quienes somos?</h2>
+				<p align="justify">Info</p>
+			</div>
+			<div class="span3">
+				<center>
+					<h3>Inicio de Sesión</h3>
+				</center>
+				<form method="POST" action="/login/" name="login">
+				{% csrf_token %}
+					<table class ="table-hover">
+						<tbody>
+							<tr>
+						        <td><label>Numero de documento o correo electronico:</label></td>
+						        <td><input type="text" name="username" required="true" value="{{username}}"/></td>
+						    </tr>
+						    <tr>
+						        <td><label>Contraseña:</label></td>
+						        <td><input type="password" name="password" required="true"/></td>
+						    </tr>
+					    </tbody>
+					</table>
+					<br>
+					<center>
+				    <div>
+				        <input type="submit" value="Entrar" name="login"/>
+				    </div>
+				    </center>
+				    {% if loginFailed%}
+						<p class="text-error">El nombre de usuario (o correo) y la contraseña no coinciden</p>
+					{% endif%}
+				</form>
+			</div>
+		{% endif %}
+	</div>
+{% endblock %}
+
