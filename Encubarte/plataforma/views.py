@@ -4,6 +4,7 @@ from django.template import RequestContext
 from django.http import HttpResponseRedirect
 from django.forms.models import model_to_dict
 from django.contrib.auth import login, authenticate, logout
+from django.views.generic import base
 from Encubarte.plataforma.models import Estudiante, DatosFamiliaMayor, DatosFamiliaMenor, Profesor, Horario, Curso, Grupo
 from Encubarte.plataforma.parametros import parametros
 from django.contrib.auth.models import User
@@ -18,6 +19,7 @@ import itertools
 
 from django.core import serializers
 
+
 def inicioControl(request, registerSuccess=False):
 	conectado=False
 	nombre=request.user.username
@@ -30,8 +32,11 @@ def inicioControl(request, registerSuccess=False):
 		nombre=request.user.first_name
 		diasSemana = parametros["diasSemana"]
 		horas = parametros["horas"]
-		horario = horarioUsuario(request.user)
-	return render_to_response ('inicio.html',locals(), context_instance = RequestContext(request))
+		#horario = horarioUsuario(request.user)
+		return render_to_response ('Estudiante/LogEstudiante.html',locals(), context_instance = RequestContext(request))
+	else:
+		return render_to_response ('inicio.html',locals(), context_instance = RequestContext(request))
+	
 
 def registroEstudianteControl(request):
 	if not request.user.is_authenticated():
@@ -143,7 +148,7 @@ def registroProfesorControl(request):
 			errorGenero = (genero not in (parametros["generos"]))
 	
 			if (errorNumeroDocumento or errorCorreoElectronico or errorContrasena or errorFechaNacimiento or errorTipoDocumento or errorGenero):
-				return render_to_response('registroProfesor.html', locals(), context_instance = RequestContext(request))
+				return render_to_response('Administrador/registroProfesor.html', locals(), context_instance = RequestContext(request))
 	
 			#Guardar usuario
 			usuario = User.objects.create_user(username=numeroDocumento, email=correoElectronico, password=contrasena)
@@ -158,7 +163,7 @@ def registroProfesorControl(request):
 	
 			return inicioControl(request,registerSuccess=True)
 		else:
-			return render_to_response('registroProfesor.html', locals(), context_instance = RequestContext(request))
+			return render_to_response('Administrador/registroProfesor.html', locals(), context_instance = RequestContext(request))
 	else:
 		return HttpResponseRedirect('/404')
 
@@ -184,15 +189,15 @@ def registroCursoControl(request):
 			errorCursoYaExiste = tmp is not None
 
 			if (errorNombreCurso or errorProfesor or errorCursoYaExiste):
-				return render_to_response('registroCurso.html', locals(), context_instance = RequestContext(request))
+				return render_to_response('Administrador/registroCurso.html', locals(), context_instance = RequestContext(request))
 
 			#guardo objeto en base de datos
 			curso = Curso(nombre = nombreCurso, idProfesor = profesor)#Profesor.objects.get(nombre = profesor))
 			curso.save()
 			operationSuccess = True
-			return render_to_response('registroCurso.html', locals(), context_instance = RequestContext(request))
+			return render_to_response('Administrador/registroCurso.html', locals(), context_instance = RequestContext(request))
 		else:
-			return render_to_response('registroCurso.html', locals(), context_instance = RequestContext(request))
+			return render_to_response('Administrador/registroCurso.html', locals(), context_instance = RequestContext(request))
 	else:
 		return HttpResponseRedirect('/404')
 
@@ -222,15 +227,15 @@ def registroHorarioControl(request):
 			errorHoraFin = horaFinFormato < horaInicioFormato
 
 			if (errorCurso or errorDia or errorHora or errorHoraFin):
-				return render_to_response('registroHorario.html', locals(), context_instance = RequestContext(request))
+				return render_to_response('Administrador/registroHorario.html', locals(), context_instance = RequestContext(request))
 
 			#guardo objeto
 			horario = Horario(idCurso = curso, dia = dia, horaInicio = horaInicioFormato, horaFin = horaFinFormato)
 			horario.save()
 			operationSuccess = True
-			return render_to_response('registroHorario.html', locals(), context_instance = RequestContext(request))
+			return render_to_response('Administrador/registroHorario.html', locals(), context_instance = RequestContext(request))
 		else:
-			return render_to_response('registroHorario.html', locals(), context_instance = RequestContext(request))
+			return render_to_response('Administrador/registroHorario.html', locals(), context_instance = RequestContext(request))
 	else:
 		return HttpResponseRedirect('/404')
 
@@ -303,6 +308,33 @@ def horarioUsuario(User):
 				else:
 					horario[h].append('')
 	return horario
+
+class matriculaControl(base.View):
+	def get(self, request, *args, **kwargs):
+		curso = Curso.objects.all()
+		return render_to_response('Estudiante\MatricularCurso.html', {"cursos":curso})
+
+class horarioControl(base.View):
+	def get(self, request, *args, **kwargs):
+		return render_to_response('Estudiante\VerHorario.html', locals(), context_instance = RequestContext(request))
+
+class LogEstudiante(base.View):
+	def get(self, request, *args, **kwargs):
+		return render_to_response('Estudiante\LogEstudiante.html', locals(), context_instance = RequestContext(request))
+
+class CamPassEstudiante(base.View):
+	def get(self, request, *args, **kwargs):
+		return render_to_response('Estudiante\CambiarContraseña.html', locals(), context_instance = RequestContext(request))
+
+	def post(self, request, *args, **kwargs):
+		return render_to_response('Estudiante\CambiarContraseña.html', locals(), context_instance = RequestContext(request))
+
+class ModificarInformacion(base.View):
+	def get(self, request, *args, **kwargs):
+		return render_to_response('Estudiante\ModificarInfo.html', locals(), context_instance = RequestContext(request))
+
+	def post(self, request, *args, **kwargs):
+		return render_to_response('Estudiante\ModificarInfo.html', locals(), context_instance = RequestContext(request))
 
 @register.filter
 def get_item(dictionary, key):

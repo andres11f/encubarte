@@ -1,0 +1,83 @@
+{%extends "base.html"%}
+{% block titulo %}Registro Curso{% endblock %}
+{% block contenido %}
+	{%if errorCurso or errorDia or errorHora or errorHoraFin %}
+	<div class="container">
+		<h3>Corrige los siguientes errores para continuar:</h3>
+		<p class="text-error">
+			{% if errorCurso %}
+				El curso no es valido.<br>
+			{% endif %}
+			{% if errorDia %}
+				El dia no es valido.<br>
+			{% endif %}
+			{% if errorHora %}
+				La hora de inicio o de fin no es valida.<br>
+			{% endif %}
+			{% if errorHoraFin %}
+				La hora final es anterior a la hora inicial.<br>
+			{% endif %}
+		</p>
+	</div>
+	{% endif %}
+	{% if operationSuccess %}
+		<div class="container">
+			<p class="text-info">Operacion completada con exito.</p>
+		</div>
+	{% endif %}
+
+	<form method="POST" action="/registroHorario/" name="registroHorario">
+		{% csrf_token %}
+		<div class="container">
+		<h3>Ingresa los datos del horario</hs3>
+			<table class="table-bordered table-striped table-hover">
+				<tbody>
+				    <tr>
+				        <td><label>Curso:</label></td>
+				        <td>
+				        	<select name="idCurso" required="true">
+				        		{% for c in cursos%}
+				        			<option value="{{c.id}}">{{c}}</option>
+				        		{% endfor %}
+				        	</select>
+				    	</td>
+				    </tr>
+				    <tr>
+				        <td><label>Dia:</label></td>
+				        <td>
+				        	<select name="dia" required="true" value="{{dia}}">
+				        		{% for d in dias%}
+				        			<option>{{d}}</option>
+				        		{% endfor %}
+				        	</select>
+				    	</td>
+				    </tr>
+				    <tr>
+				        <td><label>Hora Inicio:</label></td>
+				        <td>
+				        	<select name="horaInicio" required="true" value="{{horaInicio}}">
+				        		{% for h in horas%}
+				        			<option>{{h}}</option>
+				        		{% endfor %}
+				        	</select>
+				    	</td>
+				    </tr>
+				    <tr>
+				        <td><label>Hora Fin:</label></td>
+				        <td>
+				        	<select name="horaFin" required="true" value="{{horaFin}}">
+				        		{% for h in horas%}
+				        			<option>{{h}}</option>
+				        		{% endfor %}
+				        	</select>
+				    	</td>
+				    </tr>
+				    <tr>
+				        <td><input type="submit" value="Regístrate" name="registrar"/>
+				    </tr>
+				</tbody>
+			</table>
+		<p class="text-info"><h5>Por favor ingrese todos los campos requeridos (*)</h5></p>
+		</div>
+	</form>
+{% endblock %}
