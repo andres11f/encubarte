@@ -4,27 +4,29 @@
 
 {% block contenido %}
 	<div class="container-fluid offset1">
-		<!--{% if conectado %}
-			<!-- full calendar
-			<div class="span10" id='calendar'></div>
-
-			<div class="span3">
-				<form action="/logout/" name="logout">
-				{% csrf_token %}
-					<h3>Inicio de Sesión</h3>
-					<div>
-						<p>Estás logueado como {{nombre}}, ¿Quieres iniciar sesión como alguien más?</p>
-				        <label>Cerrar sesión</label>
-				        <input type="submit" value="Log out" name="logout"/>
-				    </div>
-			</form>
-			</div>
-		{% else %} -->
-
 			{% block items %}
 			<div class="spanEst">
 				<center>
-				<table border="1" >
+				<table width="80%" align="center" >
+			    <div id="head_nav">
+			    	<th>Hora</th>
+				    {% for d in diasSemana%}
+				        <th>{{d}}</th>
+				    {% endfor %}
+				</div> 
+
+				{% for h in horas%}
+				<tr>
+			        <th>{{h}}</th>
+			        	{% for d in diasSemana%}
+			        		{% with d|add:","|add:h as tupla %}
+				        		<td>{{horario|get_item:tupla}}</td>
+				    		{% endwith %}
+				    	{% endfor %}
+			    </tr>
+				{% endfor %}
+				</table>
+				<!--<table border="1" >
 					<tr>
 						<th> Horario </th>
 						<th> Lunes </th>
@@ -115,12 +117,11 @@
 						<td> 6</td>
 						<td> 7</td>
 					</tr>
-				</table>
+				</table>-->
 				</center>
 			<br>
 			</div>
 			
 			{% endblock %}
-		<!--{% endif %}-->
 	</div>
 {% endblock %}

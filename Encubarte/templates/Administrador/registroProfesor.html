@@ -31,6 +31,7 @@
 		{% csrf_token %}
 		<div class="container">
 		<h3>Ingresa los datos del profesor</hs3>
+		<p class="text-info"><h5>Por favor ingresa todos los campos requeridos (*)</h5></p>
 			<table class="table-bordered table-striped table-hover">
 				<tbody>
 					<tr>
@@ -52,7 +53,7 @@
 				        <td><input type="password" name="contrasena" required="true"/>*</td>
 				    </tr>
 				    <tr>
-				        <td><label>Repita su Contraseña:</label></td>
+				        <td><label>Repite la Contraseña:</label></td>
 				        <td><input type="password" name="contrasena2" required="true"/>*</td>
 				    </tr>
 				    <tr>
@@ -82,11 +83,10 @@
 				    	</td>
 				    </tr>
 				    <tr>
-				        <td><input type="submit" value="Regístrate" name="registrar"/>
+				        <td><input type="submit" value="Registrar Profesor" name="registrar"/>
 				    </tr>
 				</tbody>
 			</table>
-		<p class="text-info"><h5>Por favor ingrese todos los campos requeridos (*)</h5></p>
 		</div>
 	</form>
 {% endblock %}

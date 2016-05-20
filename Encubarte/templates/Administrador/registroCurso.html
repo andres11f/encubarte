@@ -23,10 +23,11 @@
 		</div>
 	{% endif %}
 
+	<div class="container">
 	<form method="POST" action="/registroCurso/" name="registroCurso">
 		{% csrf_token %}
 		<div class="container">
-		<h3>Ingresa los datos del profesor</hs3>
+		<h3>Ingresa los datos del curso</hs3>
 			<table class="table-bordered table-striped table-hover">
 				<tbody>
 				    <tr>
@@ -54,7 +55,16 @@
 				    </tr>
 				</tbody>
 			</table>
-		<p class="text-info"><h5>Por favor ingrese todos los campos requeridos (*)</h5></p>
 		</div>
 	</form>
+		<div class="container">
+			<table width="80%" align="center" >
+			{% for c in cursos%}
+				<tr>
+			        <td>{{c}}</td>
+			    </tr>
+			{% endfor %}
+			</table>
+		</div> 
+	</div>
 {% endblock %}

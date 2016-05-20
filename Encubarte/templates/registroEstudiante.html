@@ -2,7 +2,7 @@
 
 {% block titulo %}Registro Estudiante{% endblock %}
 {% block contenido %}
-	{%if errorNumeroDocumento or errorTipoDocumento or errorContrasena or errorCorreoElectronico or errorFechaNacimiento or errorGenero or errorTelefonos %}
+	{%if errorNumeroDocumento or errorTipoDocumento or errorContrasena or errorCorreoElectronico or errorFechaNacimiento or errorGenero or errorTelefonos or errorDocumento %}
 	<div class="container">
 		<h3>Corrige los siguientes errores para continuar:</h3>
 		<p class="text-error">
@@ -26,7 +26,10 @@
 			{% endif %}
 			{% if errorTelefonos %}
 				Los telefonos deben ser solo números y no exceder los 12 caracteres, por favor revisa los campos de teléfono fijo, celular y de contacto.<br>
-			{% endif %}		
+			{% endif %}
+			{% if errorDocumento %}
+				el documento ingresado no es valido.<br>
+			{% endif %}	
 		</p>
 	</div>
 	{% endif %}
@@ -41,10 +44,11 @@
 		    </div>
 		</form>
 	{%else %}
-		<form method="POST" action="/registroEstudiante/" name="registroEstudiante">
+		<form method="POST" action="/registroEstudiante/" name="registroEstudiante" enctype="multipart/form-data">
 			{% csrf_token %}
 			<div class="container">
 			<h3>Ingresa tus datos</hs3>
+			<p class="text-info"><h5>Por favor ingrese todos los campos requeridos (*)</h5></p>
 			<table class="table-bordered table-striped table-hover">
 				<tbody>
 					<tr>
@@ -66,7 +70,7 @@
 				        <td><input type="password" name="contrasena" required="true"/>*</td>
 				    </tr>
 				    <tr>
-				        <td><label>Repita su Contraseña:</label></td>
+				        <td><label>Repite la Contraseña:</label></td>
 				        <td><input type="password" name="contrasena2" required="true"/>*</td>
 				    </tr>
 				    <tr>
@@ -104,14 +108,6 @@
 				        <td><input type="text" name="barrio" required="true" value="{{barrio}}"/>*</td>
 				    </tr>
 				    <tr>
-				        <td><label>Zona:</label></td>
-				        <td><input type="text" name="zona" required="true" value="{{zona}}"/>*</td>
-				    </tr>
-				    <tr>
-				        <td><label>Comuna:</label></td>
-				        <td><input type="text" name="comuna" required="true" value="{{comuna}}"/>*</td>
-				    </tr>
-				    <tr>
 				        <td><label>Telefono Fijo:</label></td>
 				        <td><input type="text" name="telefonoFijo" required="true" pattern="[0-9]{7,12}" value="{{telefonoFijo}}"/>*</td>
 				    </tr>
@@ -120,27 +116,38 @@
 				        <td><input type="text" name="telefonoCelular" required="true" pattern="[0-9]{7,12}" value="{{telefonoCelular}}"/>*</td>
 				    </tr>
 				    <tr>
-				        <td><label>Grupo etnico:</label></td>
-				        <td><input type="text" name="grupoEtnico" required="true" value="{{grupoEtnico}}"/>*</td>
-				    </tr>
-				    <tr>
-				        <td><label>Condicion:</label></td>
-				        <td><input type="text" name="condicion" required="true" value="{{condicion}}"/>*</td>
-				    </tr>
-				    <tr>
 				        <td><label>Seguridad social:</label></td>
 				        <td><input type="text" name="seguridadSocial" required="true" value="{{seguridadSocial}}"/>*</td>
 				    </tr>
 				    <tr>
-				        <td><label>Desea recibir información en su correo electronico?:</label></td>
-				        <td><input type="checkbox" name="enviarInfoAlCorreo" required="true" value="{{enviarInfoAlCorreo}}"/>*</td>
+				        <td><label>Zona:</label></td>
+				        <td><input type="text" name="zona" value="{{zona}}"/></td>
+				    </tr>
+				    <tr>
+				        <td><label>Comuna:</label></td>
+				        <td><input type="text" name="comuna" value="{{comuna}}"/></td>
+				    </tr>
+				    <tr>
+				        <td><label>Grupo etnico:</label></td>
+				        <td><input type="text" name="grupoEtnico" value="{{grupoEtnico}}"/></td>
+				    </tr>
+				    <tr>
+				        <td><label>Condicion:</label></td>
+				        <td><input type="text" name="condicion" value="{{condicion}}"/></td>
+				    </tr>
+				    <tr>
+				        <td><label>Deseas recibir información en tu correo electronico?:</label></td>
+				        <td><input type="checkbox" name="enviarInfoAlCorreo" value="{{enviarInfoAlCorreo}}"/></td>
+				    </tr>
+				    <tr>
+				        <td><label>Documento:</label></td>
+				        <td><input type="file" accept=".jpg,.jpeg" name="documento" value="{{documento}}" required="true"/>*</td>
 				    </tr>
 				    <tr>
 				        <td><input type="submit" value="Regístrate" name="registrarEstudiante"/>
 				    </tr>
 				</tbody>
 			</table>
-			<p class="text-info"><h5>Por favor ingrese todos los campos requeridos (*)</h5></p>
 			</div>
 		</form>
 	{% endif %}

@@ -16,9 +16,7 @@ from datetime import timedelta, datetime, date
 from django import template
 import itertools
 
-
 from django.core import serializers
-
 
 def inicioControl(request, registerSuccess=False):
 	conectado=False
@@ -30,13 +28,12 @@ def inicioControl(request, registerSuccess=False):
 		conectado=True
 		estudiante= not request.user.is_staff
 		nombre=request.user.first_name
-		diasSemana = parametros["diasSemana"]
-		horas = parametros["horas"]
-		#horario = horarioUsuario(request.user)
-		return render_to_response ('Estudiante/LogEstudiante.html',locals(), context_instance = RequestContext(request))
+		if estudiante:
+			return render_to_response('Estudiante/LogEstudiante.html',locals(), context_instance = RequestContext(request))
+		else:
+			return render_to_response('inicio.html',locals(), context_instance = RequestContext(request))
 	else:
 		return render_to_response ('inicio.html',locals(), context_instance = RequestContext(request))
-	
 
 def registroEstudianteControl(request):
 	if not request.user.is_authenticated():
@@ -55,14 +52,24 @@ def registroEstudianteControl(request):
 			genero = request.POST['genero']
 			direccion = request.POST['direccion']
 			barrio = request.POST['barrio']
-			zona = request.POST['zona']
-			comuna = request.POST['comuna']
 			telefonoFijo = request.POST['telefonoFijo']
 			telefonoCelular = request.POST['telefonoCelular']
-			grupoEtnico = request.POST['grupoEtnico']
-			condicion = request.POST['condicion']
 			seguridadSocial = request.POST['seguridadSocial']
-			enviarInfoAlCorreo = request.POST['enviarInfoAlCorreo']
+			documento = request.FILES["documento"]
+
+			#Inicializo datos opcionales
+			zona = ""
+			comuna = ""
+			grupoEtnico = ""
+			condicion = ""
+			enviarInfoAlCorreo = False
+
+			#Tomo los datos opcionales que el usuario haya ingresado
+			if request.POST['zona']: zona = request.POST['zona']
+			if request.POST['comuna']: comuna = request.POST['comuna']
+			if request.POST['grupoEtnico']: grupoEtnico = request.POST['grupoEtnico']
+			if request.POST['condicion']: condicion = request.POST['condicion']
+			if "enviarInfoAlCorreo" in request.POST.keys(): enviarInfoAlCorreo = True
 
 			#Validaciones
 			errorNumeroDocumento = (User.objects.filter(username=numeroDocumento) or  not re.match("^([0-9]{8,20})$",numeroDocumento))
@@ -72,8 +79,9 @@ def registroEstudianteControl(request):
 			errorFechaNacimiento = not fechaCorrecta(fechaNacimiento)
 			errorGenero = (genero not in (parametros["generos"]))
 			errorTelefonos = (not re.match("^([0-9]{7,12})$",telefonoFijo) or not re.match("^([0-9]{7,12})$",telefonoCelular))
+			errorDocumento = not documento
 
-			if (errorContrasena or errorNumeroDocumento or errorTipoDocumento or errorCorreoElectronico or errorFechaNacimiento or errorGenero or errorTelefonos):
+			if (errorContrasena or errorNumeroDocumento or errorTipoDocumento or errorCorreoElectronico or errorFechaNacimiento or errorGenero or errorTelefonos or errorDocumento):
 				return render_to_response('registroEstudiante.html', locals(), context_instance = RequestContext(request))
 
 			#Guardar usuario
@@ -83,8 +91,7 @@ def registroEstudianteControl(request):
 			usuario.save()
 
 			#Guardo estudiante
-			estudiante = Estudiante(user = usuario, tipoDocumento = tipoDocumento, fechaNacimiento = fechaNacimiento, genero = genero, direccion = direccion, barrio = barrio, zona = zona, comuna = comuna, telefonoFijo = telefonoFijo, telefonoCelular = telefonoCelular, grupoEtnico = grupoEtnico, condicion = condicion, seguridadSocial = seguridadSocial, enviarInfoAlCorreo = enviarInfoAlCorreo)
-
+			estudiante = Estudiante(user = usuario, tipoDocumento = tipoDocumento, fechaNacimiento = fechaNacimiento, genero = genero, direccion = direccion, barrio = barrio, zona = zona, comuna = comuna, telefonoFijo = telefonoFijo, telefonoCelular = telefonoCelular, grupoEtnico = grupoEtnico, condicion = condicion, seguridadSocial = seguridadSocial, enviarInfoAlCorreo = enviarInfoAlCorreo, documento = documento)
 			estudiante.save()
 
 			return inicioControl(request,registerSuccess=True)
@@ -134,7 +141,6 @@ def registroProfesorControl(request):
 			contrasena2 = request.POST["contrasena2"]
 			nombres = request.POST["nombres"]
 			apellidos = request.POST["apellidos"]
-	
 			fechaNacimiento = request.POST['fechaNacimiento']
 			tipoDocumento = request.POST["tipoDocumento"]
 			genero = request.POST['genero']
@@ -174,14 +180,18 @@ def registroCursoControl(request):
 
 		if request.method == 'POST':
 			nombreCurso = request.POST["nombreCurso"]
-			profesor = request.POST["profesor"]
+			idProfesor = request.POST["profesor"]
 
 			#validaciones
-			user = User.objects.get(username = profesor.split()[0])
-			profesor = Profesor.objects.get(user = user)
+			try:
+				user = User.objects.get(username = idProfesor.split()[0])
+				profesor = Profesor.objects.get(user = user)
+			except Profesor.DoesNotExist or User.DoesNotExist:
+				profesor = None
 
 			errorNombreCurso = nombreCurso not in parametros["nombresCursos"]
 			errorProfesor = profesor is None
+
 			try:
 				tmp = Curso.objects.get(nombre = nombreCurso, idProfesor = profesor)
 			except Curso.DoesNotExist:
@@ -197,6 +207,7 @@ def registroCursoControl(request):
 			operationSuccess = True
 			return render_to_response('Administrador/registroCurso.html', locals(), context_instance = RequestContext(request))
 		else:
+			cursos = Curso.objects.all()
 			return render_to_response('Administrador/registroCurso.html', locals(), context_instance = RequestContext(request))
 	else:
 		return HttpResponseRedirect('/404')
@@ -239,35 +250,6 @@ def registroHorarioControl(request):
 	else:
 		return HttpResponseRedirect('/404')
 
-#def asignarCursoControl(request):
-#	if request.user.is_authenticated() and request.user.is_superuser:
-#		profesores = Profesor.objects.all()
-#		cursos = Curso.objects.all()
-#		profesoresCursos = dict()
-#		operationSuccess = False
-#
-#		#se cargan profesores ya asignados a cada curso
-#		for pc in ProfesorCurso.objects.all():
-#			if pc.idCurso.nombre in profesoresCursos:
-#				profesoresCursos[pc.idCurso.nombre].append(pc.idProfesor)
-#			else:
-#				profesoresCursos[pc.idCurso.nombre] = [pc.idProfesor]
-#
-#		if request.method == 'POST':
-#			ProfesorCurso.objects.all().delete()
-#			for curso in cursos:
-#				profsCurso = request.POST.getlist(curso.nombre)
-#				for prof in profsCurso:
-#					user = User.objects.get(username = prof.split()[0])
-#					profesorCurso = ProfesorCurso(idCurso = curso, idProfesor = Profesor.objects.get(user = user))
-#					profesorCurso.save()
-#			operationSuccess = True
-#			return render_to_response('asignarCurso.html', locals(), context_instance = RequestContext(request))
-#		else:
-#			return render_to_response('asignarCurso.html', locals(), context_instance = RequestContext(request))
-#	else:
-#		return HttpResponseRedirect('/404')
-
 def notFoundControl(request):
 	return render_to_response('404.html',locals(),context_instance = RequestContext(request))
 
@@ -284,15 +266,31 @@ def horarioUsuario(User):
 	
 	horario = dict()
 
-	for h in horas:
-		horario[h] = list()
-	
+	for d in diasSemana:
+		for h in horas:
+			horario[(d, h)] = ''
+
 	try:
 		estudiante = Estudiante.objects.get(user = User)
 		gruposEstudiante = Grupo.objects.filter(idEstudiante = estudiante)
 	except:
 		return {}
 
+	for grupoE in gruposEstudiante:
+		horariosGrupo = Horario.objects.filter(idCurso = grupoE.idCurso)
+
+		for h in horariosGrupo:
+			horaInicio = h.horaInicio
+			horaFin = h.horaFin
+			horaTmp = horaInicio
+
+			while horaTmp < horaFin:
+				if horaTmp.strftime("%H:%M") in horas and h.dia in diasSemana:
+					horario[(h.dia, horaTmp.strftime("%H:%M"))] = h.idCurso.nombre
+				horaTmp = (datetime.combine(date.today(), horaTmp) + timedelta(hours=1)).time()
+
+	return horario	
+	"""
 	for d in diasSemana:
 		for h in horas:
 			try:
@@ -307,7 +305,13 @@ def horarioUsuario(User):
 					horario[h].append(tmpHorario.idCurso.nombre)
 				else:
 					horario[h].append('')
-	return horario
+	"""
+	#por cada grupo del estudiante
+		#obtengo el id del curso
+			#obtengo los horarios asociados a ese curso
+				#por cada horario obtengo el horario de inicio a final
+					#por cada hora entre la hora de inicio y final
+						#horario[hora] = idcurso.nombre
 
 class matriculaControl(base.View):
 	def get(self, request, *args, **kwargs):
@@ -316,6 +320,9 @@ class matriculaControl(base.View):
 
 class horarioControl(base.View):
 	def get(self, request, *args, **kwargs):
+		diasSemana = parametros["diasSemana"]
+		horas = parametros["horas"]
+		horario = horarioUsuario(request.user)
 		return render_to_response('Estudiante\VerHorario.html', locals(), context_instance = RequestContext(request))
 
 class LogEstudiante(base.View):
@@ -338,7 +345,7 @@ class ModificarInformacion(base.View):
 
 @register.filter
 def get_item(dictionary, key):
-    return dictionary.get(key)
+	return dictionary.get((key.split(",")[0], key.split(",")[1]))
 
 class CycleNode(template.Node):
     def __init__(self, cyclevars):

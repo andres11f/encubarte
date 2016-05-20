@@ -9,29 +9,28 @@
 		{% if conectado %}
 			{% if estudiante %}
 			<div class="span10">
-			<table width="80%" align="center" >
+			<!--<table width="80%" align="center" >
 			    <div id="head_nav">
 			    	<th>Hora</th>
 				    {% for d in diasSemana%}
 				        <th>{{d}}</th>
 				    {% endfor %}
 				</div> 
-				
+
 				{% for h in horas%}
 					<tr>
 			        	<th>{{h}}</th>
-
-			        		{% for d in horario|get_item:h%}
-				        		<td>{{d}}</td>
+			        		{% for d in diasSemana%}
+			        			{% with d|add:","|add:h as tupla %}
+				        			<td>{{horario|get_item:tupla}}</td>
+				    			{% endwith %}
 				    		{% endfor %}
-
 			    	</tr>
 				{% endfor %}
-				</table>
+				</table> --> 
 			</div>
+			<!--This is a comment. Comments are not displayed in the browser--> 
 			{% endif %}
-			<!-- full calendar 
-			<div class="span10" id='calendar'></div> -->
 			<div class="span3">
 				<form action="/logout/" name="logout">
 				{% csrf_token %}
