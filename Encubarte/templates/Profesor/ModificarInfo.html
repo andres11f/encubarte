@@ -1,0 +1,42 @@
+{% extends "base.html"%}
+
+{% block contenido %}
+	{%if errorNumeroDocumento or errorTipoDocumento or errorContrasena or errorCorreoElectronico or errorFechaNacimiento or errorGenero or errorTelefonos %}
+	<div class="container">
+		<h3>Corrige los siguientes errores para continuar:</h3>
+		<p class="text-error">
+			{% if errorNumeroDocumento %}
+				El número de documento que seleccionaste ya está en uso o no es un número.<br>
+			{% endif %}
+			{% if errorTipoDocumento %}
+				No seleccionaste un tipo de documento correcto.<br>
+			{% endif %}
+			{% if errorContrasena %}
+				Las contraseñas no coinciden, verifica por favor.<br>
+			{% endif %}
+			{% if errorCorreoElectronico %}
+				El correo ya está en uso, intenta otro.<br>
+			{% endif %}
+			{% if errorFechaNacimiento %}
+				La fecha no es correcta, si tu navegador no muestra un campo de fecha intenta con el formato aaaa-mm-dd.<br>
+			{% endif %}
+			{% if errorGenero %}
+				No seleccionaste un género correcto.<br>
+			{% endif %}
+		</p>
+	</div>
+	{% endif %}
+
+	<form method="POST" action="/LogProfesor/ModificarInfo" name="ModificarInfo">
+		{% csrf_token %}
+		<center>
+			{{ formUser.as_table }}
+			{{ form.as_table }}
+			<br>
+		    <tr>
+		        <td><input type="submit" value="Cambiar Datos" name="CamPass"/>
+		    </tr>
+			<p class="text-info"><h5> Por favor ingrese todos los campos requeridos (*)</h5></p>
+		</center>
+	</form>
+{% endblock %}

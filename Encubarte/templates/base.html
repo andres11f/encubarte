@@ -1,15 +1,16 @@
-</body>
+
 </html lang="es">
+
 <!DOCTYPE HTML>
 <html>
 	<head>
-		<title>{% block titulo %} Inicio {% endblock %}</title>
+		<title> {% block titulo %} Inicio {% endblock %} </title>
 		{%block css%}
 		<link rel="stylesheet" type="text/css" href="/media/css/estilos.css"/>
 		{% endblock%}
 		{% block bootstrap %}
 			<link rel="stylesheet" href="/media/bootstrap/css/bootstrap.min.css">
-			<script type="text/javascript" src="/media/bootstrap/js/bootstrap.min.js"></script>
+			<script type="text/javascript" src="/media/bootstrap/js/bootstrap.min.js"> </script>
 		{% endblock %}
 		{% block scripts %}
 		{% endblock %}
@@ -28,15 +29,17 @@
 					<li><a class="btn btn-danger" href="/logout">Cerrar sesión</a></li>
 				{% else %}
 					{% if request.user.is_staff %}
-						<li> <a class="btn btn-info" href="/">lista de cursos</a> </li>
-						<li> <a class="btn btn-info" href="/">Matriculados a sus cursos</a> </li>
-						<li> <a class="btn btn-info" href="/">Matricular estudiante</a> </li>
+						<li> <a class="btn btn-info" href="/"> Lista de cursos</a> </li>
+						<li> <a class="btn btn-info" href="/"> Matriculados a sus cursos</a> </li>
+						<li> <a class="btn btn-info" href="/"> Matricular estudiante</a> </li>
+						<li> <a class="btn btn-info" href="/LogProfesor/ModificarInfo">Modificar Informacion Personal</a> </li>
+						<li> <a class="btn btn-info" href="/LogProfesor/CambiarContrasena">Cambiar Contraseña</a> </li>
 						<li><a class="btn btn-danger" href="/logout">Cerrar sesión</a></li>
 					{% else %}
 						{% if request.user.is_authenticated %}
-							<li><a class="btn btn-primary" href="/LogEstudiante/VerHorario">Ver Horario</a></li>
+							<li><a class="btn btn-primary" href="/LogEstudiante/VerHorario"> Ver Horario </a></li>
 							<li><a class="btn btn-primary" href="/LogEstudiante/ModificarInfo">Modificar información Personal</a></li>
-							<li><a class="btn btn-primary" href="/LogEstudiante/CambiarContraseña">Cambiar Contraseña</a></li>
+							<li><a class="btn btn-primary" href="/LogEstudiante/CambiarContrasena">Cambiar Contraseña</a></li>
 							<li><a class="btn btn-primary" href="/LogEstudiante/MatricularCurso">Matricular Curso</a></li>
 							<li><a class="btn btn-danger" href="/logout">Cerrar sesión</a></li>
 						{% else %}

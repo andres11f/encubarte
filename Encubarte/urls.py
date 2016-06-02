@@ -2,7 +2,7 @@ from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from django.conf import settings
 import Encubarte.plataforma.views
-from Encubarte.plataforma.views import matriculaControl, LogEstudiante, horarioControl, inicioControl, CamPassEstudiante, ModificarInformacion
+from Encubarte.plataforma.views import matriculaControl, LogEstudiante, horarioControl, inicioControl, CamPass, ModificarInfoEstudiante, ModificarInfoProfesor
 
 admin.autodiscover()
 
@@ -19,11 +19,15 @@ urlpatterns = patterns('Encubarte.plataforma.views',
     url(r'^registroCurso/$', Encubarte.plataforma.views.registroCursoControl),
     url(r'^registroHorario/$', Encubarte.plataforma.views.registroHorarioControl),
 
+    #Links Profesores:
+    url(r'^LogProfesor/ModificarInfo/?$', ModificarInfoProfesor.as_view(), name='Modificar'),
+    url(r'^LogProfesor/CambiarContrasena/?$', CamPass.as_view(), name='Cambiar'),
+
     #links estudiantes:
-    url(r'^LogEstudiante/CambiarContraseña?$', CamPassEstudiante.as_view(), name='Cambiar'),
-    url(r'^LogEstudiante/ModificarInfo?$', ModificarInformacion.as_view(), name='Modificar'),
-    url(r'^LogEstudiante/VerHorario?$', horarioControl.as_view(), name='Horario'),
-    url(r'^LogEstudiante/MatricularCurso?$', matriculaControl.as_view(), name='Matricula'),
+    url(r'^LogEstudiante/CambiarContrasena/?$', CamPass.as_view(), name='Cambiar'),
+    url(r'^LogEstudiante/ModificarInfo/?$', ModificarInfoEstudiante.as_view(), name='Modificar'),
+    url(r'^LogEstudiante/VerHorario/?$', horarioControl.as_view(), name='Horario'),
+    url(r'^LogEstudiante/MatricularCurso/?$', matriculaControl.as_view(), name='Matricular'),
     url(r'^LogEstudiante/?$', LogEstudiante.as_view(), name='Estudiante'),
 
     #links para usuarios conectados:

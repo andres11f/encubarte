@@ -1,4 +1,4 @@
-{% include "Estudiante/LogEstudiante.html"%}
+{% extends "Estudiante/LogEstudiante.html"%}
 
 <!--{% block titulo %}Encubarte{% endblock %}-->
 
@@ -8,116 +8,24 @@
 			<div class="spanEst">
 				<center>
 				<table width="80%" align="center" >
-			    <div id="head_nav">
-			    	<th>Hora</th>
-				    {% for d in diasSemana%}
-				        <th>{{d}}</th>
-				    {% endfor %}
-				</div> 
+				    <div id="head_nav">
+				    	<th>Hora</th>
+					    {% for d in diasSemana%}
+					        <th>{{d}}</th>
+					    {% endfor %}
+					</div> 
 
-				{% for h in horas%}
-				<tr>
-			        <th>{{h}}</th>
-			        	{% for d in diasSemana%}
-			        		{% with d|add:","|add:h as tupla %}
-				        		<td>{{horario|get_item:tupla}}</td>
-				    		{% endwith %}
-				    	{% endfor %}
-			    </tr>
-				{% endfor %}
+					{% for h in horas%}
+					<tr>
+				        <th>{{h}}</th>
+				        	{% for d in diasSemana%}
+				        		{% with d|add:","|add:h as tupla %}
+					        		<td>{{horario|get_item:tupla}}</td>
+					    		{% endwith %}
+					    	{% endfor %}
+				    </tr>
+					{% endfor %}
 				</table>
-				<!--<table border="1" >
-					<tr>
-						<th> Horario </th>
-						<th> Lunes </th>
-						<th> Martes </th>
-						<th> Miércoles </th>
-						<th> Jueves </th>
-						<th> Viernes </th>
-						<th> Sábado </th>
-						<th> Domingo </th>
-					</tr>
-					<tr>
-						<td> 2:00</td>
-						<td> 1</td>
-						<td> 2</td>
-						<td> 3</td>
-						<td> 4</td>
-						<td> 5</td>
-						<td> 6</td>
-						<td> 7</td>
-					</tr>
-					<tr>
-						<td> 3:00</td>
-						<td> 1</td>
-						<td> 2</td>
-						<td> 3</td>
-						<td> 4</td>
-						<td> 5</td>
-						<td> 6</td>
-						<td> 7</td>
-					</tr>
-					<tr>
-						<td> 4:00</td>
-						<td> 1</td>
-						<td> 2</td>
-						<td> 3</td>
-						<td> 4</td>
-						<td> 5</td>
-						<td> 6</td>
-						<td> 7</td> 
-					</tr>
-					<tr>
-						<td> 5:00</td>
-						<td> 1</td>
-						<td> 2</td>
-						<td> 3</td>
-						<td> 4</td>
-						<td> 5</td>
-						<td> 6</td>
-						<td> 7</td>
-					</tr>
-					<tr> 
-						<td> 6:00 </td>
-						<td> 1</td>
-						<td> 2</td>
-						<td> 3</td>
-						<td> 4</td>
-						<td> 5</td>
-						<td> 6</td>
-						<td> 7</td>
-					</tr>
-					<tr>
-						<td> 7:00 </td> 
-						<td> 1</td>
-						<td> 2</td>
-						<td> 3</td>
-						<td> 4</td>
-						<td> 5</td>
-						<td> 6</td>
-						<td> 7</td>
-					</tr>
-					<tr>
-						<td> 8:00 </td> 
-						<td> 1</td>
-						<td> 2</td>
-						<td> 3</td>
-						<td> 4</td>
-						<td> 5</td>
-						<td> 6</td>
-						<td> 7</td>
-					</tr>
-					<tr>
-						<td> 9:00 </td> 
-						<td> 1</td>
-						<td> 2</td>
-						<td> 3</td>
-						<td> 4</td>
-						<td> 5</td>
-						<td> 6</td>
-						<td> 7</td>
-					</tr>
-				</table>-->
 				</center>
 			<br>
 			</div>
