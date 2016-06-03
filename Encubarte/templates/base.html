@@ -35,9 +35,9 @@
 						</button>
 						<a class="navbar-brand" href="#">Encubarte</a>
 			    	</div>
-					<div class="collapse navbar-collapse">
+					<div class="collapse navbar-collapse" id="myNavbar">
 						<ul class="nav navbar-nav">
-							<li class="active"><a href="/">Inicio</a></li>
+							<li><a href="/">Inicio</a></li>
 							{% if request.user.is_superuser %}
 								<li><a href="/registroProfesor">Registrar Profesor</a></li>
 								<li><a href="/registroCurso">Registrar Curso</a></li>
