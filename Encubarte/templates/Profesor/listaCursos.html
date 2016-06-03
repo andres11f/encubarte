@@ -1,0 +1,15 @@
+{%extends "base.html"%}
+
+{% block titulo %}Lista Cursos{% endblock %}
+
+{% block contenido %}
+	<div class="col-md-2">
+			<table align="center" >
+			{% for c in cursos%}
+				<tr>
+			        <td>{{c}}</td>
+			    </tr>
+			{% endfor %}
+			</table>
+		</div>
+{% endblock %}

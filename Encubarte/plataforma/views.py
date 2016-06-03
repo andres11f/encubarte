@@ -132,7 +132,8 @@ def registroProfesorControl(request):
 	if request.user.is_authenticated() and request.user.is_superuser:
 		generos = parametros["generos"]
 		tiposDocumento = parametros["tiposDocumento"]
-	
+		profesores = Profesor.objects.all()
+
 		if request.method == 'POST':
 			#Toma de datos
 			numeroDocumento = request.POST["numeroDocumento"]
@@ -169,6 +170,10 @@ def registroProfesorControl(request):
 	
 			return inicioControl(request,registerSuccess=True)
 		else:
+			if(request.GET.get('eliminarProfesor')):
+				user = User.objects.get(username = request.GET.get('username'))
+				profesorAEliminar = Profesor.objects.get(user = user)
+				profesorAEliminar.delete()
 			return render_to_response('Administrador/registroProfesor.html', locals(), context_instance = RequestContext(request))
 	else:
 		return HttpResponseRedirect('/404')
@@ -177,6 +182,7 @@ def registroCursoControl(request):
 	if request.user.is_authenticated() and request.user.is_superuser:
 		nombresCursos = parametros["nombresCursos"]
 		profesores = Profesor.objects.all()
+		cursos = Curso.objects.all()
 
 		if request.method == 'POST':
 			nombreCurso = request.POST["nombreCurso"]
@@ -207,7 +213,9 @@ def registroCursoControl(request):
 			operationSuccess = True
 			return render_to_response('Administrador/registroCurso.html', locals(), context_instance = RequestContext(request))
 		else:
-			cursos = Curso.objects.all()
+			if(request.GET.get('eliminarCurso')):				
+				cursoAEliminar = Curso.objects.get(id = request.GET.get('id'))
+				cursoAEliminar.delete()
 			return render_to_response('Administrador/registroCurso.html', locals(), context_instance = RequestContext(request))
 	else:
 		return HttpResponseRedirect('/404')
@@ -217,6 +225,7 @@ def registroHorarioControl(request):
 		cursos = Curso.objects.all()
 		dias = parametros["diasSemana"]
 		horas = parametros["horas"]
+		horarios = Horario.objects.all().order_by('idCurso')
 
 		if request.method == 'POST':
 			idCurso = request.POST["idCurso"]
@@ -246,9 +255,20 @@ def registroHorarioControl(request):
 			operationSuccess = True
 			return render_to_response('Administrador/registroHorario.html', locals(), context_instance = RequestContext(request))
 		else:
+			if(request.GET.get('eliminarHorario')):				
+				horarioAEliminar = Horario.objects.get(id = request.GET.get('id'))
+				horarioAEliminar.delete()
 			return render_to_response('Administrador/registroHorario.html', locals(), context_instance = RequestContext(request))
 	else:
 		return HttpResponseRedirect('/404')
+
+def listaCursosControl(request):
+	if request.user.is_authenticated() and request.user.is_staff:
+		idProfesor = Profesor.objects.get(user = request.user)
+		cursos = Curso.objects.filter(idProfesor = idProfesor)
+		print("--------------------CURSOS----------------")
+		print(cursos)
+		return render_to_response('Profesor/listaCursos.html',locals(), context_instance = RequestContext(request))
 
 def notFoundControl(request):
 	return render_to_response('404.html',locals(),context_instance = RequestContext(request))

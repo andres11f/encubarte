@@ -28,7 +28,7 @@
 					<li><a class="btn btn-danger" href="/logout">Cerrar sesión</a></li>
 				{% else %}
 					{% if request.user.is_staff %}
-						<li> <a class="btn btn-info" href="/">lista de cursos</a> </li>
+						<li> <a class="btn btn-info" href="/listaCursos">lista de cursos</a> </li>
 						<li> <a class="btn btn-info" href="/">Matriculados a sus cursos</a> </li>
 						<li> <a class="btn btn-info" href="/">Matricular estudiante</a> </li>
 						<li><a class="btn btn-danger" href="/logout">Cerrar sesión</a></li>
@@ -40,8 +40,8 @@
 							<li><a class="btn btn-primary" href="/LogEstudiante/MatricularCurso">Matricular Curso</a></li>
 							<li><a class="btn btn-danger" href="/logout">Cerrar sesión</a></li>
 						{% else %}
-						<li><a class="btn btn-success"href="/registroEstudiante">Regístrate</a></li>
-						<li><a class="btn btn-success"href="/LogEstudiante">Estudiante</a></li>
+						<li><a class="btn btn-success" href="/registroEstudiante">Regístrate</a></li>
+						<li><a class="btn btn-success" href="/LogEstudiante">Estudiante</a></li>
 						{% endif %}
 					{% endif %}
 				{% endif %}

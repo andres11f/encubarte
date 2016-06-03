@@ -93,14 +93,3 @@ class Grupo(models.Model):
 
 	def __str__(self):
 		return "Estudiante: " + self.idEstudiante.user.username + " Curso: " + self.idCurso.nombre + " - " + self.idCurso.idProfesor.user.first_name + " " + self.idCurso.idProfesor.user.last_name
-
-#class ProfesorCurso(models.Model):
-#	id = models.AutoField(primary_key=True)
-#	idCurso = models.ForeignKey(Curso)
-#	idProfesor = models.ForeignKey(Profesor)
-#
-#	def __str__(self):
-#		return "Curso: " + self.idCurso.nombre + " Profesor: " + self.idProfesor.user.username
-#
-#	class Meta:
-#		verbose_name_plural=u'Profesores - Cursos'

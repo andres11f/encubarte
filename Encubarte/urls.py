@@ -19,6 +19,9 @@ urlpatterns = patterns('Encubarte.plataforma.views',
     url(r'^registroCurso/$', Encubarte.plataforma.views.registroCursoControl),
     url(r'^registroHorario/$', Encubarte.plataforma.views.registroHorarioControl),
 
+    #links profesor
+    url(r'^listaCursos/$', Encubarte.plataforma.views.listaCursosControl),
+
     #links estudiantes:
     url(r'^LogEstudiante/CambiarContraseña?$', CamPassEstudiante.as_view(), name='Cambiar'),
     url(r'^LogEstudiante/ModificarInfo?$', ModificarInformacion.as_view(), name='Modificar'),

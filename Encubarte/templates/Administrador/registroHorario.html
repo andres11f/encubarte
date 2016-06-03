@@ -1,5 +1,22 @@
 {%extends "base.html"%}
 {% block titulo %}Registro Curso{% endblock %}
+{% block scripts %}
+<script type="text/javascript">
+	function cambiarDisplay(id) {
+		if (!document.getElementById) return false;
+
+		fila = document.getElementById(id);
+		if (fila.style.display != "none") 
+		{
+			fila.style.display = "none"; //ocultar fila 
+		} 
+		else 
+		{
+			fila.style.display = ""; //mostrar fila 
+  		}
+	}
+</script>
+{% endblock %}
 {% block contenido %}
 	{%if errorCurso or errorDia or errorHora or errorHoraFin %}
 	<div class="container">
@@ -73,10 +90,27 @@
 				    	</td>
 				    </tr>
 				    <tr>
-				        <td><input type="submit" value="Regístrate" name="registrar"/>
+				        <td><input type="submit" class="btn" value="Regístrate" name="registrar"/>
 				    </tr>
 				</tbody>
 			</table>
 		</div>
 	</form>
+	<div class="col-md-2">
+			<table align="center" >
+			{% for hor in horarios%}
+				<tr>
+			        <td onclick="cambiarDisplay('{{hor.id}}')">{{hor}}</td>
+			    </tr>
+			    <tr id="{{hor.id}}" style="display:none">
+					<td> 
+					<form action="#"  method="get">
+						<input type="hidden" name="id" value="{{hor.id}}">
+ 						<input type="submit" onclick="return confirm('Esta seguro que desea eliminar este horario?')" class="btn" value="Eliminar Horario" name="eliminarHorario">
+					</form>
+					</td>
+				</tr>
+			{% endfor %}
+			</table>
+		</div>
 {% endblock %}

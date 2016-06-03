@@ -1,5 +1,22 @@
 {%extends "base.html"%}
 {% block titulo %}Registro Profesor{% endblock %}
+{% block scripts %}
+<script type="text/javascript">
+	function cambiarDisplay(id) {
+		if (!document.getElementById) return false;
+
+		fila = document.getElementById(id);
+		if (fila.style.display != "none") 
+		{
+			fila.style.display = "none"; //ocultar fila 
+		} 
+		else 
+		{
+			fila.style.display = ""; //mostrar fila 
+  		}
+	}
+</script>
+{% endblock %}
 {% block contenido %}
 	{%if errorNumeroDocumento or errorCorreoElectronico or errorContrasena or errorFechaNacimiento or errorTipoDocumento or errorGenero %}
 	<div class="container">
@@ -83,10 +100,27 @@
 				    	</td>
 				    </tr>
 				    <tr>
-				        <td><input type="submit" value="Registrar Profesor" name="registrar"/>
+				        <td><input type="submit" class="btn" value="Registrar Profesor" name="registrar"/>
 				    </tr>
 				</tbody>
 			</table>
 		</div>
 	</form>
+	<div class="col-md-2">
+			<table align="center" >
+			{% for p in profesores%}
+				<tr>
+			        <td onclick="cambiarDisplay('{{p.user.username}}')">{{p}}</td>
+			    </tr>
+			    <tr id="{{p.user.username}}" style="display:none">
+					<td> 
+					<form action="#"  method="get">
+						<input type="hidden" name="username" value="{{p.user.username}}">
+ 						<input type="submit" onclick="return confirm('Esta seguro que desea eliminar este profesor?')" class="btn" value="Eliminar Profesor" name="eliminarProfesor">
+					</form>
+					</td>
+				</tr>
+			{% endfor %}
+			</table>
+		</div>
 {% endblock %}
