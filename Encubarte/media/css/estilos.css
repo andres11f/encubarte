@@ -29,8 +29,8 @@ li.listEst {
 	text-decoration: none;
 	color: #000000;
 	background: #FE2E2E;
-	padding-left: 5%;
-	padding-right: 5%;
+	padding-left: 3%;
+	padding-right: 3%;
 	padding-bottom: 5px;
 	padding-top: 5px;
 }
@@ -77,4 +77,13 @@ img{
 
 footer{
 	color: blue;
+}
+
+.menu_bar, li{
+	background: #FE2E2E
+}
+
+.menu_bar, li:hover{
+	background: #FFBF00 !important;
+	transition: 1s;
 }

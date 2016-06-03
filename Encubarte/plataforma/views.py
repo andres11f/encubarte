@@ -7,7 +7,7 @@ from django.contrib.auth import login, authenticate, logout
 from django.views.generic import base
 from Encubarte.plataforma.models import Estudiante, DatosFamiliaMayor, DatosFamiliaMenor, Profesor, Horario, Curso, Grupo
 from Encubarte.plataforma.parametros import parametros
-from Encubarte.plataforma.forms import EstudianteForm, HorarioForm, ProfesorForm, UserForm
+from Encubarte.plataforma.forms import EstudianteForm, ProfesorForm, UserForm
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator,EmptyPage,InvalidPage
 from django.template.defaulttags import register
@@ -420,24 +420,29 @@ def horarioUsuario(User):
 
 class matriculaControl(base.View):
 	def get(self, request, *args, **kwargs):
-		cursos = Curso.objects.all()
-		horarios = Horario.objects.all()
-		return render_to_response('Estudiante\MatricularCurso.html',  locals(), context_instance = RequestContext(request)) 
+		if(request.GET.get('VerHorario')):
+			cursos = Curso.objects.all()
+			curso_grupo = request.GET['horario'].split(" ")
+			cursoMatricular = curso_grupo[0] #nombre a matricular en string
+			grupoCurso = curso_grupo[1] #grupo del curso a matricular
+			cursoID = Curso.objects.get(nombre=cursoMatricular, numeroGrupo=grupoCurso) #IdCurso a partir del nombre del curso
+			horarioVer = Horario.objects.filter(idCurso = cursoID)
+			MostrarHorario = True
+			return render_to_response('Estudiante\MatricularCurso.html',  locals(), context_instance = RequestContext(request)) 
+		else:
+			MostrarHorario = False
+			cursos = Curso.objects.all()
+			horarios = Horario.objects.all()
+			return render_to_response('Estudiante\MatricularCurso.html',  locals(), context_instance = RequestContext(request)) 
 
 	def post(self, request, *args, **kwargs):
-		#cursos = Curso.objects.all()
+		cursos = Curso.objects.all()
 		horarios = Horario.objects.all()
-		horario = request.POST['horario']
-		curso_horario = horario.split(": ")
-		curso = curso_horario[0] #idCurso a matricular en string
-		curso_profesor = curso.split(" - ")
-		cursoid = curso_profesor[0] #Nombre del curso a matricular en string
-		IDcurso = Curso.objects.get(nombre = cursoid) #IdCurso a partir del nombre del curso
-		dia_hora = curso_horario[1]
-		dia_horas = dia_hora.split(" ")
-		dia = dia_horas[0]
-		hora_ini = datetime.strptime(dia_horas[1], "%H:%M").time() #hora de inicio curso a matricular
-		hora_fin = datetime.strptime(dia_horas[3], "%H:%M").time() #hora fin curso a matricular
+		cursoMatricular = request.POST['idCurso'] #nombre a matricular en string
+		grupoCurso = request.POST['idGrupo'] #grupo del curso a matricular
+		cursoID = Curso.objects.get(nombre=cursoMatricular, numeroGrupo=grupoCurso) #IdCurso a partir del nombre del curso
+		horarioNuevo = Horario.objects.filter(idCurso = cursoID)
+
 		try:
 			user = User.objects.get(username = request.user.username)
 			estudiante = Estudiante.objects.get(user = user)
@@ -446,30 +451,39 @@ class matriculaControl(base.View):
 			return {}
 
 		for grupoE in gruposEstudiante:
+			HorarioEmpty = False
 			horariosGrupo = Horario.objects.filter(idCurso = grupoE.idCurso)
+		else:
+			HorarioEmpty = True
 
-		for h in horariosGrupo:
-			hora_IC = h.horaInicio # hora inicio cursos matriculados
-			hora_FC = h.horaFin #hora fin cursos matriculados
-			if h.idCurso != curso:
-				CursoDiferente = True
-				Libre = Hora_Libre(hora_IC, hora_FC, hora_ini, hora_fin)
-				if h.dia == dia:
-					if Libre:
-						HorarioLibre = True
+		if not HorarioEmpty:
+			for horario in horarioNuevo:
+				hora_ini = horario.horaInicio
+				hora_final = horario.horaFin
+				for h in horariosGrupo:
+					hora_IC = h.horaInicio # hora inicio cursos matriculados
+					hora_FC = h.horaFin #hora fin cursos matriculados
+					if h.idCurso != curso:
+						CursoDiferente = True
+						Libre = Hora_Libre(hora_IC, hora_FC, hora_ini, hora_fin)
+						if h.dia == dia:
+							if Libre:
+								HorarioLibre = True
+							else:
+								HorarioLibre = False
+								break
+						else:
+							HorarioLibre = True
 					else:
-						HorarioLibre = False
+						CursoDiferente = False
 						break
-				else:
-					HorarioLibre = True
-			else:
-				CursoDiferente = False
-				break
-
+		else:
+			CursoDiferente = True
+			HorarioLibre = True
 
 		if CursoDiferente and HorarioLibre:
 			MatriculaSuccess = True
-			grupo = Grupo(idEstudiante= estudiante , idCurso= IDcurso)
+			grupo = Grupo(idEstudiante= estudiante , idCurso= cursoID)
 			grupo.save()
 			return render_to_response('Estudiante\MatricularCurso.html',  locals(), context_instance = RequestContext(request))
 		elif not CursoDiferente:
@@ -503,20 +517,43 @@ class ModificarInfoEstudiante(base.View):
 			form = EstudianteForm(instance=estudiante)
 			formUser = UserForm(instance=user)
 			return render_to_response('Estudiante\ModificarInfo.html', locals(), context_instance = RequestContext(request))
-		
+
 
 	def post(self, request, *args, **kwargs):
 		user = User.objects.get(username = request.user.username)
 		estudiante = Estudiante.objects.get(user = user)
-		
-		form = EstudianteForm(request.POST, instance=estudiante)
-		if form.is_valide():
-			form.save()
-			operationSuccess = True
-			return render_to_response('Estudiante\LogEstudiante.html', locals(), context_instance = RequestContext(request))
-		else:
-			operationSuccess = False
-			return render_to_response('Estudiante\LogEstudiante.html', locals(), context_instance = RequestContext(request))
+
+		user.first_name = request.POST["first_name"]
+		user.last_name = request.POST["last_name"]
+		estudiante.tipoDocumento = request.POST["tipoDocumento"]
+		estudiante.fechaNacimiento = request.POST['fechaNacimiento']
+		estudiante.genero = request.POST['genero']
+		estudiante.direccion = request.POST['direccion']
+		estudiante.barrio = request.POST['barrio']
+		estudiante.telefonoFijo = request.POST['telefonoFijo']
+		estudiante.telefonoCelular = request.POST['telefonoCelular']
+		estudiante.seguridadSocial = request.POST['seguridadSocial']
+		estudiante.zona = request.POST['zona']
+		estudiante.comuna = request.POST['comuna']
+		estudiante.grupoEtnico = request.POST['grupoEtnico']
+		estudiante.condicion = request.POST['condicion']
+		if "enviarInfoAlCorreo" in request.POST.keys(): enviarInfoAlCorreo = True
+
+		#Validaciones
+		errorTipoDocumento = (estudiante.tipoDocumento  not in (parametros["tiposDocumento"]))
+		errorFechaNacimiento = not fechaCorrecta(estudiante.fechaNacimiento)
+		errorGenero = (estudiante.genero not in (parametros["generos"]))
+		errorTelefonos = (not re.match("^([0-9]{7,12})$",estudiante.telefonoFijo) or not re.match("^([0-9]{7,12})$",estudiante.telefonoCelular))
+
+		if (errorTipoDocumento or errorFechaNacimiento or errorGenero or errorTelefonos):
+			return render_to_response('registroEstudiante.html', locals(), context_instance = RequestContext(request))
+	
+        #Guardar usuario
+		user.save()
+		estudiante.save()
+
+		operationSuccess = True
+		return render_to_response('Estudiante\LogEstudiante.html', locals(), context_instance = RequestContext(request))
 
 #__________________________________________________________________________________________________________________________________________________#
 #__________________________________________________________________________________________________________________________________________________#

@@ -3,7 +3,8 @@
 <!--{% block titulo %}Encubarte{% endblock %}-->
 
 {% block header %}
-	<div>
+	<center>
+	<div class="bar_menu">
 		<li class="listEst" id="inicio" onmouseover="CursorOn(this)" onmouseout="CursorOut(this)"> <a class="OptionEst" href="/LogEstudiante">Inicio</a> </li>
 	    <li class="listEst" id="horario" onmouseover="CursorOn(this)" onmouseout="CursorOut(this)"> <a class="OptionEst" href="/LogEstudiante/VerHorario">Ver Horario</a> </li>
 	    <li class="listEst" id="curso" onmouseover="CursorOn(this)" onmouseout="CursorOut(this)"> <a class="OptionEst" href="/LogEstudiante/MatricularCurso">Matricular Cursos</a> </li>
@@ -11,6 +12,8 @@
 	    <li class="listEst" id="contraseña" onmouseover="CursorOn(this)" onmouseout="CursorOut(this)"> <a class="OptionEst" href="/LogEstudiante/CambiarContrasena">Cambiar Contraseña</a> </li>
 	    <li class="listEst" id="contraseña" onmouseover="CursorOn(this)" onmouseout="CursorOut(this)"> <a class="OptionEst" href="/logout"/> Cerrar Sesión </a> </li>
 	</div>
+	<br>
+	</center>
 {% endblock %}
 
 {% block contenido %}

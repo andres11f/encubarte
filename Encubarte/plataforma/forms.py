@@ -17,12 +17,6 @@ class EstudianteForm(forms.ModelForm):
 	def __str__(self):
 		return self.user.username+" "+self.user.first_name+" "+self.user.last_name
 
-
-class HorarioForm(forms.ModelForm):
-	class Meta:
-		model = Horario
-		fields = '__all__'
-
 class ProfesorForm(forms.ModelForm):
 	class Meta:
 		model = Profesor
@@ -31,4 +25,4 @@ class ProfesorForm(forms.ModelForm):
 class UserForm(forms.ModelForm):
 	class Meta:
 		model = User
-		fields = ['username', 'first_name', 'last_name']
+		fields = ['first_name', 'last_name']

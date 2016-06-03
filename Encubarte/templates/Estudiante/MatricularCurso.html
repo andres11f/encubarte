@@ -4,39 +4,58 @@
 	<div class="container-fluid offset1">
 			{% block items %}
 			<div class="spanEst">
-				<form method="POST" action="/LogEstudiante/MatricularCurso" name="MatricularCurso">
+				<form method="GET" action="/LogEstudiante/MatricularCurso" name="MatricularCurso">
 					{% csrf_token %}
 					<br>
 					<select name="horario">
-						{% for horarios in horarios %}
-						       <option> {{ horarios }} </option>
+						{% for c in cursos %}
+						       <option> {{ c.nombre }} {{ c.numeroGrupo }} </option>
 						{% endfor %}
 					</select>
 					<div>
-					    <input type="submit" align= "left" value="Confirmar" name="MatricularCurso"/>
+					    <input type="submit" align= "left" value="Ver Horario" name="VerHorario"/>
 					</div>
 				</form>
-				<p> {{ cursoid }} </p>
-				<p> {{ horario }} </p>
-				{% if MatriculaSuccess %}
-					<p class="text-error"> Su matricula se realizo satisfactoriamente </p>
-				{% endif%}
-				{% if HoraOcupada %}
-					<p class="text-error"> Usted no tiene el horario disponible </p>
-				{% endif%}
-				{% if CursandoCurso %}
-					<p class="text-error"> Usted ya se encuentra matriculado a este curso </p>
-				{% endif%}
-
-				<!--<table width="20%" align="left">
-					{% for curso in curso %}
-					<tr>
-				       <td> {{ curso.nombre }} </td>
-				    </tr>
-					{% endfor %}
-				</table>-->
 				<br>
-			</div>	
+				{% if MostrarHorario %}
+				<center>
+				<div>
+					<table align="center" >
+					{% for horario in horarioVer %}
+						<tr>
+					        <td> {{ horario }} </td>
+					    </tr>
+					
+					    <tr id="{{c.id}}" input style="display:none">
+							<td> 
+							<form method="POST" action="/LogEstudiante/MatricularCurso">
+							{% csrf_token %}
+								<input type="hidden" name="idCurso" value="{{horario.idCurso.nombre}}">
+								<input type="hidden" name="idGrupo" value="{{horario.idCurso.numeroGrupo}}">
+							</td>
+						</tr>
+					{% endfor %}
+					</table>
+					<br>
+					<tr>
+						<input type="submit" onclick="return confirm('Esta seguro que desea Matricular este curso?')" class="btn" value="Matricular Curso" name="matricularCurso">
+						</form>
+					</tr>
+				{% endif%}
+				</div>
+				</center>
+			</div>
+			
+			{% if MatriculaSuccess %}
+				<p class="text-error"> Su matricula se realizo satisfactoriamente </p>
+			{% endif%}
+			{% if HoraOcupada %}
+				<p class="text-error"> Usted no tiene el horario disponible </p>
+			{% endif%}
+			{% if CursandoCurso %}
+				<p class="text-error"> Usted ya se encuentra matriculado a este curso </p>
+			{% endif%}
+			<br>
 			{% endblock %}
 	</div>
 {% endblock %}
