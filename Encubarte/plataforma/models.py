@@ -72,11 +72,11 @@ class Curso(models.Model):
 	id = models.AutoField(primary_key=True)
 	nombre = models.CharField(max_length=50)
 	idProfesor = models.ForeignKey(Profesor)
-	nroGrupo = models.IntegerField()
+	numeroGrupo = models.IntegerField()
 	esCerrado = models.BooleanField()
 	
 	def __str__(self):
-		return self.nombre + " - " + self.idProfesor.user.first_name + " " + self.idProfesor.user.last_name 
+		return self.nombre + " Grupo " + str(self.numeroGrupo) + " - " + self.idProfesor.user.first_name + " " + self.idProfesor.user.last_name 
 
 class Horario(models.Model):
 	id = models.AutoField(primary_key=True)

@@ -40,7 +40,6 @@ def inicioControl(request, registerSuccess=False):
 	else:
 		return render_to_response ('inicio.html',locals(), context_instance = RequestContext(request))
 
-
 def loginControl(request):
 	try:
 		username = request.POST['username']
@@ -63,15 +62,12 @@ def loginControl(request):
 	quienesSomosInicio= "yellow"
 	return render_to_response('inicio.html', locals(), context_instance = RequestContext(request))
 
-
 def logoutControl(request):
     logout(request)
     return HttpResponseRedirect('/')
 
-
 def notFoundControl(request):
 	return render_to_response('404.html',locals(),context_instance = RequestContext(request))
-
 
 def fechaCorrecta(fecha):
 	try:
@@ -79,7 +75,6 @@ def fechaCorrecta(fecha):
 		return True
 	except:
 		return False
-
 
 class CamPass(base.View):
 	def get(self, request, *args, **kwargs):
@@ -169,35 +164,39 @@ def registroProfesorControl(request):
 
 def registroCursoControl(request):
 	if request.user.is_authenticated() and request.user.is_superuser:
-		nombresCursos = parametros["nombresCursos"]
+		numerosGrupos = parametros["numerosGrupos"]
 		profesores = Profesor.objects.all()
 		cursos = Curso.objects.all()
-
+		
 		if request.method == 'POST':
 			nombreCurso = request.POST["nombreCurso"]
-			idProfesor = request.POST["profesor"]
+			usernameProfesor = request.POST["profesor"]
+			numeroGrupo = request.POST["numeroGrupo"]
+
+			esCerrado = False
+			if "esCursoCerrado" in request.POST.keys(): esCerrado = True
 
 			#validaciones
 			try:
-				user = User.objects.get(username = idProfesor.split()[0])
+				user = User.objects.get(username = usernameProfesor)
 				profesor = Profesor.objects.get(user = user)
 			except Profesor.DoesNotExist or User.DoesNotExist:
 				profesor = None
 
-			errorNombreCurso = nombreCurso not in parametros["nombresCursos"]
 			errorProfesor = profesor is None
+			errorNumeroGrupo = (int(numeroGrupo) not in parametros["numerosGrupos"])
 
 			try:
-				tmp = Curso.objects.get(nombre = nombreCurso, idProfesor = profesor)
+				tmp = Curso.objects.get(nombre = nombreCurso, idProfesor = profesor, numeroGrupo = numeroGrupo)
 			except Curso.DoesNotExist:
 				tmp = None
 			errorCursoYaExiste = tmp is not None
 
-			if (errorNombreCurso or errorProfesor or errorCursoYaExiste):
+			if (errorProfesor or errorNumeroGrupo or errorCursoYaExiste):
 				return render_to_response('Administrador/registroCurso.html', locals(), context_instance = RequestContext(request))
 
 			#guardo objeto en base de datos
-			curso = Curso(nombre = nombreCurso, idProfesor = profesor)#Profesor.objects.get(nombre = profesor))
+			curso = Curso(nombre = nombreCurso, idProfesor = profesor, numeroGrupo = numeroGrupo, esCerrado = esCerrado)#Profesor.objects.get(nombre = profesor))
 			curso.save()
 			operationSuccess = True
 			return render_to_response('Administrador/registroCurso.html', locals(), context_instance = RequestContext(request))
@@ -251,16 +250,6 @@ def registroHorarioControl(request):
 	else:
 		return HttpResponseRedirect('/404')
 
-def listaCursosControl(request):
-	if request.user.is_authenticated() and request.user.is_staff:
-		idProfesor = Profesor.objects.get(user = request.user)
-		cursos = Curso.objects.filter(idProfesor = idProfesor)
-		print("--------------------CURSOS----------------")
-		print(cursos)
-		return render_to_response('Profesor/listaCursos.html',locals(), context_instance = RequestContext(request))
-
-def notFoundControl(request):
-	return render_to_response('404.html',locals(),context_instance = RequestContext(request))
 
 #__________________________________________________________________________________________________________________________________________________#
 #__________________________________________________________________________________________________________________________________________________#
@@ -293,6 +282,13 @@ class ModificarInfoProfesor(base.View):
 			operationSuccess = False
 			return render_to_response('Profesor\ModificarInfo.html', locals(), context_instance = RequestContext(request))
 
+def listaCursosControl(request):
+	if request.user.is_authenticated() and request.user.is_staff:
+		idProfesor = Profesor.objects.get(user = request.user)
+		cursos = Curso.objects.filter(idProfesor = idProfesor)
+		print("--------------------CURSOS----------------")
+		print(cursos)
+		return render_to_response('Profesor/listaCursos.html',locals(), context_instance = RequestContext(request))
 
 #__________________________________________________________________________________________________________________________________________________#
 #__________________________________________________________________________________________________________________________________________________#
@@ -421,7 +417,6 @@ def horarioUsuario(User):
 				#por cada horario obtengo el horario de inicio a final
 					#por cada hora entre la hora de inicio y final
 						#horario[hora] = idcurso.nombre
-
 
 class matriculaControl(base.View):
 	def get(self, request, *args, **kwargs):
