@@ -1,13 +1,30 @@
-{% extends "base.html"%}
+{% include "base.html"%}
 
 <!--{% block titulo %}Encubarte{% endblock %}-->
 
+{% block header %}
+	<div>
+		<li class="listEst" id="inicio" onmouseover="CursorOn(this)" onmouseout="CursorOut(this)"> <a class="OptionEst" href="/LogEstudiante">Inicio</a> </li>
+	    <li class="listEst" id="horario" onmouseover="CursorOn(this)" onmouseout="CursorOut(this)"> <a class="OptionEst" href="/LogEstudiante/VerHorario">Ver Horario</a> </li>
+	    <li class="listEst" id="curso" onmouseover="CursorOn(this)" onmouseout="CursorOut(this)"> <a class="OptionEst" href="/LogEstudiante/MatricularCurso">Matricular Cursos</a> </li>
+	    <li class="listEst" id="informacion" onmouseover="CursorOn(this)" onmouseout="CursorOut(this)"> <a class="OptionEst" href="/LogEstudiante/ModificarInfo">Modificar Información Personal</a> </li>
+	    <li class="listEst" id="contraseña" onmouseover="CursorOn(this)" onmouseout="CursorOut(this)"> <a class="OptionEst" href="/LogEstudiante/CambiarContrasena">Cambiar Contraseña</a> </li>
+	    <li class="listEst" id="contraseña" onmouseover="CursorOn(this)" onmouseout="CursorOut(this)"> <a class="OptionEst" href="/logout"/> Cerrar Sesión </a> </li>
+	</div>
+{% endblock %}
+
 {% block contenido %}
 	<div class="container-fluid offset1">
+		{% if operationSucess %}
+			<p> {{nombre}}, Has cambiado tus datos correctamente</p>
+			<br>
+		(% else %)
+			<p> {{nombre}}, Error al cambiar tus datos</p>
+			<br>
+		{%endif%}
 		{% if conectado %}
 			<!-- full calendar -->
 			<div class="span10" id='calendar'></div>
-
 			<div class="span3">
 				<form action="/logout/" name="logout">
 				{% csrf_token %}
@@ -21,16 +38,8 @@
 			</div>
 		{% else %}
 			{% block items %}
-			<div>
-				<li class="listEst" id="inicio" onmouseover="CursorOn(this)" onmouseout="CursorOut(this)"> <a class="OptionEst" href="/LogEstudiante">Inicio</a> </li>
-			    <li class="listEst" id="horario" onmouseover="CursorOn(this)" onmouseout="CursorOut(this)"> <a class="OptionEst" href="/LogEstudiante/VerHorario">Ver Horario</a> </li>
-			    <li class="listEst" id="curso" onmouseover="CursorOn(this)" onmouseout="CursorOut(this)"> <a class="OptionEst" href="/LogEstudiante/MatricularCurso">Matricular Cursos</a> </li>
-			    <li class="listEst" id="informacion" onmouseover="CursorOn(this)" onmouseout="CursorOut(this)"> <a class="OptionEst" href="/LogEstudiante/ModificarInfo">Modificar Información Personal</a> </li>
-			    <li class="listEst" id="contraseña" onmouseover="CursorOn(this)" onmouseout="CursorOut(this)"> <a class="OptionEst" href="/LogEstudiante/CambiarContraseña">Cambiar Contraseña</a> </li>
-			    <li class="listEst" id="contraseña" onmouseover="CursorOn(this)" onmouseout="CursorOut(this)"> <a class="OptionEst" href="/logout"/> Cerrar Sesión </a> </li>
-			</div>
-			<br><br>
 			<center>
+			<br><br>
 			<div>
 			<!--	<img src="media/images/Encu1.jpg">-->
 			</div>

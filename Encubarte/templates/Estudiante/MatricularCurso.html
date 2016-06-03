@@ -1,135 +1,43 @@
-{% include "Estudiante/LogEstudiante.html"%}
-
-<!--{% block titulo %}Encubarte{% endblock %}-->
+{% extends "Estudiante/LogEstudiante.html" %}
 
 {% block contenido %}
 	<div class="container-fluid offset1">
-		<!--{% if conectado %}
-			<!-- full calendar
-			<div class="span10" id='calendar'></div>
-
-			<div class="span3">
-				<form action="/logout/" name="logout">
-				{% csrf_token %}
-					<h3>Inicio de Sesión</h3>
-					<div>
-						<p>Estás logueado como {{nombre}}, ¿Quieres iniciar sesión como alguien más?</p>
-				        <label>Cerrar sesión</label>
-				        <input type="submit" value="Log out" name="logout"/>
-				    </div>
-			</form>
-			</div>
-		{% else %}-->
 			{% block items %}
 			<div class="spanEst">
-				<select name="tipoDocumento" value="{{tipoDocumento}}">
-				        		{% for curso in  cursos%}
-				        			<option>{{ curso.nombre }}</option>
-				        		{% endfor %}
-				</select>
-				<nav class="navbar nav-bar matricular">
-					<li><a class="btn btn-matricular"> Matricular </a></li>
-				</nav>
-				<center>
-				<table border="1">
-					<tr>
-						<th> Horario </th>
-						<th> Lunes </th>
-						<th> Martes </th>
-						<th> Miércoles </th>
-						<th> Jueves </th>
-						<th> Viernes </th>
-						<th> Sábado </th>
-						<th> Domingo </th>
-					</tr>
-					<tr>
-						<td> 2:00</td>
-						<td> 1</td>
-						<td> 2</td>
-						<td> 3</td>
-						<td> 4</td>
-						<td> 5</td>
-						<td> 6</td>
-						<td> 7</td>
-					</tr>
-					<tr>
-						<td> 3:00</td>
-						<td> 1</td>
-						<td> 2</td>
-						<td> 3</td>
-						<td> 4</td>
-						<td> 5</td>
-						<td> 6</td>
-						<td> 7</td>
-					</tr>
-					<tr>
-						<td> 4:00</td>
-						<td> 1</td>
-						<td> 2</td>
-						<td> 3</td>
-						<td> 4</td>
-						<td> 5</td>
-						<td> 6</td>
-						<td> 7</td> 
-					</tr>
-					<tr>
-						<td> 5:00</td>
-						<td> 1</td>
-						<td> 2</td>
-						<td> 3</td>
-						<td> 4</td>
-						<td> 5</td>
-						<td> 6</td>
-						<td> 7</td>
-					</tr>
-					<tr> 
-						<td> 6:00 </td>
-						<td> 1</td>
-						<td> 2</td>
-						<td> 3</td>
-						<td> 4</td>
-						<td> 5</td>
-						<td> 6</td>
-						<td> 7</td>
-					</tr>
-					<tr>
-						<td> 7:00 </td> 
-						<td> 1</td>
-						<td> 2</td>
-						<td> 3</td>
-						<td> 4</td>
-						<td> 5</td>
-						<td> 6</td>
-						<td> 7</td>
-					</tr>
-					<tr>
-						<td> 8:00 </td> 
-						<td> 1</td>
-						<td> 2</td>
-						<td> 3</td>
-						<td> 4</td>
-						<td> 5</td>
-						<td> 6</td>
-						<td> 7</td>
-					</tr>
-					<tr>
-						<td> 9:00 </td> 
-						<td> 1</td>
-						<td> 2</td>
-						<td> 3</td>
-						<td> 4</td>
-						<td> 5</td>
-						<td> 6</td>
-						<td> 7</td>
-					</tr>
-				</table>
-				</center>
-			<br>
-			</div>
+				<form method="POST" action="/LogEstudiante/MatricularCurso" name="MatricularCurso">
+					{% csrf_token %}
+					<br>
+					<select name="horario">
+						{% for horarios in horarios %}
+						       <option> {{ horarios }} </option>
+						{% endfor %}
+					</select>
+					<div>
+					    <input type="submit" align= "left" value="Confirmar" name="MatricularCurso"/>
+					</div>
+				</form>
+				<p> {{ cursoid }} </p>
+				<p> {{ horario }} </p>
+				{% if MatriculaSuccess %}
+					<p class="text-error"> Su matricula se realizo satisfactoriamente </p>
+				{% endif%}
+				{% if HoraOcupada %}
+					<p class="text-error"> Usted no tiene el horario disponible </p>
+				{% endif%}
+				{% if CursandoCurso %}
+					<p class="text-error"> Usted ya se encuentra matriculado a este curso </p>
+				{% endif%}
 
+				<!--<table width="20%" align="left">
+					{% for curso in curso %}
+					<tr>
+				       <td> {{ curso.nombre }} </td>
+				    </tr>
+					{% endfor %}
+				</table>-->
+				<br>
+			</div>	
 			{% endblock %}
-		<!--{% endif %}-->
 	</div>
-	<script type="text/javascript" src="media/js/LogEstudiante.js"> 
-	</script>
 {% endblock %}
+

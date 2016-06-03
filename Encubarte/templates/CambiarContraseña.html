@@ -1,0 +1,46 @@
+{% extends "Estudiante/LogEstudiante.html"%}
+
+<!--{% block titulo %}Encubarte{% endblock %}-->
+
+{% block contenido %}
+	<div class="container-fluid offset1">
+			{% block items %}
+			<div class="spanEst">
+				<center>
+					<h3>Cambiar Contraseña</h3>
+				<form method="POST" action="/LogEstudiante/CambiarContrasena" name="CamPass">
+				{% csrf_token %}
+					<table class ="table-hover">
+						<tbody>
+							<tr>
+						        <td><label>Actual Contraseña:</label></td>
+						        <td><input type="password" name="PastPassword" required="true"/> </td>
+						    </tr>
+						    <tr>
+						        <td><label>Contraseña Nueva:</label></td>
+						        <td><input type="password" name="NewPassword" required="true"/> </td>
+						    </tr>
+						    <tr>
+						        <td><label>Repetir Contraseña Nueva:</label></td>
+						        <td><input type="password" name="NewPassword2" required="true"/> </td>
+						    </tr>
+					    </tbody>
+					</table>
+					<br>
+					<center>
+				    <div>
+				        <input type="submit" value="Confirmar" name="CambiarPass"/>
+				    </div>
+				    </center>
+				</form>
+				{% if ChangedFailed%}
+					<p class="text-error"> La nueva contraseña no coincide </p>
+				{% endif%}
+				{% if PassFailed%}
+					<p class="text-error"> La contraseña no es correcta </p>
+				{% endif%}
+			</div>
+			<br>
+			{% endblock %}
+	</div>
+{% endblock %}

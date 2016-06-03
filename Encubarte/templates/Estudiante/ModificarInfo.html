@@ -1,4 +1,4 @@
-{% include "Estudiante/LogEstudiante.html"%}
+{ % include "base.html"% }
 
 {% block contenido %}
 	{%if errorNumeroDocumento or errorTipoDocumento or errorContrasena or errorCorreoElectronico or errorFechaNacimiento or errorGenero or errorTelefonos %}
@@ -30,6 +30,7 @@
 	</div>
 	{% endif %}
 
+<!--<<<<<<< HEAD
 	{%if conectado%}
 		<form action="/logout/" name="logout">
 			{% csrf_token %}
@@ -145,4 +146,17 @@
 			</div>
 		</form>
 	{%endif %}
+=======-->
+	<form method="POST" action="/LogEstudiante/ModificarInfo" name="ModificarInfo">
+		{% csrf_token %}
+		<center>
+		{{ formUser.as_table }}
+		{{ form.as_table }}
+		<br> <br>
+	    <tr>
+	        <td><input type="submit" value="Cambiar Datos" name="registrarEstudiante"/>
+	    </tr>
+		<p class="text-info"><h5> Por favor ingrese todos los campos requeridos (*)</h5></p>
+		</center>
+	</form>
 {% endblock %}
