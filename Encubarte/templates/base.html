@@ -1,4 +1,3 @@
-
 </html lang="es">
 
 <!DOCTYPE HTML>
@@ -9,46 +8,64 @@
 		<link rel="stylesheet" type="text/css" href="/media/css/estilos.css"/>
 		{% endblock%}
 		{% block bootstrap %}
-			<link rel="stylesheet" href="/media/bootstrap/css/bootstrap.min.css">
+			<!-- Latest compiled and minified CSS -->
+			<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+			<!-- Optional theme -->
+			<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+
+			<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+
+			<!-- Latest compiled and minified JavaScript -->
+			<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
 			<script type="text/javascript" src="/media/bootstrap/js/bootstrap.min.js"> </script>
 		{% endblock %}
-		{% block scripts %}
-		{% endblock %}
-
 	</head>
-		<center><h1> Encubarte </h1></center><br>	
+	<center><h1> Encubarte </h1></center><br>	
 	<body>
 		<center>
 		<div class="container">
-			<nav class="navbar navbar-inverse">
-				<li><a class="btn btn-primary" href="/">Inicio</a></li>
-				{% if request.user.is_superuser %}
-					<li><a class="btn btn-warning" href="/registroProfesor">Registrar Profesor</a></li>
-					<li><a class="btn btn-warning" href="/registroCurso">Registrar Curso</a></li>
-					<li><a class="btn btn-warning" href="/registroHorario">Registrar Horario</a></li>
-					<li><a class="btn btn-warning" href="/admin">Pagina Admin</a></li>
-					<li><a class="btn btn-danger" href="/logout">Cerrar sesión</a></li>
-				{% else %}
-					{% if request.user.is_staff %}
-						<li> <a class="btn btn-info" href="/listaCursos"> Lista de cursos</a> </li>
-						<li> <a class="btn btn-info" href="/"> Matriculados a sus cursos</a> </li>
-						<li> <a class="btn btn-info" href="/"> Matricular estudiante</a> </li>
-						<li> <a class="btn btn-info" href="/LogProfesor/ModificarInfo">Modificar Informacion Personal</a> </li>
-						<li> <a class="btn btn-info" href="/LogProfesor/CambiarContrasena">Cambiar Contraseña</a> </li>
-						<li><a class="btn btn-danger" href="/logout">Cerrar sesión</a></li>
-					{% else %}
-						{% if request.user.is_authenticated %}
-							<li><a class="btn btn-primary" href="/LogEstudiante/VerHorario"> Ver Horario </a></li>
-							<li><a class="btn btn-primary" href="/LogEstudiante/ModificarInfo">Modificar información Personal</a></li>
-							<li><a class="btn btn-primary" href="/LogEstudiante/CambiarContrasena">Cambiar Contraseña</a></li>
-							<li><a class="btn btn-primary" href="/LogEstudiante/MatricularCurso">Matricular Curso</a></li>
-							<li><a class="btn btn-danger" href="/logout">Cerrar sesión</a></li>
-						{% else %}
-						<li><a class="btn btn-success" href="/registroEstudiante">Regístrate</a></li>
-						<li><a class="btn btn-success" href="/LogEstudiante">Estudiante</a></li>
-						{% endif %}
-					{% endif %}
-				{% endif %}
+			<nav class="navbar navbar-default">
+				<div class="container-fluid">
+					<div class="navbar-header">
+						<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>                        
+						</button>
+						<a class="navbar-brand" href="#">Encubarte</a>
+			    	</div>
+					<div class="collapse navbar-collapse">
+						<ul class="nav navbar-nav">
+							<li class="active"><a href="/">Inicio</a></li>
+							{% if request.user.is_superuser %}
+								<li><a href="/registroProfesor">Registrar Profesor</a></li>
+								<li><a href="/registroCurso">Registrar Curso</a></li>
+								<li><a href="/registroHorario">Registrar Horario</a></li>
+								<li><a href="/admin">Pagina Admin</a></li>
+							{% elif request.user.is_staff %}
+								<li> <a href="/listaCursos"> Lista de cursos</a> </li>
+								<li> <a href="/"> Matricular estudiante</a> </li>
+								<li> <a href="/LogProfesor/ModificarInfo">Modificar Informacion Personal</a> </li>
+								<li> <a href="/LogProfesor/CambiarContrasena">Cambiar Contraseña</a> </li>
+							{% elif request.user.is_authenticated %}
+								<li><a href="/LogEstudiante/VerHorario"> Ver Horario </a></li>
+								<li><a href="/LogEstudiante/ModificarInfo">Modificar información Personal</a></li>
+								<li><a href="/LogEstudiante/CambiarContrasena">Cambiar Contraseña</a></li>
+								<li><a href="/LogEstudiante/MatricularCurso">Matricular Curso</a></li>
+							{% endif %}
+						</ul>
+						<ul class="nav navbar-nav navbar-right">
+			      			{% if request.user.is_authenticated %}
+								<li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span>Cerrar sesión</a></li>
+			        		{% else %}
+			        			<li><a href="/registroEstudiante"><span class="glyphicon glyphicon-user"></span> Regístrate</a></li>
+								<li><a href="/LogEstudiante"><span class="glyphicon glyphicon-user"></span> Estudiante</a></li>
+			        		{% endif %}
+			      		</ul>
+			    	</div>
+			  </div>
 			</nav>
 		</div>
 		</center>

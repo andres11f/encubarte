@@ -25,14 +25,13 @@ from django.core import serializers
 
 def inicioControl(request, registerSuccess=False):
 	conectado=False
-	nombre=request.user.username
 	misionInicio= "blabla"
 	visionInicio= "blublu"
 	quienesSomosInicio= "bleble"
 	if request.user.is_authenticated():
 		conectado=True
 		estudiante= not request.user.is_staff
-		nombre=request.user.first_name
+		nombre=request.user.first_name + " " + request.user.last_name
 		if estudiante:
 			return render_to_response('Estudiante/LogEstudiante.html',locals(), context_instance = RequestContext(request))
 		else:
@@ -493,7 +492,6 @@ class matriculaControl(base.View):
 			HoraOcupada = True
 			return render_to_response('Estudiante\MatricularCurso.html',  locals(), context_instance = RequestContext(request))
 
-
 class horarioControl(base.View):
 	def get(self, request, *args, **kwargs):
 		diasSemana = parametros["diasSemana"]
@@ -501,11 +499,9 @@ class horarioControl(base.View):
 		horario = horarioUsuario(request.user)
 		return render_to_response('Estudiante\VerHorario.html', locals(), context_instance = RequestContext(request))
 
-
 class LogEstudiante(base.View):
 	def get(self, request, *args, **kwargs):
 		return render_to_response('Estudiante\LogEstudiante.html', locals(), context_instance = RequestContext(request))
-
 
 class ModificarInfoEstudiante(base.View):
 	def get(self, request, *args, **kwargs):
