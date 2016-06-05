@@ -18,75 +18,87 @@
 </script>
 {% endblock %}
 {% block contenido %}
+	<div class="container">
 	{%if errorProfesor or errorNumeroGrupo or errorCursoYaExiste %}
-	<div class="container">
-		<h3>Corrige los siguientes errores para continuar:</h3>
-		<p class="text-error">
-			{% if errorProfesor %}
-				El profesor no existe en la base de datos o no es valido.<br>
-			{% endif %}
-			{% if errorNumeroGrupo %}
-				El numero del grupo no es valido.<br>
-			{% endif %}
-			{% if errorCursoYaExiste %}
-				Este curso ya esta asignado a este profesor.<br>
-			{% endif %}
-		</p>
-	</div>
+		<div class="alert alert-warning">
+    		<strong>Atención!</strong> Corrige los siguientes errores para continuar:
+  		</div>
+  		{% if errorProfesor %}
+  		<div class="alert alert-danger">
+  				<strong>Error!</strong> El profesor no existe en la base de datos o no es valido.	
+  		</div>
+  		{% endif %}
+  		{% if errorNumeroGrupo %}
+  		<div class="alert alert-danger">
+  				<strong>Error!</strong> El numero del grupo no es valido. 		
+  		</div>
+  		{% endif %}
+  		{% if errorCursoYaExiste %}
+  		<div class="alert alert-danger">
+  				<strong>Error!</strong> Este curso ya esta asignado a este profesor con este grupo.		
+  		</div>
+  		{% endif %}
 	{% endif %}
+
 	{% if operationSuccess %}
-		<div class="container">
-			<p class="text-info">Operacion completada con exito.</p>
-		</div>
+		<p class="bg-success">Operacion completada con exito.</p>
 	{% endif %}
-	<div class="container">
-	<div class="row">
-		<div class="col-md-3">
-			<form method="POST" action="/registroCurso/" name="registroCurso">
+
+		<div class="row">
+			<div class="col-md-6">
+				<form class="form-horizontal" role="form" method="POST" action="/registroCurso/" name="registroCurso">
 				{% csrf_token %}
-				<div class="container">
-				<h3>Ingresa los datos del curso</hs3>
-					<table class="table-bordered table-striped table-hover">
-						<tbody>
-						    <tr>
-				        		<td><label>Nombre:</label></td>
-				        		<td><input type="text" name="nombreCurso" required="true" value="{{nombreCurso}}"/>*</td>
-				   			</tr>
-						    <tr>
-						        <td><label>Profesor:</label></td>
-						        <td>
-						        	<select name="profesor" required="true" value="{{profesor}}">
-						        		{% for p in profesores%}
-						        			<option value="{{p.user.username}}">{{p}}</option>
-						        		{% endfor %}
-						        	</select>
-						    	</td>
-						    </tr>
-						    <tr>
-						        <td><label>Numero Grupo:</label></td>
-						        <td>
-						        	<select name="numeroGrupo" required="true" value="{{numeroGrupo}}">
-						        		{% for p in numerosGrupos%}
-						        			<option>{{p}}</option>
-						        		{% endfor %}
-						        	</select>
-						    	</td>
-						    </tr>
-				    		<tr>
-				        		<td><label>Es este un curso cerrado?:</label></td>
-				        		<td><input type="checkbox" name="esCursoCerrado" value="{{esCursoCerrado}}"/></td>
-				    		</tr>
-						    <tr>
-						        <td><input type="submit" class="btn" value="Registrar Curso" name="registrar"/>
-						    </tr>
-						</tbody>
-					</table>
+				<h3>Ingresa los datos del curso</h3>
+
+				<div class="form-group">
+					<label class="control-label col-md-4" for="name">Nombre:</label>
+					<div class="col-md-8">
+						<input type="text" name="nombreCurso" required="true" value="{{nombreCurso}}" class="form-control" id="name">
+					</div>
 				</div>
-			</form>
-		</div>
-		<div class="col-md-2">
-			<table align="center" >
-			{% for c in cursos%}
+
+				<div class="form-group">
+					<label class="control-label col-md-4" for="prof">Profesor:</label>
+					<div class="col-md-8">
+						<select class="form-control" name="profesor" required="true" value="{{profesor}}" id="prof">
+							{% for p in profesores%}
+								<option value="{{p.user.username}}">{{p}}</option>
+							{% endfor %}
+						</select>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="control-label col-md-4" for="numg">Numero Grupo:</label>
+					<div class="col-md-8">
+						<select class="form-control" name="numeroGrupo" required="true" value="{{numeroGrupo}}" id="numg">
+							{% for n in numerosGrupos%}
+						        <option>{{n}}</option>
+						    {% endfor %}
+						</select>
+					</div>
+				</div>
+
+				<div class="form-group"> 
+					<div class="col-md-offset-4 col-md-10">
+						<div class="checkbox">
+							<label><input type="checkbox" name="esCursoCerrado" value="{{esCursoCerrado}}"> Es un curso cerrado</label>
+						</div>
+					</div>
+				</div>
+
+				<div class="form-group"> 
+ 					<div class="col-md-offset-4 col-md-10">
+						<button type="submit" name="registrar" class="btn btn-default">Registrar Curso</button>
+					</div>
+				</div>
+
+				</form>
+
+			</div>
+			<div class="col-md-6">
+				<table align="center" >
+				{% for c in cursos%}
 				<tr>
 			        <td onclick="cambiarDisplay('{{c.id}}')">{{c}}</td>
 			    </tr>
@@ -98,10 +110,9 @@
 					</form>
 					</td>
 				</tr>
-			{% endfor %}
-			</table>
+				{% endfor %}
+				</table>
+			</div>
 		</div>
 	</div>
-	</div>
-	
 {% endblock %}
