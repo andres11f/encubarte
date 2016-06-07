@@ -20,7 +20,7 @@ class EstudianteForm(forms.ModelForm):
 class ProfesorForm(forms.ModelForm):
 	class Meta:
 		model = Profesor
-		exclude = ['user', 'username']
+		exclude = ['username']
 
 class UserForm(forms.ModelForm):
 	class Meta:

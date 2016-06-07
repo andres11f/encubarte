@@ -46,7 +46,7 @@
 							<li><a href="/admin">Pagina Admin</a></li>
 						{% elif request.user.is_staff %}
 							<li> <a href="/listaCursos"> Lista de cursos</a> </li>
-							<li> <a href="/"> Matricular estudiante</a> </li>
+							<li> <a href="/LogProfesor/MatricularEstu"> Matricular estudiante</a> </li>
 							<li> <a href="/LogProfesor/ModificarInfo">Modificar Informacion Personal</a> </li>
 							<li> <a href="/LogProfesor/CambiarContrasena">Cambiar Contraseña</a> </li>
 						{% elif request.user.is_authenticated %}

@@ -89,7 +89,7 @@ class CamPass(base.View):
 				request.user.set_password(NewPassword)
 				request.user.save()
 				operationSuccess = True
-				return render_to_response('Estudiante\LogEstudiante.html', locals(), context_instance = RequestContext(request))
+				return render_to_response('inicio.html', locals(), context_instance = RequestContext(request))
 			else:
 				ChangedFailed = True
 				return render_to_response('CambiarContraseña.html', locals(), context_instance = RequestContext(request))
@@ -263,23 +263,134 @@ class ModificarInfoProfesor(base.View):
 		user = User.objects.get(username = request.user.username)
 		profesor = Profesor.objects.get(user = user)
 		generos = parametros["generos"]
-		#tiposDocumento = parametros["tiposDocumento"]
+		tiposDocumento = parametros["tiposDocumento"]
 		if request.user.is_authenticated():
 			form = ProfesorForm(instance=profesor)
+			formUser = UserForm(instance=user)
 			return render_to_response('Profesor\ModificarInfo.html', locals(), context_instance = RequestContext(request))
 		
 
 	def post(self, request, *args, **kwargs):
 		user = User.objects.get(username = request.user.username)
 		profesor = Profesor.objects.get(user = user)
-		form = ProfesorForm(request.POST, instance=profesor)
-		if form.is_valide():
-			form.save()
-			operationSuccess = True
-			return render_to_response('Profesor\ModificarInfo.html', locals(), context_instance = RequestContext(request))
+
+		user.first_name = request.POST["first_name"]
+		user.last_name = request.POST["last_name"]		
+		profesor.tipoDocumento = request.POST["tipoDocumento"]
+		profesor.fechaNacimiento = request.POST['fechaNacimiento']
+		profesor.genero = request.POST['genero']
+		
+		#Validaciones
+		errorTipoDocumento = (profesor.tipoDocumento  not in (parametros["tiposDocumento"]))
+		errorFechaNacimiento = not fechaCorrecta(profesor.fechaNacimiento)
+		errorGenero = (profesor.genero not in (parametros["generos"]))
+
+		if (errorTipoDocumento or errorFechaNacimiento or errorGenero):
+			return render_to_response('registroEstudiante.html', locals(), context_instance = RequestContext(request))
+	
+        #Guardar usuario
+		user.save()
+		profesor.save()
+
+		operationSuccess = True
+		return render_to_response('Estudiante\LogEstudiante.html', locals(), context_instance = RequestContext(request))
+
+
+
+class MatricularEstudiante(base.View):
+	def get(self, request, *args, **kwargs):
+		profesor = Profesor.objects.get(user = request.user)
+		cursos = Curso.objects.filter(idProfesor = profesor)
+		return render_to_response('Profesor/MatricularEstudiante.html',  locals(), context_instance = RequestContext(request)) 
+
+	def post(self, request, *args, **kwargs):
+		profesor = Profesor.objects.get(user = request.user)
+		cursos = Curso.objects.filter(idProfesor = profesor)
+		curso_grupo = request.POST['horario'].split(" Grupo ")
+		print ("==========================> NoNO <================================")
+		cursoMatricular = curso_grupo[0] #nombre a matricular en string
+		grupoCurso = curso_grupo[1] #grupo del curso a matricular
+		cursoID = Curso.objects.get(nombre=cursoMatricular, numeroGrupo=grupoCurso) #IdCurso a partir del nombre del curso
+		horarioNuevo = Horario.objects.filter(idCurso = cursoID)
+		print(cursoMatricular)
+		print (grupoCurso)
+		print(cursoID)
+		print (horarioNuevo)
+		estudianteaMatricular = User.objects.get(username=request.POST['numeroDocumento'])
+		#codigoEstudiante = request.GET['numeroDocumento']
+
+		try:
+			print ("==========================> Cerveza <================================")
+			estudiante = Estudiante.objects.get(user = estudianteaMatricular)
+			gruposEstudiante = Grupo.objects.filter(idEstudiante = estudiante)
+			print(estudiante)
+			print (gruposEstudiante)
+		except estudiante.DoesNotExist:
+			estudiante = None
+
+		errorEstudiante = estudiante is None
+
+		if errorEstudiante:
+			return render_to_response('Profesor/MatricularEstudiante.html', locals(), context_instance = RequestContext(request))
+
+		HorarioEmpty = True
+
+		for grupoE in gruposEstudiante:
+			HorarioEmpty = False
+			horariosGrupo = Horario.objects.filter(idCurso = grupoE.idCurso)
+			print(grupoE.idCurso)
+			print(horariosGrupo)
+			print(HorarioEmpty)
+
+		CursoDiferente = False
+		HorarioLibre = False
+
+		print ("==========================> PERRO <================================")
+		print(HorarioEmpty)
+
+		if not HorarioEmpty:
+			for horario in horarioNuevo:
+				print ("==========================> HOLA <================================")
+				hora_ini = horario.horaInicio
+				hora_final = horario.horaFin
+				for h in horariosGrupo:
+					hora_IC = h.horaInicio # hora inicio cursos matriculados
+					hora_FC = h.horaFin #hora fin cursos matriculados
+					if h.idCurso != horario.idCurso:
+						CursoDiferente = True
+						Libre = Hora_Libre(hora_IC, hora_FC, hora_ini, hora_final)
+						if h.dia == horario.dia:
+							if Libre:
+								HorarioLibre = True
+							else:
+								HorarioLibre = False
+								break
+						else:
+							HorarioLibre = True
+					else:
+						CursoDiferente = False
+						break
 		else:
-			operationSuccess = False
-			return render_to_response('Profesor\ModificarInfo.html', locals(), context_instance = RequestContext(request))
+			print ("==========================> CABALLO <================================")
+			CursoDiferente = True
+			HorarioLibre = True
+
+
+		if CursoDiferente and HorarioLibre:
+			MatriculaSuccess = True
+			print ("==========================> EXITO <================================")
+			grupo = Grupo(idEstudiante= estudiante , idCurso= cursoID)
+			grupo.save()
+			return render_to_response('Profesor/MatricularEstudiante.html',  locals(), context_instance = RequestContext(request))
+		elif not CursoDiferente:
+				print ("==========================> CURSANDOCURSO <================================")
+				CursandoCurso = True
+				return render_to_response('Profesor/MatricularEstudiante.html',  locals(), context_instance = RequestContext(request))
+		else:
+			print ("==========================> HORAOCUPADA <================================")
+			HoraOcupada = True
+			return render_to_response('Profesor/MatricularEstudiante.html',  locals(), context_instance = RequestContext(request))
+
 
 def listaCursosControl(request):
 	if request.user.is_authenticated() and request.user.is_staff:
@@ -519,7 +630,20 @@ class horarioControl(base.View):
 	def get(self, request, *args, **kwargs):
 		diasSemana = parametros["diasSemana"]
 		horas = parametros["horas"]
+		user = User.objects.get(username = request.user.username)
+
+		try:
+			estudiante = Estudiante.objects.get(user = user)
+			gruposEstudiante= Grupo.objects.filter(idEstudiante = estudiante)
+		except:
+			return {}
+
+		for grupo in gruposEstudiante:
+			horarios = Horario.objects.filter(idCurso = grupo.idCurso)
+
 		horario = horarioUsuario(request.user)
+		print ("==========================> CABALLO <================================")
+		print(gruposEstudiante)
 		return render_to_response('Estudiante\VerHorario.html', locals(), context_instance = RequestContext(request))
 
 class LogEstudiante(base.View):

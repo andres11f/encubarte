@@ -1,21 +1,12 @@
 {% extends "base.html"%}
 
 {% block contenido %}
-	{%if errorNumeroDocumento or errorTipoDocumento or errorContrasena or errorCorreoElectronico or errorFechaNacimiento or errorGenero or errorTelefonos %}
+	{%if errorTipoDocumento or errorFechaNacimiento or errorGenero %}
 	<div class="container">
 		<h3>Corrige los siguientes errores para continuar:</h3>
 		<p class="text-error">
-			{% if errorNumeroDocumento %}
-				El número de documento que seleccionaste ya está en uso o no es un número.<br>
-			{% endif %}
 			{% if errorTipoDocumento %}
 				No seleccionaste un tipo de documento correcto.<br>
-			{% endif %}
-			{% if errorContrasena %}
-				Las contraseñas no coinciden, verifica por favor.<br>
-			{% endif %}
-			{% if errorCorreoElectronico %}
-				El correo ya está en uso, intenta otro.<br>
 			{% endif %}
 			{% if errorFechaNacimiento %}
 				La fecha no es correcta, si tu navegador no muestra un campo de fecha intenta con el formato aaaa-mm-dd.<br>

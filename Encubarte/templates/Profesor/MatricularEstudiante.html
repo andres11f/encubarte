@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block contenido %}
+	<div class="container-fluid offset1">
+			{% block items %}
+			<div class="spanEst">
+				<center>
+				<form method="POST" action="/LogProfesor/MatricularEstu" name="MatricularEstudiante">
+					{% csrf_token %}
+					<br>
+					<select name="horario">
+						{% for c in cursos %}
+						       <option> {{ c.nombre }} Grupo {{ c.numeroGrupo }} </option>
+						{% endfor %}
+					</select>
+					<br> <br>
+						<label>Numero Documento:</label>
+						<input type="text" name="numeroDocumento" required="true" pattern="[0-9]{8,20}" value="{{numeroDocumento}}"/>
+					<div>
+						<br>
+					    <input type="submit" align= "left" value="Matricular Estudiante" name="Matricular"/>
+					</div>
+				</form>
+				<br>
+				</center>
+				<center>
+				<br>
+					{% if MatriculaSuccess %}
+						<p class="text-error"> La matricula se realizo satisfactoriamente </p>
+					{% endif%}
+					{% if HoraOcupada %}
+						<p class="text-error"> No tiene el horario disponible </p>
+					{% endif%}
+					{% if CursandoCurso %}
+						<p class="text-error"> Ya se encuentra matriculado a este curso </p>
+					{% endif%}
+					{% if errorEstudiante %}
+						<p class="text-error"> Numero de documento erroneo </p>
+					{% endif%}
+					<br>
+					{% endblock %}
+				</center>
+			</div>
+	</div>
+{% endblock %}
+

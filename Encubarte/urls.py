@@ -2,7 +2,7 @@ from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from django.conf import settings
 import Encubarte.plataforma.views
-from Encubarte.plataforma.views import matriculaControl, LogEstudiante, horarioControl, inicioControl, CamPass, ModificarInfoEstudiante, ModificarInfoProfesor
+from Encubarte.plataforma.views import matriculaControl, LogEstudiante, horarioControl, inicioControl, CamPass, ModificarInfoEstudiante, ModificarInfoProfesor, MatricularEstudiante
 
 admin.autodiscover()
 
@@ -21,6 +21,7 @@ urlpatterns = patterns('Encubarte.plataforma.views',
 
     #Links Profesores:
     url(r'^listaCursos/$', Encubarte.plataforma.views.listaCursosControl),
+    url(r'^LogProfesor/MatricularEstu/?$', MatricularEstudiante.as_view(), name='Matricular'),
     url(r'^LogProfesor/ModificarInfo/?$', ModificarInfoProfesor.as_view(), name='Modificar'),
     url(r'^LogProfesor/CambiarContrasena/?$', CamPass.as_view(), name='Cambiar'),
     

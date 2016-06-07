@@ -29,7 +29,17 @@
 				</center>
 			<br>
 			</div>
-			
+			<center>
+			<div>
+				<table>
+					{% for curso in gruposEstudiante%}
+						<tr>
+					        <td> {{ curso.idCurso }} </td>
+					    </tr>
+					{% endfor %}
+				</table>
+			</div>
+			</center>
 			{% endblock %}
 	</div>
 {% endblock %}
