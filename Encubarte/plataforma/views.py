@@ -301,6 +301,7 @@ def registroEstudianteControl(request):
 	if not request.user.is_authenticated():
 		generos = parametros["generos"]
 		tiposDocumento = parametros["tiposDocumento"]
+		zona = parametros["zona"]
 		if request.method == 'POST':
 			#Toma de datos
 			numeroDocumento = request.POST["numeroDocumento"]

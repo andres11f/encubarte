@@ -121,7 +121,13 @@
 				    </tr>
 				    <tr>
 				        <td><label>Zona:</label></td>
-				        <td><input type="text" name="zona" value="{{zona}}"/></td>
+				        <td>
+				        	<select name="zona" value="{{zona}}">
+				        		{% for z in  zona%}
+				        			<option>{{z}}</option>
+				        		{% endfor %}
+				        	</select>
+				    	</td>
 				    </tr>
 				    <tr>
 				        <td><label>Comuna:</label></td>
