@@ -1,6 +1,7 @@
+<!DOCTYPE HTML>
+
 </html lang="es">
 
-<!DOCTYPE HTML>
 <html>
 	<head>
 		<title> {% block titulo %} Inicio {% endblock %} </title>
@@ -24,63 +25,48 @@
 	</head>
 	<center><h1> Encubarte </h1></center><br>	
 	<body>
-		<center>
-		<div class="container">
-			<center>
-			<nav class="navbar navbar-default">
-				<center>
-				<div class="container-fluid">
-					<div class="navbar-header">
-						<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-							<span class="icon-bar"></span>
-							<span class="icon-bar"></span>
-							<span class="icon-bar"></span>                        
-						</button>
-						<!--<a class="navbar-brand" href="#">Encubarte</a>-->
-			    	</div>
-					<center>
-					<div class="collapse navbar-collapse">
-						<ul class="nav navbar-nav">
-							<!--<li class="active"><a href="/">Inicio</a></li>-->
-							
-
-					<div class="collapse navbar-collapse" id="myNavbar">
-						<ul class="nav navbar-nav">
-							<li><a href="/"> Inicio </a></li>
-
-							{% if request.user.is_superuser %}
-								<li><a href="/registroProfesor">Registrar Profesor</a></li>
-								<li><a href="/registroCurso">Registrar Curso</a></li>
-								<li><a href="/registroHorario">Registrar Horario</a></li>
-								<li><a href="/admin">Pagina Admin</a></li>
-							{% elif request.user.is_staff %}
-								<li> <a href="/listaCursos"> Lista de cursos</a> </li>
-								<li> <a href="/"> Matricular estudiante</a> </li>
-								<li> <a href="/LogProfesor/ModificarInfo">Modificar Informacion Personal</a> </li>
-								<li> <a href="/LogProfesor/CambiarContrasena">Cambiar Contraseña</a> </li>
-							{% elif request.user.is_authenticated %}
-								<li><a href="/LogEstudiante/VerHorario"> Ver Horario </a></li>
-								<li><a href="/LogEstudiante/ModificarInfo">Modificar información Personal</a></li>
-								<li><a href="/LogEstudiante/CambiarContrasena">Cambiar Contraseña</a></li>
-								<li><a href="/LogEstudiante/MatricularCurso">Matricular Curso</a></li>
-							{% endif %}
-						</ul>
-						<ul class="nav navbar-nav navbar-right">
-			      			{% if request.user.is_authenticated %}
-								<li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Cerrar sesión </a></li>
-			        		{% else %}
-			        			<li><a href="/registroEstudiante"><span class="glyphicon glyphicon-user"></span> Regístrate</a></li>
-								<li><a href="/LogEstudiante"><span class="glyphicon glyphicon-user"></span> Estudiante</a></li>
-			        		{% endif %}
-			      		</ul>
-			    	</div>
-			    	</center>
-			  </div>
-			  </center>
-			</nav>
-			</center>
-		</div>
-		</center>
+		<nav class="navbar navbar-default">
+  			<div class="container-fluid">
+    			<div class="navbar-header">
+      				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        			<span class="icon-bar"></span>
+        			<span class="icon-bar"></span>
+        			<span class="icon-bar"></span>                        
+      				</button>
+      			<a class="navbar-brand" href="#">Encubarte</a>
+    			</div>
+   				<div class="collapse navbar-collapse" id="myNavbar">
+      				<ul class="nav navbar-nav">
+	        			<li><a href="/"> Inicio </a></li>
+	        			
+	        			{% if request.user.is_superuser %}
+							<li><a href="/registroProfesor">Registrar Profesor</a></li>
+							<li><a href="/registroCurso">Registrar Curso</a></li>
+							<li><a href="/registroHorario">Registrar Horario</a></li>
+							<li><a href="/admin">Pagina Admin</a></li>
+						{% elif request.user.is_staff %}
+							<li> <a href="/listaCursos"> Lista de cursos</a> </li>
+							<li> <a href="/"> Matricular estudiante</a> </li>
+							<li> <a href="/LogProfesor/ModificarInfo">Modificar Informacion Personal</a> </li>
+							<li> <a href="/LogProfesor/CambiarContrasena">Cambiar Contraseña</a> </li>
+						{% elif request.user.is_authenticated %}
+							<li><a href="/LogEstudiante/VerHorario"> Ver Horario </a></li>
+							<li><a href="/LogEstudiante/ModificarInfo">Modificar información Personal</a></li>
+							<li><a href="/LogEstudiante/CambiarContrasena">Cambiar Contraseña</a></li>
+							<li><a href="/LogEstudiante/MatricularCurso">Matricular Curso</a></li>
+						{% endif %}
+      				</ul>
+      				<ul class="nav navbar-nav navbar-right">
+        				{% if request.user.is_authenticated %}
+							<li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Cerrar sesión </a></li>
+			        	{% else %}
+			        		<li><a href="/registroEstudiante"><span class="glyphicon glyphicon-user"></span> Regístrate</a></li>
+							<li><a href="/LogEstudiante"><span class="glyphicon glyphicon-user"></span> Estudiante</a></li>
+			        	{% endif %}
+      				</ul>
+    			</div>
+  			</div>
+		</nav>
 		{% block contenido %}{% endblock %}
 		{% block footer %}
 		{% endblock %}
