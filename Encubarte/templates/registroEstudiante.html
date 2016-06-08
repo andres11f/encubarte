@@ -2,159 +2,235 @@
 
 {% block titulo %}Registro Estudiante{% endblock %}
 {% block contenido %}
-	{%if errorNumeroDocumento or errorTipoDocumento or errorContrasena or errorCorreoElectronico or errorFechaNacimiento or errorGenero or errorTelefonos or errorDocumento %}
 	<div class="container">
-		<h3>Corrige los siguientes errores para continuar:</h3>
-		<p class="text-error">
-			{% if errorNumeroDocumento %}
-				El número de documento que seleccionaste ya está en uso o no es un número.<br>
-			{% endif %}
-			{% if errorTipoDocumento %}
-				No seleccionaste un tipo de documento correcto.<br>
-			{% endif %}
-			{% if errorContrasena %}
-				Las contraseñas no coinciden, verifica por favor.<br>
-			{% endif %}
-			{% if errorCorreoElectronico %}
-				El correo ya está en uso, intenta otro.<br>
-			{% endif %}
-			{% if errorFechaNacimiento %}
-				La fecha no es correcta, si tu navegador no muestra un campo de fecha intenta con el formato aaaa-mm-dd.<br>
-			{% endif %}
-			{% if errorGenero %}
-				No seleccionaste un género correcto.<br>
-			{% endif %}
-			{% if errorTelefonos %}
-				Los telefonos deben ser solo números y no exceder los 12 caracteres, por favor revisa los campos de teléfono fijo, celular y de contacto.<br>
-			{% endif %}
-			{% if errorDocumento %}
-				el documento ingresado no es valido.<br>
-			{% endif %}	
-		</p>
-	</div>
-	{% endif %}
+		{%if errorNumeroDocumento or errorCorreoElectronico or errorContrasena or errorFechaNacimiento or errorTipoDocumento or errorGenero %}
+		<div class="alert alert-warning">
+    		<strong>Atención!</strong> Corrige los siguientes errores para continuar:
+  		</div>
 
-	{%if conectado%}
-		<form action="/logout/" name="logout">
+  			{% if errorNumeroDocumento %}
+			<div class="alert alert-danger">
+  				<strong>Error!</strong> El número de documento que seleccionaste ya está en uso o no es un número.		
+  			</div>
+			{% endif %}
+
+			{% if errorTipoDocumento %}
+			<div class="alert alert-danger">
+  				<strong>Error!</strong> No seleccionaste un tipo de documento correcto.
+  			</div>
+			{% endif %}
+
+			{% if errorContrasena %}
+			<div class="alert alert-danger">
+  				<strong>Error!</strong> Las contraseñas no coinciden, verifica por favor.
+			</div>
+			{% endif %}
+
+			{% if errorCorreoElectronico %}
+			<div class="alert alert-danger">
+  				<strong>Error!</strong> El correo ya está en uso, intenta otro.
+			</div>
+			{% endif %}
+
+			{% if errorFechaNacimiento %}
+			<div class="alert alert-danger">
+  				<strong>Error!</strong> La fecha no es correcta, si tu navegador nomuestra un campo de fecha intenta con el formatoaaaa-mm-dd.
+			</div>
+			{% endif %}
+
+			{% if errorGenero %}
+			<div class="alert alert-danger">
+  				<strong>Error!</strong> No seleccionaste un género correcto.
+			</div>
+			{% endif %}
+
+			{% if errorTelefonos %}
+			<div class="alert alert-danger">
+  				<strong>Error!</strong> Los telefonos deben ser solo números y no excederlos 12 caracteres, por favor revisa los campos deteléfono fijo, celular y de contacto.
+			</div>
+			{% endif %}
+
+			{% if errorDocumento %}
+			<div class="alert alert-danger">
+  				<strong>Error!</strong> El documento ingresado no es valido.
+			</div>
+			<br>
+			{% endif %}
+		{% endif %}
+
+		{%if conectado%}
+		<form class="form-horizontal" role="form" method="POST" action="/registroProfesor/" name="registroProfesor">
 			{% csrf_token %}
-			<div class="container">
-				<p>Ya estás registrado y logueado como {{nombreUsuario}}, para crear un nuevo usuario debes cerrar sesión primero</p>
-		        <label>Cerrar sesión:</label>
-		        <input type="submit" value="Log out" name="logout"/>
-		    </div>
-		</form>
-	{%else %}
-		<form method="POST" action="/registroEstudiante/" name="registroEstudiante" enctype="multipart/form-data">
-			{% csrf_token %}
-			<div class="container">
-			<h3>Ingresa tus datos</hs3>
-			<p class="text-info"><h5>Por favor ingrese todos los campos requeridos (*)</h5></p>
-			<table class="table-bordered table-striped table-hover">
-				<tbody>
-					<tr>
-				        <td><label>Numero Documento:</label></td>
-				        <td><input type="text" name="numeroDocumento" required="true" pattern="[0-9]{8,20}" value="{{numeroDocumento}}"/>*</td>
-				    </tr>
-				    <tr>
-				        <td><label>Tipo de Documento:</label></td>
-				        <td>
-				        	<select name="tipoDocumento" value="{{tipoDocumento}}">
-				        		{% for t in  tiposDocumento%}
-				        			<option>{{t}}</option>
-				        		{% endfor %}
-				        	</select>
-				    	</td>
-				    </tr>
-				    <tr>
-				        <td><label>Contraseña:</label></td>
-				        <td><input type="password" name="contrasena" required="true"/>*</td>
-				    </tr>
-				    <tr>
-				        <td><label>Repite la Contraseña:</label></td>
-				        <td><input type="password" name="contrasena2" required="true"/>*</td>
-				    </tr>
-				    <tr>
-				        <td><label>Correo Electronico:</label></td>
-				        <td><input type="email" name="correoElectronico" required="true" value="{{correoElectronico}}"/>*</td>
-				    </tr>
-				    <tr>
-				        <td><label>Nombres:</label></td>
-				        <td><input type="text" name="nombres" required="true" value="{{nombres}}"/>*</td>
-				    </tr>
-				    <tr>
-				        <td><label>Apellidos:</label></td>
-				        <td><input type="text" name="apellidos" required="true" value="{{apellidos}}"/>*</td>
-				    </tr>
-				    <tr>
-				        <td><label>Fecha de nacimiento:</label></td>
-				        <td><input type="date" name="fechaNacimiento" required="true" value="{{fechaNacimiento}}"/>*</td>
-				    </tr>
-				    <tr>
-				        <td><label>Género:</label></td>
-				        <td>
-				        	<select name="genero" value="{{genero}}">
-				        		{% for g in  generos%}
-				        			<option>{{g}}</option>
-				        		{% endfor %}
-				        	</select>
-				    	</td>
-				    </tr>
-				    <tr>
-				        <td><label>Dirección:</label></td>
-				        <td><input type="text" name="direccion" required="true" value="{{direccion}}"/>*</td>
-				    </tr>
-				    <tr>
-				        <td><label>Barrio:</label></td>
-				        <td><input type="text" name="barrio" required="true" value="{{barrio}}"/>*</td>
-				    </tr>
-				    <tr>
-				        <td><label>Telefono Fijo:</label></td>
-				        <td><input type="text" name="telefonoFijo" required="true" pattern="[0-9]{7,12}" value="{{telefonoFijo}}"/>*</td>
-				    </tr>
-				    <tr>
-				        <td><label>Telefonos Celular:</label></td>
-				        <td><input type="text" name="telefonoCelular" required="true" pattern="[0-9]{7,12}" value="{{telefonoCelular}}"/>*</td>
-				    </tr>
-				    <tr>
-				        <td><label>Seguridad social:</label></td>
-				        <td><input type="text" name="seguridadSocial" required="true" value="{{seguridadSocial}}"/>*</td>
-				    </tr>
-				    <tr>
-				        <td><label>Zona:</label></td>
-				        <td>
-				        	<select name="zona" value="{{zona}}">
-				        		{% for z in  zona%}
-				        			<option>{{z}}</option>
-				        		{% endfor %}
-				        	</select>
-				    	</td>
-				    </tr>
-				    <tr>
-				        <td><label>Comuna:</label></td>
-				        <td><input type="text" name="comuna" value="{{comuna}}"/></td>
-				    </tr>
-				    <tr>
-				        <td><label>Grupo etnico:</label></td>
-				        <td><input type="text" name="grupoEtnico" value="{{grupoEtnico}}"/></td>
-				    </tr>
-				    <tr>
-				        <td><label>Condicion:</label></td>
-				        <td><input type="text" name="condicion" value="{{condicion}}"/></td>
-				    </tr>
-				    <tr>
-				        <td><label>Deseas recibir información en tu correo electronico?:</label></td>
-				        <td><input type="checkbox" name="enviarInfoAlCorreo" value="{{enviarInfoAlCorreo}}"/></td>
-				    </tr>
-				    <tr>
-				        <td><label>Documento:</label></td>
-				        <td><input type="file" accept=".jpg,.jpeg" name="documento" value="{{documento}}" required="true"/>*</td>
-				    </tr>
-				    <tr>
-				        <td><input type="submit" class="btn" value="Regístrate" name="registrarEstudiante"/>
-				    </tr>
-				</tbody>
-			</table>
+			<div class="form-group">
+				<p class="lead">Ya estás registrado y logueado como {{nombreUsuario}}, para crear un nuevo usuario debes cerrar sesión primero</p>
+				<button type="submit" name="logout" class="btn btn-default">Cerrar Sesión</button>
 			</div>
 		</form>
-	{% endif %}
+		{%else %}
+
+		<form class="form-horizontal" role="form" method="POST" action="/registroEstudiante/" name="registroEstudiante" enctype="multipart/form-data">
+			{% csrf_token %}
+			<h3>Ingresa tus datos</h3>
+			<p class="bg-info">Por favor ingresa todos los campos requeridos (*).</p>
+			<div class="form-group">
+				<label class="control-label col-md-4" for="numeroDocumento">Numero Documento:</label>
+				<div class="col-md-8">
+					<input type="text" name="numeroDocumento" required="true" pattern="[0-9]{8,20}" value="{{numeroDocumento}}" class="form-control" id="numeroDocumento">
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="control-label col-md-4" for="selTipoDocumento">Tipo de Documento:</label>
+				<div class="col-md-8">
+					<select class="form-control" name="tipoDocumento" value="{{tipoDocumento}}" id="selTipoDocumento">
+						{% for t in  tiposDocumento%}
+				        	<option>{{t}}</option>
+				        {% endfor %}
+					</select>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="control-label col-md-4" for="pwd">Contraseña:</label>
+				<div class="col-md-8"> 
+					<input type="password" name="contrasena" class="form-control" id="pwd">
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="control-label col-md-4" for="pwd2">Repite la Contraseña:</label>
+				<div class="col-md-8"> 
+					<input type="password" name="contrasena2" class="form-control" id="pwd2">
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="control-label col-md-4" for="email">Correo Electronico:</label>
+				<div class="col-md-8">
+					<input type="email" name="correoElectronico" required="true" value="{{correoElectronico}}" class="form-control" id="email">
+				</div>
+  			</div>
+
+  			<div class="form-group">
+				<label class="control-label col-md-4" for="noms">Nombres:</label>
+				<div class="col-md-8">
+					<input type="text" name="nombres" required="true" value="{{nombres}}" class="form-control" id="noms">
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="control-label col-md-4" for="apes">Apellidos:</label>
+				<div class="col-md-8">
+					<input type="text" name="apellidos" required="true" value="{{apellidos}}" class="form-control" id="apes">
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="control-label col-md-4" for="date">Fecha de nacimiento:</label>
+				<div class="col-md-8">
+					<input type="date" name="fechaNacimiento" required="true" value="{{fechaNacimiento}}" class="form-control" id="date">
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="control-label col-md-4" for="gen">Género:</label>
+				<div class="col-md-8">
+					<select class="form-control" name="genero" value="{{genero}}" id="gen">
+					{% for g in  generos%}
+				        <option>{{g}}</option>
+				    {% endfor %}
+					</select>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="control-label col-md-4" for="dir">Dirección:</label>
+				<div class="col-md-8">
+					<input type="text" name="direccion" required="true" value="{{direccion}}" class="form-control" id="dir">
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="control-label col-md-4" for="barr">Barrio:</label>
+				<div class="col-md-8">
+					<input type="text" name="barrio" required="true" value="{{barrio}}" class="form-control" id="barr">
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="control-label col-md-4" for="telfijo">Telefono Fijo:</label>
+				<div class="col-md-8">
+					<input type="text" name="telefonoFijo" required="true" value="{{telefonoFijo}}" class="form-control" id="telfijo">
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="control-label col-md-4" for="telcel">Telefonos Celular:</label>
+				<div class="col-md-8">
+					<input type="text" name="telefonoCelular" required="true" value="{{telefonoCelular}}" class="form-control" id="telcel">
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="control-label col-md-4" for="segso">Seguridad social:</label>
+				<div class="col-md-8">
+					<input type="text" name="seguridadSocial" required="true" value="{{seguridadSocial}}" class="form-control" id="segso">
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="control-label col-md-4" for="zon">Zona:</label>
+				<div class="col-md-8">
+					<select class="form-control" name="zona" value="{{zona}}" id="zon">
+					{% for z in zonas%}
+				        <option>{{z}}</option>
+				    {% endfor %}
+					</select>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="control-label col-md-4" for="comu">Comuna:</label>
+				<div class="col-md-8">
+					<input type="text" name="comuna" required="true" value="{{comuna}}" class="form-control" id="comu">
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="control-label col-md-4" for="grupe">Grupo etnico:</label>
+				<div class="col-md-8">
+					<input type="text" name="grupoEtnico" required="true" value="{{grupoEtnico}}" class="form-control" id="grupe">
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="control-label col-md-4" for="cond">Condicion:</label>
+				<div class="col-md-8">
+					<input type="text" name="condicion" required="true" value="{{condicion}}" class="form-control" id="cond">
+				</div>
+			</div>
+
+			<div class="form-group"> 
+				<div class="col-md-offset-4 col-md-10">
+					<div class="checkbox">
+						<label><input type="checkbox" name="enviarInfoAlCorreo" value="{{enviarInfoAlCorreo}}"> Deseas recibir información en tu correo electronico?:</label>
+					</div>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="control-label col-md-4" for="file">Documento:</label>
+				<div class="col-md-8">
+					<input type="file" accept=".jpg,.jpeg" name="documento" value="{{documento}}" required="true" id="file">
+				</div>
+			</div>
+
+			<div class="form-group"> 
+ 				<div class="col-md-offset-4 col-md-10">
+					<button type="submit" name="registrar" class="btn btn-default">Registrar</button>
+				</div>
+			</div>
+		</form>
+		{% endif %}
+	</div>
 {% endblock %}
