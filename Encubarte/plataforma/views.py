@@ -307,50 +307,29 @@ class MatricularEstudiante(base.View):
 		profesor = Profesor.objects.get(user = request.user)
 		cursos = Curso.objects.filter(idProfesor = profesor)
 		curso_grupo = request.POST['horario'].split(" Grupo ")
-		print ("==========================> NoNO <================================")
 		cursoMatricular = curso_grupo[0] #nombre a matricular en string
 		grupoCurso = curso_grupo[1] #grupo del curso a matricular
 		cursoID = Curso.objects.get(nombre=cursoMatricular, numeroGrupo=grupoCurso) #IdCurso a partir del nombre del curso
 		horarioNuevo = Horario.objects.filter(idCurso = cursoID)
-		print(cursoMatricular)
-		print (grupoCurso)
-		print(cursoID)
-		print (horarioNuevo)
-		estudianteaMatricular = User.objects.get(username=request.POST['numeroDocumento'])
-		#codigoEstudiante = request.GET['numeroDocumento']
+		try:
+			estudianteaMatricular = User.objects.get(username=request.POST['numeroDocumento'])
+		except:
+			errorEstudiante = True
+			return render_to_response('Profesor/MatricularEstudiante.html',  locals(), context_instance = RequestContext(request))
+
 
 		try:
-			print ("==========================> Cerveza <================================")
 			estudiante = Estudiante.objects.get(user = estudianteaMatricular)
 			gruposEstudiante = Grupo.objects.filter(idEstudiante = estudiante)
-			print(estudiante)
-			print (gruposEstudiante)
-		except estudiante.DoesNotExist:
-			estudiante = None
-
-		errorEstudiante = estudiante is None
-
-		if errorEstudiante:
-			return render_to_response('Profesor/MatricularEstudiante.html', locals(), context_instance = RequestContext(request))
-
-		HorarioEmpty = True
-
-		for grupoE in gruposEstudiante:
-			HorarioEmpty = False
-			horariosGrupo = Horario.objects.filter(idCurso = grupoE.idCurso)
-			print(grupoE.idCurso)
-			print(horariosGrupo)
-			print(HorarioEmpty)
+			horariosGrupo = Horario.objects.filter(idCurso__in=gruposEstudiante.values('idCurso'))
+		except horariosGrupo.DoesNotExist:
+			HorarioEmpty = True
 
 		CursoDiferente = False
 		HorarioLibre = False
 
-		print ("==========================> PERRO <================================")
-		print(HorarioEmpty)
-
 		if not HorarioEmpty:
 			for horario in horarioNuevo:
-				print ("==========================> HOLA <================================")
 				hora_ini = horario.horaInicio
 				hora_final = horario.horaFin
 				for h in horariosGrupo:
@@ -371,23 +350,19 @@ class MatricularEstudiante(base.View):
 						CursoDiferente = False
 						break
 		else:
-			print ("==========================> CABALLO <================================")
 			CursoDiferente = True
 			HorarioLibre = True
 
 
 		if CursoDiferente and HorarioLibre:
 			MatriculaSuccess = True
-			print ("==========================> EXITO <================================")
 			grupo = Grupo(idEstudiante= estudiante , idCurso= cursoID)
 			grupo.save()
 			return render_to_response('Profesor/MatricularEstudiante.html',  locals(), context_instance = RequestContext(request))
 		elif not CursoDiferente:
-				print ("==========================> CURSANDOCURSO <================================")
 				CursandoCurso = True
 				return render_to_response('Profesor/MatricularEstudiante.html',  locals(), context_instance = RequestContext(request))
 		else:
-			print ("==========================> HORAOCUPADA <================================")
 			HoraOcupada = True
 			return render_to_response('Profesor/MatricularEstudiante.html',  locals(), context_instance = RequestContext(request))
 
@@ -557,47 +532,34 @@ class matriculaControl(base.View):
 		grupoCurso = request.POST['idGrupo'] #grupo del curso a matricular
 		cursoID = Curso.objects.get(nombre=cursoMatricular, numeroGrupo=grupoCurso) #IdCurso a partir del nombre del curso y numero de grupo
 		horarioNuevo = Horario.objects.filter(idCurso = cursoID)
-		print(horarioNuevo)
-		#dia = horarioNuevo.dia
+		HorarioEmpty = False
 
 		try:
-			print ("==========================> NoNO <================================")
 			user = User.objects.get(username = request.user.username)
-			print(user)
 			estudiante = Estudiante.objects.get(user = user)
-			print(estudiante)
 			gruposEstudiante = Grupo.objects.filter(idEstudiante = estudiante)
-			print (gruposEstudiante)
-		except:
-			return {}
-
-		HorarioEmpty = True
-
-		for grupoE in gruposEstudiante:
-			HorarioEmpty = False
-			horariosGrupo = Horario.objects.filter(idCurso = grupoE.idCurso)
-			print ("==========================> LUNA <================================")
-			print(grupoE.idCurso)
-			print(horariosGrupo)
-			print(HorarioEmpty)
-			
+			horariosGrupo = Horario.objects.filter(idCurso__in=gruposEstudiante.values('idCurso'))
+		except horariosGrupo.DoesNotExist:
+			HorarioEmpty = True
 
 		CursoDiferente = False
 		HorarioLibre = False
-		print ("==========================> PERRO <================================")
-		print(HorarioEmpty)
 
 		if not HorarioEmpty:
 			for horario in horarioNuevo:
-				print ("==========================> HOLA <================================")
 				hora_ini = horario.horaInicio
 				hora_final = horario.horaFin
 				for h in horariosGrupo:
+					print(horariosGrupo)
 					hora_IC = h.horaInicio # hora inicio cursos matriculados
 					hora_FC = h.horaFin #hora fin cursos matriculados
 					if h.idCurso != horario.idCurso:
 						CursoDiferente = True
 						Libre = Hora_Libre(hora_IC, hora_FC, hora_ini, hora_final)
+						print(h.idCurso)
+						print(horario.idCurso)
+						print(h.dia)
+						print(horario.dia)
 						if h.dia == horario.dia:
 							if Libre:
 								HorarioLibre = True
@@ -610,7 +572,6 @@ class matriculaControl(base.View):
 						CursoDiferente = False
 						break
 		else:
-			print ("==========================> CABALLO <================================")
 			CursoDiferente = True
 			HorarioLibre = True
 
@@ -642,8 +603,6 @@ class horarioControl(base.View):
 			horarios = Horario.objects.filter(idCurso = grupo.idCurso)
 
 		horario = horarioUsuario(request.user)
-		print ("==========================> CABALLO <================================")
-		print(gruposEstudiante)
 		return render_to_response('Estudiante\VerHorario.html', locals(), context_instance = RequestContext(request))
 
 class LogEstudiante(base.View):
@@ -717,20 +676,21 @@ def __format__(self, format_spec):
 
 
 def Hora_Libre(curso_ini, curso_fin, hora_ini, hora_fin):
-	if curso_ini >= hora_ini and curso_fin <= hora_fin:
+	if hora_ini > curso_ini and hora_ini < curso_fin:
 		libre = False
-	elif hora_ini >= curso_ini and hora_fin <= curso_fin:
+	elif hora_ini > curso_ini and hora_fin < curso_fin:
 		libre = False
-	elif curso_ini >= hora_ini and curso_ini <= hora_fin:
+	elif hora_ini < curso_ini and hora_fin > curso_ini:
 		libre = False
-	elif hora_ini >= curso_ini and hora_ini <= curso_fin:
+	elif hora_ini < curso_ini and hora_fin > curso_fin:
 		libre = False
-	elif hora_ini == curso_ini and hora_ini == curso_fin:
+	elif hora_ini == curso_ini and hora_fin == curso_fin:
 		libre = False
 	else:
 		libre = True
 
 	return libre
+
 
 
 class CycleNode(template.Node):
