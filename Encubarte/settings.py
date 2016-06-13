@@ -125,7 +125,6 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.admin',
     'Encubarte.plataforma',
-    'crispy_forms',
 )
 
 # A sample logging configuration. The only tangible logging

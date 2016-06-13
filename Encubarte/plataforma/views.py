@@ -534,6 +534,8 @@ class matriculaControl(base.View):
 		horarioNuevo = Horario.objects.filter(idCurso = cursoID)
 		HorarioEmpty = False
 
+		
+
 		try:
 			user = User.objects.get(username = request.user.username)
 			estudiante = Estudiante.objects.get(user = user)
