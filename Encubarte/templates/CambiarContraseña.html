@@ -3,44 +3,45 @@
 <!--{% block titulo %}Encubarte{% endblock %}-->
 
 {% block contenido %}
-	<div class="container-fluid offset1">
-			{% block items %}
-			<div class="spanEst">
-				<center>
-					<h3>Cambiar Contraseña</h3>
-				<form method="POST" action="/LogEstudiante/CambiarContrasena" name="CamPass">
+	<div class="container">
+		<center>
+			<h3>Cambiar Contraseña</h3>
+			<form class="form-horizontal" role="form" method="POST" action="/LogEstudiante/CambiarContrasena" name="CamPass">
 				{% csrf_token %}
-					<table class ="table-hover">
-						<tbody>
-							<tr>
-						        <td><label>Actual Contraseña:</label></td>
-						        <td><input type="password" name="PastPassword" required="true"/> </td>
-						    </tr>
-						    <tr>
-						        <td><label>Contraseña Nueva:</label></td>
-						        <td><input type="password" name="NewPassword" required="true"/> </td>
-						    </tr>
-						    <tr>
-						        <td><label>Repetir Contraseña Nueva:</label></td>
-						        <td><input type="password" name="NewPassword2" required="true"/> </td>
-						    </tr>
-					    </tbody>
-					</table>
-					<br>
-					<center>
-				    <div>
-				        <input type="submit" value="Confirmar" name="CambiarPass"/>
-				    </div>
-				    </center>
-				</form>
-				{% if ChangedFailed%}
-					<p class="text-error"> La nueva contraseña no coincide </p>
-				{% endif%}
-				{% if PassFailed%}
-					<p class="text-error"> La contraseña no es correcta </p>
-				{% endif%}
-			</div>
-			<br>
-			{% endblock %}
+				<div class="form-group">
+					<label class="control-label col-md-4" for="cpwd">Actual Contraseña:</label>
+					<div class="col-md-8"> 
+						<input type="password" name="PastPassword" class="form-control" id="cpwd">
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="control-label col-md-4" for="newpwd">Contraseña Nueva:</label>
+					<div class="col-md-8"> 
+						<input type="password" name="NewPassword" class="form-control" id="newpwd">
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="control-label col-md-4" for="newpwd2">Repetir Contraseña Nueva:</label>
+					<div class="col-md-8"> 
+						<input type="password" name="NewPassword2" class="form-control" id="newpwd2">
+					</div>
+				</div>
+
+				<div class="form-group"> 
+ 					<div class="col-md-offset-1 col-md-8">
+						<button type="submit" name="CambiarPass" class="btn btn-default">Confirmar</button>
+					</div>
+				</div>
+
+			</center>
+			</form>
+			{% if ChangedFailed%}
+				<p class="text-error"> La nueva contraseña no coincide </p>
+			{% endif%}
+			{% if PassFailed%}
+				<p class="text-error"> La contraseña no es correcta </p>
+			{% endif%}
 	</div>
 {% endblock %}

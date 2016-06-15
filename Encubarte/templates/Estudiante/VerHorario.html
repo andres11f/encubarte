@@ -3,43 +3,39 @@
 <!--{% block titulo %}Encubarte{% endblock %}-->
 
 {% block contenido %}
-	<div class="container-fluid offset1">
-			{% block items %}
-			<div class="spanEst">
-				<center>
-				<table width="80%" align="center" >
-				    <div id="head_nav">
-				    	<th>Hora</th>
-					    {% for d in diasSemana%}
-					        <th>{{d}}</th>
-					    {% endfor %}
-					</div> 
-
-					{% for h in horas%}
+	<div class="container">
+		<div class="table-responsive">
+			<table class="table">
+				<thead>
 					<tr>
-				        <th>{{h}}</th>
-				        	{% for d in diasSemana%}
-				        		{% with d|add:","|add:h as tupla %}
-					        		<td>{{horario|get_item:tupla}}</td>
-					    		{% endwith %}
-					    	{% endfor %}
-				    </tr>
+						<th>Hora</th>
+						{% for d in diasSemana%}
+							<th>{{d}}</th>
+						{% endfor %}
+					</tr>
+			    </thead>
+			    <tbody>
+			    	{% for h in horas%}
+					<tr>
+						<th>{{h}}</th>
+						{% for d in diasSemana%}
+							{% with d|add:","|add:h as tupla %}
+								<td>{{horario|get_item:tupla}}</td>
+							{% endwith %}
+						{% endfor %}
+					</tr>
 					{% endfor %}
-				</table>
-				</center>
-			<br>
-			</div>
-			<center>
-			<div>
-				<table>
-					{% for curso in gruposEstudiante%}
-						<tr>
-					        <td> {{ curso.idCurso }} </td>
-					    </tr>
-					{% endfor %}
-				</table>
-			</div>
-			</center>
-			{% endblock %}
+				</tbody>
+			</table>
+		</div>
+		<div class="table-responsive">
+			<table class="table">
+				{% for curso in gruposEstudiante%}
+				<tr>
+					<td> {{ curso.idCurso }} </td>
+				</tr>
+				{% endfor %}
+			</table>
+		</div>
 	</div>
 {% endblock %}

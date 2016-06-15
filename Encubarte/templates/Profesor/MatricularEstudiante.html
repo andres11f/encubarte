@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block contenido %}
+	<div class="container">
+		<form class="form-horizontal" role="form" method="POST" action="/LogProfesor/MatricularEstu" name="MatricularEstudiante">
+			{% csrf_token %}
+			<div class="form-group">
+				<label class="control-label col-md-4" for="cur">Curso:</label>
+				<div class="col-md-8">
+					<select class="form-control" name="horario" id="cur">
+						{% for c in cursos %}
+							<option> {{ c.nombre }} Grupo {{ c.numeroGrupo }} </option>
+						{% endfor %}
+					</select>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-md-4" for="numd">Numero Documento:</label>
+				<div class="col-md-8">
+					<input type="text" name="numeroDocumento" required="true" pattern="[0-9]{8,20}" value="{{numeroDocumento}}" class="form-control" id="numd">
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-md-offset-4 col-md-10">
+					<input type="submit" class="btn btn-default" value="Matricular Estudiante" name="Matricular"/>
+				</div>
+			</div>
+		</form>
+		{% if MatriculaSuccess %}
+			<div class="alert alert-success">
+				<strong>Exito!</strong> La matricula se realizo satisfactoriamente
+			</div>
+		{% endif%}
+		{% if HoraOcupada %}
+			<div class="alert alert-danger">
+				<strong>Error!</strong> No tiene el horario disponible
+			</div>
+		{% endif%}
+		{% if CursandoCurso %}
+			<div class="alert alert-danger">
+				<strong>Error!</strong> Ya se encuentra matriculado a este curso
+			</div>
+		{% endif%}
+		{% if errorEstudiante %}
+			<div class="alert alert-danger">
+				<strong>Error!</strong> Numero de documento erroneo
+			</div>
+		{% endif%}
+	</div>
+{% endblock %}

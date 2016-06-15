@@ -387,7 +387,7 @@ def registroEstudianteControl(request):
 	if not request.user.is_authenticated():
 		generos = parametros["generos"]
 		tiposDocumento = parametros["tiposDocumento"]
-		zona = parametros["zona"]
+		zonas = parametros["zonas"]
 		if request.method == 'POST':
 			#Toma de datos
 			numeroDocumento = request.POST["numeroDocumento"]
@@ -533,6 +533,8 @@ class matriculaControl(base.View):
 		cursoID = Curso.objects.get(nombre=cursoMatricular, numeroGrupo=grupoCurso) #IdCurso a partir del nombre del curso y numero de grupo
 		horarioNuevo = Horario.objects.filter(idCurso = cursoID)
 		HorarioEmpty = False
+
+		
 
 		try:
 			user = User.objects.get(username = request.user.username)

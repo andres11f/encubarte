@@ -3,7 +3,6 @@ from django.forms import ModelForm
 from Encubarte.plataforma.models import Estudiante, Horario, Profesor
 from django.contrib.auth.models import User
 
-
 class EstudianteForm(forms.ModelForm):
 	class Meta:
 		model = Estudiante
