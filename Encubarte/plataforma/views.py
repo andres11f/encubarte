@@ -691,6 +691,19 @@ def Hora_Libre(curso_ini, curso_fin, hora_ini, hora_fin):
 
 	return libre
 
+def Edad(fechaNacimiento):
+	Fecha_Actual = datetime.now()
+	Fecha_Dia = Fecha_Actual.days
+	Fecha_Mes = Fecha_Actual.month
+	Fecha_Año = Fecha_Actual.year
+	Edad = fechaNacimiento.year - Fecha_Año
+	if fechaNacimiento.month == Fecha_Mes:
+		if fechaNacimiento.days >= Fecha_Dia:
+			Edad = Edad + 1
+	elif fechaNacimiento.month > Fecha_Mes:
+		Edad = Edad + 1
+
+	return Edad
 
 
 class CycleNode(template.Node):
