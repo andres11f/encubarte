@@ -1,8 +1,9 @@
+# -*- coding: utf-8 -*-
 from django.db import models
 from django.contrib.auth.models import User
 
 class Estudiante(models.Model):
-	#Objeto user contiene: numeroDocumento como username, correoElectronico como email, contraseña como password
+	#Objeto user contiene: numeroDocumento como username, correoElectronico como email, contrasena como password
 	#nombres como first_name, apellidos como last_name
 	user = models.OneToOneField(User, primary_key=True)
 	tipoDocumento = models.CharField(max_length=10)
@@ -31,7 +32,7 @@ class DatosFamiliaMayor(models.Model):
 	idEstudiante = models.OneToOneField(Estudiante)
 	nombreContacto = models.CharField(max_length=50)
 	telefonoContacto = models.IntegerField()
-	desempeño = models.CharField(max_length=50)
+	desempeno = models.CharField(max_length=50)
 	lugar = models.CharField(max_length=50)
 
 	class Meta:
@@ -54,7 +55,7 @@ class DatosFamiliaMenor(models.Model):
 		verbose_name_plural=u'Datos Familias Menor'
 
 class Profesor(models.Model):
-	#Objeto user contiene: numeroDocumento como username, correoElectronico como email, contraseña como password
+	#Objeto user contiene: numeroDocumento como username, correoElectronico como email, contrasena como password
 	#nombres como first_name, apellidos como last_name
 	user = models.OneToOneField(User, primary_key=True)
 	fechaNacimiento = models.DateField()

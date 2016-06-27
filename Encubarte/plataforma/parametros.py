@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 parametros = {'generos': ('Masculino', 'Femenino'),
 			  'comunas': ( 'Boston', 'Centro', 'Consota', 'Cuba', 'Del Café','El Jardin', 'El Oso', 'El Poblado', 'El Rocío', 'Ferrocarril', 'Olimpica', 'Oriente', 'Perla del Otun', 'San Joaquín', 'San Nicolas', 'Univerdidad', 'Villa Santana', 'Villavicencio'),
 			  'zonas' : ('Urbana', 'Rural'),

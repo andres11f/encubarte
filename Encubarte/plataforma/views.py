@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Create your views here.
 from django.shortcuts import render_to_response
 from django.template import RequestContext
@@ -77,7 +78,7 @@ def fechaCorrecta(fecha):
 
 class CamPass(base.View):
 	def get(self, request, *args, **kwargs):
-		return render_to_response('CambiarContraseña.html', locals(), context_instance = RequestContext(request))
+		return render_to_response('CambiarContrasena.html', locals(), context_instance = RequestContext(request))
 
 	def post(self, request, *args, **kwargs):
 
@@ -92,15 +93,15 @@ class CamPass(base.View):
 				return render_to_response('inicio.html', locals(), context_instance = RequestContext(request))
 			else:
 				ChangedFailed = True
-				return render_to_response('CambiarContraseña.html', locals(), context_instance = RequestContext(request))
-				#return HttpResponseRedirect("LogEstudiante/CambiarContraseña")
+				return render_to_response('CambiarContrasena.html', locals(), context_instance = RequestContext(request))
+				#return HttpResponseRedirect("LogEstudiante/CambiarContrasena")
 		else:
 			PassFailed = True
-			return render_to_response('CambiarContraseña.html', locals(), context_instance = RequestContext(request))
-			#return HttpResponseRedirect("LogEstudiante/CambiarContraseña")
+			return render_to_response('CambiarContrasena.html', locals(), context_instance = RequestContext(request))
+			#return HttpResponseRedirect("LogEstudiante/CambiarContrasena")
 
 
-	#	return render_to_response('Estudiante\CambiarContraseña.html', locals(), context_instance = RequestContext(request))
+	#	return render_to_response('Estudiante\CambiarContrasena.html', locals(), context_instance = RequestContext(request))
 
 
 #__________________________________________________________________________________________________________________________________________________#
@@ -697,8 +698,8 @@ def Edad(fechaNacimiento):
 	Fecha_Actual = datetime.now()
 	Fecha_Dia = Fecha_Actual.days
 	Fecha_Mes = Fecha_Actual.month
-	Fecha_Año = Fecha_Actual.year
-	Edad = fechaNacimiento.year - Fecha_Año
+	Fecha_Ano = Fecha_Actual.year
+	Edad = fechaNacimiento.year - Fecha_Ano
 	if fechaNacimiento.month == Fecha_Mes:
 		if fechaNacimiento.days >= Fecha_Dia:
 			Edad = Edad + 1
