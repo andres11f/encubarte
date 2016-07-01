@@ -167,6 +167,10 @@ def registroCursoControl(request):
 		numerosGrupos = parametros["numerosGrupos"]
 		profesores = Profesor.objects.all()
 		cursos = Curso.objects.all()
+		profusers = []
+		for i in range(len(profesores)):
+			user = profesores[i].user.username
+			profusers.append(user)
 		
 		if request.method == 'POST':
 			nombreCurso = request.POST["nombreCurso"]

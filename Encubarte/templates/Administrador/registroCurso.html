@@ -61,8 +61,8 @@
 					<label class="control-label col-md-4" for="prof">Profesor:</label>
 					<div class="col-md-8">
 						<select class="form-control" name="profesor" required="true" value="{{profesor}}" id="prof">
-							{% for p in profesores%}
-								<option value="{{p.user.username}}">{{p}}</option>
+							{% for p in profusers%}
+								<option value="{{p}}">{{p}}</option>
 							{% endfor %}
 						</select>
 					</div>
