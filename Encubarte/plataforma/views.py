@@ -268,7 +268,7 @@ class ModificarInfoProfesor(base.View):
 		if request.user.is_authenticated():
 			form = ProfesorForm(instance=profesor)
 			formUser = UserForm(instance=user)
-			return render_to_response('Profesor\ModificarInfo.html', locals(), context_instance = RequestContext(request))
+			return render_to_response('Profesor/ModificarInfo.html', locals(), context_instance = RequestContext(request))
 		
 
 	def post(self, request, *args, **kwargs):
@@ -294,7 +294,7 @@ class ModificarInfoProfesor(base.View):
 		profesor.save()
 
 		operationSuccess = True
-		return render_to_response('Estudiante\LogEstudiante.html', locals(), context_instance = RequestContext(request))
+		return render_to_response('Estudiante/LogEstudiante.html', locals(), context_instance = RequestContext(request))
 
 
 
@@ -519,12 +519,12 @@ class matriculaControl(base.View):
 			horarioVer = Horario.objects.filter(idCurso = cursoID)
 			print(horarioVer)
 			MostrarHorario = True
-			return render_to_response('Estudiante\MatricularCurso.html',  locals(), context_instance = RequestContext(request)) 
+			return render_to_response('Estudiante/MatricularCurso.html',  locals(), context_instance = RequestContext(request)) 
 		else:
 			MostrarHorario = False
 			cursos = Curso.objects.filter(esCerrado=False)
 			horarios = Horario.objects.all()
-			return render_to_response('Estudiante\MatricularCurso.html',  locals(), context_instance = RequestContext(request)) 
+			return render_to_response('Estudiante/MatricularCurso.html',  locals(), context_instance = RequestContext(request)) 
 
 	def post(self, request, *args, **kwargs):
 		cursos = Curso.objects.filter(esCerrado=False)
@@ -582,13 +582,13 @@ class matriculaControl(base.View):
 			MatriculaSuccess = True
 			grupo = Grupo(idEstudiante= estudiante , idCurso= cursoID)
 			grupo.save()
-			return render_to_response('Estudiante\MatricularCurso.html',  locals(), context_instance = RequestContext(request))
+			return render_to_response('Estudiante/MatricularCurso.html',  locals(), context_instance = RequestContext(request))
 		elif not CursoDiferente:
 				CursandoCurso = True
-				return render_to_response('Estudiante\MatricularCurso.html',  locals(), context_instance = RequestContext(request))
+				return render_to_response('Estudiante/MatricularCurso.html',  locals(), context_instance = RequestContext(request))
 		else:
 			HoraOcupada = True
-			return render_to_response('Estudiante\MatricularCurso.html',  locals(), context_instance = RequestContext(request))
+			return render_to_response('Estudiante/MatricularCurso.html',  locals(), context_instance = RequestContext(request))
 
 class horarioControl(base.View):
 	def get(self, request, *args, **kwargs):
@@ -606,11 +606,11 @@ class horarioControl(base.View):
 			horarios = Horario.objects.filter(idCurso = grupo.idCurso)
 
 		horario = horarioUsuario(request.user)
-		return render_to_response('Estudiante\VerHorario.html', locals(), context_instance = RequestContext(request))
+		return render_to_response('Estudiante/VerHorario.html', locals(), context_instance = RequestContext(request))
 
 class LogEstudiante(base.View):
 	def get(self, request, *args, **kwargs):
-		return render_to_response('Estudiante\LogEstudiante.html', locals(), context_instance = RequestContext(request))
+		return render_to_response('Estudiante/LogEstudiante.html', locals(), context_instance = RequestContext(request))
 
 class ModificarInfoEstudiante(base.View):
 	def get(self, request, *args, **kwargs):
@@ -621,7 +621,7 @@ class ModificarInfoEstudiante(base.View):
 		if request.user.is_authenticated():
 			form = EstudianteForm(instance=estudiante)
 			formUser = UserForm(instance=user)
-			return render_to_response('Estudiante\ModificarInfo.html', locals(), context_instance = RequestContext(request))
+			return render_to_response('Estudiante/ModificarInfo.html', locals(), context_instance = RequestContext(request))
 
 
 	def post(self, request, *args, **kwargs):
@@ -658,7 +658,7 @@ class ModificarInfoEstudiante(base.View):
 		estudiante.save()
 
 		operationSuccess = True
-		return render_to_response('Estudiante\LogEstudiante.html', locals(), context_instance = RequestContext(request))
+		return render_to_response('Estudiante/LogEstudiante.html', locals(), context_instance = RequestContext(request))
 
 #__________________________________________________________________________________________________________________________________________________#
 #__________________________________________________________________________________________________________________________________________________#
