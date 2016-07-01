@@ -169,7 +169,7 @@ def registroCursoControl(request):
 		cursos = Curso.objects.all()
 		profusers = []
 		for i in range(len(profesores)):
-			user = unicode(profesores[i].user.username,"utf-8")
+			user = profesores[i].user.username.encode("utf-8")
 			profusers.append(user)
 		
 		if request.method == 'POST':
