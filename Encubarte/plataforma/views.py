@@ -170,7 +170,7 @@ def registroCursoControl(request):
 		
 		if request.method == 'POST':
 			nombreCurso = request.POST["nombreCurso"]
-			usernameProfesor = request.POST["profesor"]
+			usernameProfesor = unicode(request.POST["profesor"], "utf-8")
 			numeroGrupo = request.POST["numeroGrupo"]
 
 			esCerrado = False
