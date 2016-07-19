@@ -16,12 +16,12 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
 
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'encubarteDB',
-        'USER': '',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'encubarte',
+        'USER': 'postgres',
         'PASSWORD':'',
-        'HOST': '',
-        'PORT': '',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 
