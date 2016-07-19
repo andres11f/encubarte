@@ -165,17 +165,16 @@ def registroProfesorControl(request):
 def registroCursoControl(request):
 	if request.user.is_authenticated() and request.user.is_superuser:
 		numerosGrupos = parametros["numerosGrupos"]
+		edad = parametros["edad"]
 		profesores = Profesor.objects.all()
 		cursos = Curso.objects.all()
-		profusers = []
-		for i in range(len(profesores)):
-			user = profesores[i].user.username.encode("utf-8")
-			profusers.append(user)
 		
 		if request.method == 'POST':
 			nombreCurso = request.POST["nombreCurso"]
-			usernameProfesor = unicode(request.POST["profesor"], "utf-8")
+			usernameProfesor = request.POST["profesor"]
 			numeroGrupo = request.POST["numeroGrupo"]
+			edadMin = request.POST["edadMin"]
+			edadMax = request.POST["edadMax"]
 
 			esCerrado = False
 			if "esCursoCerrado" in request.POST.keys(): esCerrado = True
@@ -272,7 +271,7 @@ class ModificarInfoProfesor(base.View):
 		if request.user.is_authenticated():
 			form = ProfesorForm(instance=profesor)
 			formUser = UserForm(instance=user)
-			return render_to_response('Profesor/ModificarInfo.html', locals(), context_instance = RequestContext(request))
+			return render_to_response('Profesor\ModificarInfo.html', locals(), context_instance = RequestContext(request))
 		
 
 	def post(self, request, *args, **kwargs):
@@ -298,7 +297,7 @@ class ModificarInfoProfesor(base.View):
 		profesor.save()
 
 		operationSuccess = True
-		return render_to_response('Estudiante/LogEstudiante.html', locals(), context_instance = RequestContext(request))
+		return render_to_response('Estudiante\LogEstudiante.html', locals(), context_instance = RequestContext(request))
 
 
 
@@ -393,6 +392,7 @@ def registroEstudianteControl(request):
 		generos = parametros["generos"]
 		tiposDocumento = parametros["tiposDocumento"]
 		zonas = parametros["zonas"]
+		jornadas = parametros["jornada"]
 		if request.method == 'POST':
 			#Toma de datos
 			numeroDocumento = request.POST["numeroDocumento"]
@@ -528,6 +528,7 @@ class matriculaControl(base.View):
 			MostrarHorario = False
 			cursos = Curso.objects.filter(esCerrado=False)
 			horarios = Horario.objects.all()
+			#comentario
 			return render_to_response('Estudiante/MatricularCurso.html',  locals(), context_instance = RequestContext(request)) 
 
 	def post(self, request, *args, **kwargs):

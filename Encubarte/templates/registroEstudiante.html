@@ -82,7 +82,7 @@
 			<div class="form-group">
 				<label class="control-label col-md-4" for="selTipoDocumento">Tipo de Documento:</label>
 				<div class="col-md-8">
-					<select class="form-control" name="tipoDocumento" value="{{tipoDocumento}}" id="selTipoDocumento">
+					<select class="form-control" name="tipoDocumento" value="{{tipoDocumento}}" id="selTipoDocumento" onchange="ExtraDates()">
 						{% for t in  tiposDocumento%}
 				        	<option>{{t}}</option>
 				        {% endfor %}
@@ -210,7 +210,88 @@
 				</div>
 			</div>
 
-			<div class="form-group"> 
+			<div class="form-group" id="Menpad"  style='display:none'>
+				<label class="control-label col-md-4" for="padnom">Nombre Padre:</label>
+				<div class="col-md-8">
+					<input type="text" name="Nompadre" required="true" value="{{nombrePadre}}" class="form-control" id="nompadre">
+				</div>
+			</div>
+
+			<div class="form-group" id="Menpadtel"  style='display:none'>
+				<label class="control-label col-md-4" for="padtel">Telefono Padre:</label>
+				<div class="col-md-8">
+					<input type="text" name="Telpadre" required="true" value="{{telefonoPadre}}" class="form-control" id="telpadre">
+				</div>
+			</div>
+
+			<div class="form-group" id="Menmad"  style='display:none'>
+				<label class="control-label col-md-4" for="madnom">Nombre Madre:</label>
+				<div class="col-md-8">
+					<input type="text" name="Nommadre" required="true" value="{{nombreMadre}}" class="form-control" id="nommadre">
+				</div>
+			</div>
+
+			<div class="form-group" id="Menmadtel"  style='display:none'>
+				<label class="control-label col-md-4" for="madtel">Telefono Madre:</label>
+				<div class="col-md-8">
+					<input type="text" name="Telmadre" required="true" value="{{telefonoMadre}}" class="form-control" id="telmadre">
+				</div>
+			</div>
+
+			<div class="form-group" id="Mencol"  style='display:none'>
+				<label class="control-label col-md-4" for="colegio">Colegio:</label>
+				<div class="col-md-8">
+					<input type="text" name="Colegio" required="true" value="{{Colegio}}" class="form-control" id="colegio">
+				</div>
+			</div>
+
+			<div class="form-group" id="Mengrad"  style='display:none'>
+				<label class="control-label col-md-4" for="grado">Grado:</label>
+				<div class="col-md-8">
+					<input type="text" name="Grado" required="true" value="{{Grado}}" class="form-control" id="grado">
+				</div>
+			</div>
+
+			<div class="form-group" id="Menjor"  style='display:none'>
+				<label class="control-label col-md-4" for="jornada">Jornada:</label>
+				<div class="col-md-8">
+					<select class="form-control" name="jornada" value="{{jornada}}" id="jornada">
+					{% for j in jornadas%}
+				        <option>{{j}}</option>
+				    {% endfor %}
+					</select>
+				</div>
+			</div>
+
+			<div class="form-group" id="NomAcudiente"  style='display:none'>
+				<label class="control-label col-md-4" for="Acudnom">Nombre Acudiente:</label>
+				<div class="col-md-8">
+					<input type="text" name="Nomacud" required="true" value="{{nombreAcudiente}}" class="form-control" id="nomacub">
+				</div>
+			</div>
+
+			<div class="form-group" id="TelAcudiente"  style='display:none'>
+				<label class="control-label col-md-4" for="Acudtel">Telefono Acudiente:</label>
+				<div class="col-md-8">
+					<input type="text" name="Telacud" required="true" value="{{telefonoAcudiente}}" class="form-control" id="telacud">
+				</div>
+			</div>
+
+			<div class="form-group" id="Maylab"  style='display:none'>
+				<label class="control-label col-md-4" for="labor">Labor:</label>
+				<div class="col-md-8">
+					<input type="text" name="labor" required="true" value="{{Labor}}" class="form-control" id="labor">
+				</div>
+			</div>
+
+			<div class="form-group" id="Maylug"  style='display:none'>
+				<label class="control-label col-md-4" for="lugar">Lugar:</label>
+				<div class="col-md-8">
+					<input type="text" name="Lugar" required="true" value="{{Lugar}}" class="form-control" id="lugar">
+				</div>
+			</div>
+
+		    <div class="form-group"> 
 				<div class="col-md-offset-4 col-md-10">
 					<div class="checkbox">
 						<label><input type="checkbox" name="enviarInfoAlCorreo" value="{{enviarInfoAlCorreo}}"> Deseas recibir información en tu correo electronico?:</label>
@@ -218,10 +299,24 @@
 				</div>
 			</div>
 
-			<div class="form-group">
+			<div class="form-group" style='display:none'>
+				<label class="control-label col-md-4" for="file">Foto:</label>
+				<div class="col-md-8">
+					<input type="file" accept=".jpg,.jpeg" name="foto" value="{{foto}}" required="true" class="form-control" id="file1">
+				</div>
+			</div>
+
+			<div class="form-group" style='display:none'>
+				<label class="control-label col-md-4" for="file">Cedula:</label>
+				<div class="col-md-8">
+					<input type="file" accept=".jpg,.jpeg" name="cedula" value="{{cedula}}" required="true" class="form-control" id="file2">
+				</div>
+			</div>
+
+			<div class="form-group" style='display:none'>
 				<label class="control-label col-md-4" for="file">Documento:</label>
 				<div class="col-md-8">
-					<input type="file" accept=".jpg,.jpeg" name="documento" value="{{documento}}" required="true" class="form-control" id="file">
+					<input type="file" accept=".jpg,.jpeg" name="documento" value="{{documento}}" required="true" class="form-control" id="file3">
 				</div>
 			</div>
 
