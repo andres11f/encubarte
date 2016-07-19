@@ -79,6 +79,28 @@
 					</div>
 				</div>
 
+				<div class="form-group">
+					<label class="control-label col-md-4" for="numg">Edad Minima:</label>
+					<div class="col-md-8">
+						<select class="form-control" name="edadMin" required="true" value="{{edad}}" id="Emin">
+							{% for e in edad %}
+						        <option>{{e}}</option>
+						    {% endfor %}
+						</select>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="control-label col-md-4" for="numg">Edad Maxima:</label>
+					<div class="col-md-8">
+						<select class="form-control" name="edadMax" required="true" value="{{edad}}" id="Emax">
+							{% for e in edad %}
+						        <option>{{e}}</option>
+						    {% endfor %}
+						</select>
+					</div>
+				</div>
+
 				<div class="form-group"> 
 					<div class="col-md-offset-4 col-md-10">
 						<div class="checkbox">
