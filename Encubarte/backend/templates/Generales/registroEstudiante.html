@@ -1,0 +1,38 @@
+{%extends "base.html"%}
+
+<ng-controller ng-controller="registroController">
+	
+{% block titulo %}Registro Estudiante{% endblock %}
+{% block contenido %}
+	<div class="container">
+
+		{%if conectado%}
+		<form class="form-horizontal" role="form" method="POST" action="/registroProfesor/" name="registroProfesor">
+			{% csrf_token %}
+			<div class="form-group">
+				<p class="lead">Ya estás registrado y logueado como {{nombreUsuario}}, para crear un nuevo usuario debes cerrar sesión primero</p>
+				<button type="submit" name="logout" class="btn btn-default">Cerrar Sesión</button>
+			</div>
+		</form>
+		{%else %}
+
+		<div  role="group" align="center">
+            <form name="estudiante" method="post" action="/registroEstudiante/">
+                {% csrf_token %}
+                <input name="codigo_edad" id="codigo_edad" type="hidden" value="menor">
+                <button type="submit" class="btn btn-success" value="">Registrar menor de edad</button>
+            </form>
+    	</div>
+
+    	<div  role="group" align="center">
+            <form name="estudiante" method="post" action="/registroEstudiante/">
+                {% csrf_token %}
+                <input name="codigo_edad" id="codigo_edad" type="hidden" value="mayor">
+                <button type="submit" class="btn btn-success" value="">Registrar mayor de edad </button>
+            </form>
+    	</div>
+		{% endif %}
+	</div>
+{% endblock %}
+
+</ng-controller>

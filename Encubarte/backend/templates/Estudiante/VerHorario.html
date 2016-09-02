@@ -1,0 +1,41 @@
+{% include "Estudiante/LogEstudiante.html"%}
+
+<!--{% block titulo %}Encubarte{% endblock %}-->
+
+{% block contenido %}
+	<div class="container">
+		<div class="table-responsive">
+			<table class="table">
+				<thead>
+					<tr>
+						<th>Hora</th>
+						{% for d in diasSemana%}
+							<th>{{d}}</th>
+						{% endfor %}
+					</tr>
+			    </thead>
+			    <tbody>
+			    	{% for h in horas%}
+					<tr>
+						<th>{{h}}</th>
+						{% for d in diasSemana%}
+							{% with d|add:","|add:h as tupla %}
+								<td>{{horario|get_item:tupla}}</td>
+							{% endwith %}
+						{% endfor %}
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+		<div class="table-responsive">
+			<table class="table">
+				{% for curso in gruposEstudiante%}
+				<tr>
+					<td> {{ curso.idCurso }} </td>
+				</tr>
+				{% endfor %}
+			</table>
+		</div>
+	</div>
+{% endblock %}

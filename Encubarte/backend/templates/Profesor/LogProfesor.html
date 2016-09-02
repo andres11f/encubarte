@@ -1,0 +1,71 @@
+{% include "base.html"%}
+
+<!--{% block titulo %}Encubarte{% endblock %}-->
+
+{% block header %}
+
+{% endblock %}
+
+{% block contenido %}
+	<div class="container-fluid offset1">
+		{% if operationSucess %}
+			<p> {{nombre}}, Has cambiado tus datos correctamente</p>
+			<br>
+		(% else %)
+			<p> {{nombre}}, Error al cambiar tus datos</p>
+			<br>
+		{%endif%}
+		{% if conectado %}
+			<nav class="navbar navbar-default">
+	  			<div class="container-fluid">
+	    			<div class="navbar-header">
+	      				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+	        			<span class="icon-bar"></span>
+	        			<span class="icon-bar"></span>
+	        			<span class="icon-bar"></span>                        
+	      				</button>
+	      			<a class="navbar-brand" href="#">Encubarte</a>
+	    			</div>
+	   				<div class="collapse navbar-collapse" id="myNavbar">
+	      				<ul class="nav navbar-nav">
+		        			<li><a href="/"> Inicio </a></li>
+							<li> <a href="/listaCursos"> Lista de cursos</a> </li>
+							<li> <a href="/LogProfesor/MatricularEstu"> Matricular estudiante</a> </li>
+							<li> <a href="/LogProfesor/ModificarInfo">Modificar Informacion Personal</a> </li>
+							<li> <a href="/LogProfesor/CambiarContrasena">Cambiar Contraseña</a> </li>
+	      				</ul>
+	      				<ul class="nav navbar-nav navbar-right">
+	        				{% if request.user.is_authenticated %}
+								<li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Cerrar sesión </a></li>
+				        	{% else %}
+				        		<li><a href="/registroEstudiante"><span class="glyphicon glyphicon-user"></span> Regístrate</a></li>
+				        	{% endif %}
+	      				</ul>
+	    			</div>
+	  			</div>
+			</nav>
+			<!-- full calendar -->
+			<div class="span10" id='calendar'></div>
+			<div class="span3">
+				<form action="/logout/" name="logout">
+				{% csrf_token %}
+					<h3>Inicio de Sesión</h3>
+					<div>
+						<p>Estás logueado como {{nombre}}, ¿Quieres iniciar sesión como alguien más?</p>
+				        <label>Cerrar sesión</label>
+				        <input type="submit" class="btn" value="Log out" name="logout"/>
+				    </div>
+			</form>
+			</div>
+		{% else %}
+			{% block items %}
+			<center>
+			<br><br>
+			<div>
+			<!--	<img src="media/images/Encu1.jpg">-->
+			</div>
+			</center>
+			{% endblock %} 
+		{% endif %} 
+	</div>
+{% endblock %}

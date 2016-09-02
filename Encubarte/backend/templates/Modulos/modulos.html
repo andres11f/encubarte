@@ -1,0 +1,62 @@
+{% include "base.html"%}
+
+<!--{% block titulo %}Encubarte{% endblock %}-->
+
+{% block header %}
+
+{% endblock %}
+
+{% block contenido %}
+	<div class="container-fluid offset1">
+		{% if conectado %}
+			<!-- full calendar -->
+			<div class="span10" id='calendar'></div>
+			<div class="span3">
+				<h3> Desea iniciar sesión como </h3>
+				<div>
+					<table align="center">
+	           			<tr>
+	               			<td>
+	                    		{% if usuario.is_authenticated %}
+	                            	<div  role="group" align="center">
+		                                <form name="estudiante" method="get" action="/LogEstudiante/">
+		                                    {% csrf_token %}
+		                                    <input name="codigo_modulo" id="codigo_usuario" type="hidden" value="estudiante">
+		                                    <input name="codigo_usuario" id="codigo_usuario" type="hidden" value="{{ usuario.username }}">
+		                                    <button type="submit" class="btn btn-success" value="estudiante">Estudiante</button>
+		                                </form>
+	                            	</div>
+	                    		{% endif %}
+		                    </td>
+		                    <td>
+		                        {% if usuario.is_staff %}
+		                            <div  role="group" align="center">
+		                                <form name="profesor" method="get" action="/LogProfesor/">
+		                                    {% csrf_token %}
+		                                    <input name="codigo_modulo" id="codigo_usuario" type="hidden" value="profesor">
+		                                    <input name="codigo_usuario" id="codigo_usuario" type="hidden" value="{{ usuario.username }}">
+		                                    <button type="submit" class="btn btn-danger" value="profesor">Profesor</button>
+		                                </form>
+		                            </div>
+		                        {% endif %}
+		                    </td>
+		                    <td>
+		                        {% if usuario.is_superuser %}
+		                            <div  role="group" align="center">
+		                                <form name="administrador" method="get" action="/LogAdministrador/">
+		                                    {% csrf_token %}
+		                                    <input name="codigo_modulo" id="codigo_usuario" type="hidden" value="administrador">
+		                                    <input name="codigo_usuario" id="codigo_usuario" type="hidden" value="{{ usuario.username }}">
+		                                    <button type="submit" class="btn btn-primary" value="administrador">Administrador</button>
+		                                </form>
+		                            </div>
+		                        {% endif %}
+	                		</td>
+	            		</tr>
+        			</table>
+				</div>
+			</div>
+		{% endif %} 
+	</div>
+{% endblock %}
+

@@ -1,0 +1,277 @@
+{%extends "base.html"%}
+
+{% block titulo %}Datos Estudiante Menor{% endblock %}
+{% block contenido %}
+	<div class="container">
+		{%if errorTelefonos%}
+		<div class="alert alert-warning">
+    		<strong>Atención!</strong> Corrige los siguientes errores para continuar:
+  		</div>
+
+			{%if errorTelefonos%}
+			<div class="alert alert-danger">
+  				<strong>Error!</strong> Los telefonos deben ser solo números y no excederlos 12 caracteres, por favor revisa los campos deteléfono fijo, celular y de contacto.
+			</div>
+			{% endif %}
+
+		{% endif %}
+
+		{%if conectado%}
+		<form class="form-horizontal" role="form" method="POST" action="/registroProfesor/" name="registroProfesor">
+			{% csrf_token %}
+			<div class="form-group">
+				<p class="lead">Ya estás registrado y logueado como {{nombreUsuario}}, para crear un nuevo usuario debes cerrar sesión primero</p>
+				<button type="submit" name="logout" class="btn btn-default">Cerrar Sesión</button>
+			</div>
+		</form>
+		{%else %}
+
+		<form class="form-horizontal" role="form" method="POST" action="/registroEstudianteMenor/" name="registroEstudianteMenor" enctype="multipart/form-data">
+			{% csrf_token %}
+			<h3>Ingresa tus datos</h3>
+			<p class="bg-info">Por favor ingresa todos los campos requeridos (*).</p>
+			
+			<div class="form-group">
+				<label class="control-label col-md-4" for="numeroDocumento">Numero Documento:</label>
+				<div class="col-md-8">
+					<input type="text" name="numeroDocumento" required="true" pattern="[0-9]{8,20}" value="{{numeroDocumento}}" class="form-control" id="numeroDocumento">
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="control-label col-md-4" for="selTipoDocumento">Tipo de Documento:</label>
+				<div class="col-md-8">
+					<select class="form-control" name="tipoDocumento" value="{{tipoDocumento}}" id="selTipoDocumento" onchange="ExtraDates()">
+						{% for t in  tiposDocumento%}
+				        	<option>{{t}}</option>
+				        {% endfor %}
+					</select>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="control-label col-md-4" for="pwd">Contraseña:</label>
+				<div class="col-md-8"> 
+					<input type="password" name="contrasena" class="form-control" id="pwd">
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="control-label col-md-4" for="pwd2">Repite la Contraseña:</label>
+				<div class="col-md-8"> 
+					<input type="password" name="contrasena2" class="form-control" id="pwd2">
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="control-label col-md-4" for="email">Correo Electronico:</label>
+				<div class="col-md-8">
+					<input type="email" name="correoElectronico" required="true" value="{{correoElectronico}}" class="form-control" id="email">
+				</div>
+  			</div>
+
+  			<div class="form-group">
+				<label class="control-label col-md-4" for="noms">Nombres:</label>
+				<div class="col-md-8">
+					<input type="text" name="nombres" required="true" value="{{nombres}}" class="form-control" id="noms">
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="control-label col-md-4" for="apes">Apellidos:</label>
+				<div class="col-md-8">
+					<input type="text" name="apellidos" required="true" value="{{apellidos}}" class="form-control" id="apes">
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="control-label col-md-4" for="date">Fecha de nacimiento:</label>
+				<div class="col-md-8">
+					<input type="date" name="fechaNacimiento" required="true" value="{{fechaNacimiento}}" class="form-control" id="date">
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="control-label col-md-4" for="gen">Género:</label>
+				<div class="col-md-8">
+					<select class="form-control" name="genero" value="{{genero}}" id="gen">
+					{% for g in  generos%}
+				        <option>{{g}}</option>
+				    {% endfor %}
+					</select>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="control-label col-md-4" for="dir">Dirección:</label>
+				<div class="col-md-8">
+					<input type="text" name="direccion" required="true" value="{{direccion}}" class="form-control" id="dir">
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="control-label col-md-4" for="barr">Barrio:</label>
+				<div class="col-md-8">
+					<input type="text" name="barrio" required="true" value="{{barrio}}" class="form-control" id="barr">
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="control-label col-md-4" for="telfijo">Telefono Fijo:</label>
+				<div class="col-md-8">
+					<input type="text" name="telefonoFijo" required="true" value="{{telefonoFijo}}" class="form-control" id="telfijo">
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="control-label col-md-4" for="telcel">Telefonos Celular:</label>
+				<div class="col-md-8">
+					<input type="text" name="telefonoCelular" required="true" value="{{telefonoCelular}}" class="form-control" id="telcel">
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="control-label col-md-4" for="segso">Seguridad social:</label>
+				<div class="col-md-8">
+					<input type="text" name="seguridadSocial" required="true" value="{{seguridadSocial}}" class="form-control" id="segso">
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="control-label col-md-4" for="zon">Zona:</label>
+				<div class="col-md-8">
+					<select class="form-control" name="zona" value="{{zona}}" id="zon">
+					{% for z in zonas%}
+				        <option>{{z}}</option>
+				    {% endfor %}
+					</select>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="control-label col-md-4" for="comu">Comuna:</label>
+				<div class="col-md-8">
+					<input type="text" name="comuna" required="true" value="{{comuna}}" class="form-control" id="comu">
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="control-label col-md-4" for="grupe">Grupo etnico:</label>
+				<div class="col-md-8">
+					<input type="text" name="grupoEtnico" required="true" value="{{grupoEtnico}}" class="form-control" id="grupe">
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="control-label col-md-4" for="cond">Condicion:</label>
+				<div class="col-md-8">
+					<input type="text" name="condicion" required="true" value="{{condicion}}" class="form-control" id="cond">
+				</div>
+			</div>
+			
+			<div class="form-group" id="Menpad">
+				<label class="control-label col-md-4" for="padnom">Nombre Padre:</label>
+				<div class="col-md-8">
+					<input type="text" name="Nompadre" value="{{nombrePadre}}" class="form-control" id="nompadre">
+				</div>
+			</div>
+
+			<div class="form-group" id="Menpadtel">
+				<label class="control-label col-md-4" for="padtel">Telefono Padre:</label>
+				<div class="col-md-8">
+					<input type="text" name="Telpadre" value="{{telefonoPadre}}" class="form-control" id="telpadre">
+				</div>
+			</div>
+
+			<div class="form-group" id="Menmad">
+				<label class="control-label col-md-4" for="madnom">Nombre Madre:</label>
+				<div class="col-md-8">
+					<input type="text" name="Nommadre" value="{{nombreMadre}}" class="form-control" id="nommadre">
+				</div>
+			</div>
+
+			<div class="form-group" id="Menmadtel">
+				<label class="control-label col-md-4" for="madtel">Telefono Madre:</label>
+				<div class="col-md-8">
+					<input type="text" name="Telmadre" value="{{telefonoMadre}}" class="form-control" id="telmadre">
+				</div>
+			</div>
+
+			<div class="form-group" id="Mencol">
+				<label class="control-label col-md-4" for="colegio">Colegio:</label>
+				<div class="col-md-8">
+					<input type="text" name="Colegio" value="{{Colegio}}" class="form-control" id="colegio">
+				</div>
+			</div>
+
+			<div class="form-group" id="Mengrad">
+				<label class="control-label col-md-4" for="grado">Grado:</label>
+				<div class="col-md-8">
+					<input type="text" name="Grado" value="{{Grado}}" class="form-control" id="grado">
+				</div>
+			</div>
+
+			<div class="form-group" id="Menjor">
+				<label class="control-label col-md-4" for="jornada">Jornada:</label>
+				<div class="col-md-8">
+					<select class="form-control" name="jornada" value="{{Jornada}}" id="jornada">
+					{% for j in jornadas%}
+				        <option>{{j}}</option>
+				    {% endfor %}
+					</select>
+				</div>
+			</div>
+
+			<div class="form-group" id="Nomacudiente">
+				<label class="control-label col-md-4" for="acud">Nombre Acudiente:</label>
+				<div class= "col-md-8">
+					<input type="text" requiered="true" value="{{nombreAcudiente}}" class="form-control">
+				</div>
+			</div>
+
+			<div class="form-group" id="CedAcudiente">
+				<label class="control-label col-md-4" for="Acudtel">Cedula Acudiente:</label>
+				<div class="col-md-8">
+					<input type="text" name="Cedacud" requiered="true" value="{{CedulaAcudiente}}" class="form-control" id="cedacud">
+				</div>
+			</div>
+
+			<div class="form-group" id="file1">
+				<label class="control-label col-md-4" for="file">Foto:</label>
+				<div class="col-md-8">
+					<input type="file" accept=".jpg,.jpeg" requiered="true" name="foto" value="{{foto}}" required="true" class="form-control" id="file10">
+				</div>
+			</div>
+
+			<div class="form-group" id="file2">
+				<label class="control-label col-md-4" for="file">Cedula:</label>
+				<div class="col-md-8">
+					<input type="file" accept=".jpg,.jpeg" requiered="true" name="cedula" value="{{cedula}}" required="true" class="form-control" id="file20">
+				</div>
+			</div>
+
+			<div class="form-group" id="file3">
+				<label class="control-label col-md-4" for="file">Documento Menor:</label>
+				<div class="col-md-8">
+					<input type="file" accept=".jpg,.jpeg" requiered="true" name="documento" value="{{documento}}" class="form-control" id="file30">
+				</div>
+			</div>
+
+			<div class="form-group"> 
+				<div class="col-md-offset-4 col-md-10">
+					<div class="checkbox">
+						<label><input type="checkbox" name="enviarInfoAlCorreo" value="{{enviarInfoAlCorreo}}"> Deseas recibir información en tu correo electronico?:</label>
+					</div>
+				</div>
+			</div>
+
+			<div class="form-group"> 
+ 				<div class="col-md-offset-4 col-md-10">
+					<button type="submit" name="registrar" class="btn btn-default">Registrar</button>
+				</div>
+			</div>
+
+		</form>
+		{% endif %}
+	</div>
+{% endblock %}

@@ -11,19 +11,34 @@ ADMINS = (
 
 PROJECT_PATH = os.path.realpath(os.path.dirname(__file__))
 
+print PROJECT_PATH
+
 MANAGERS = ADMINS
+
+#DATABASES = {
+#    'default': {
+#
+#        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#        'NAME': 'encubarte',
+#        'USER': 'postgres',
+#        'PASSWORD':'',
+#        'HOST': 'localhost',
+#        'PORT': '5432',
+#    }
+#}
 
 DATABASES = {
     'default': {
 
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'encubarte',
-        'USER': 'postgres',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'encubarteDB',
+        'USER': '',
         'PASSWORD':'',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'HOST': '',
+        'PORT': '',
     }
 }
+
 
 TIME_ZONE = 'America/Bogota'
 
@@ -44,7 +59,7 @@ USE_TZ = True
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
-MEDIA_ROOT = os.path.join(PROJECT_PATH,'media/')
+MEDIA_ROOT = os.path.join(PROJECT_PATH,'frontend/')
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
@@ -92,7 +107,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.media",
     "django.core.context_processors.static",
     "django.core.context_processors.request",
-    "Encubarte.plataforma.contextProcessor.nombreOrganizacion"
+    "Encubarte.backend.apps.generales.contextProcessor.nombreOrganizacion"
 )
 
 MIDDLEWARE_CLASSES = (
@@ -105,13 +120,13 @@ MIDDLEWARE_CLASSES = (
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-ROOT_URLCONF = 'Encubarte.urls'
+ROOT_URLCONF = 'Encubarte.backend.apps.generales.urls'
 
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'Encubarte.wsgi.application'
 
 TEMPLATE_DIRS = (
-    os.path.join(PROJECT_PATH,'templates'),
+    os.path.join(PROJECT_PATH,'backend/templates'),
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
@@ -125,7 +140,12 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.admin',
-    'Encubarte.plataforma',
+    #aplicaciones
+    'Encubarte.backend.apps.generales',
+    'Encubarte.backend.apps.administrador',
+    'Encubarte.backend.apps.estudiante',
+    'Encubarte.backend.apps.profesor',
+    'Encubarte.backend.apps.modulos',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -156,3 +176,9 @@ LOGGING = {
         },
     }
 }
+
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'matriculasencubarte@gmail.com'
+EMAIL_HOST_PASSWORD = ''

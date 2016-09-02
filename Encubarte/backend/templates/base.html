@@ -1,0 +1,76 @@
+<!DOCTYPE HTML>
+
+</html lang="es">
+
+<html>
+	<head>
+		{% block bootstrap %}
+			<!-- Latest compiled and minified CSS -->
+			<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+			<!-- Optional theme -->
+			<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+
+			<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+
+			<!-- Latest compiled and minified JavaScript -->
+			<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+			<script type="text/javascript" src="/media/bootstrap/js/bootstrap.min.js"> </script>
+			<script type="text/javascript" src="/media/js/angular.min.js"> </script>
+			<script type="text/javascript" src="/media/js/prueba.js"> </script>
+
+		{% endblock %}
+		<nav class="navbar navbar-default">
+  			<div class="container-fluid">
+    			<div class="navbar-header">
+      				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        			<span class="icon-bar"></span>
+        			<span class="icon-bar"></span>
+        			<span class="icon-bar"></span>                        
+      				</button>
+      			<a class="navbar-brand" href="#">Encubarte</a>
+    			</div>
+   					<div class="collapse navbar-collapse" id="myNavbar">
+      				<ul class="nav navbar-nav">
+	        			<li><a href="/"> Inicio </a></li>
+	        			
+	        		<	{% if request.user.is_superuser %}
+							<li><a href="LogAdministrador/registroProfesor">Registrar Profesor</a></li>
+							<li><a href="LogAdministrador/registroCurso">Registrar Curso</a></li>
+							<li><a href="LogAdministrador/registroHorario">Registrar Horario</a></li>
+							<li><a href="/admin">Pagina Admin</a></li>
+						{% elif request.user.is_staff %}
+							<li> <a href="/listaCursos"> Lista de cursos</a> </li>
+							<li> <a href="/LogProfesor/MatricularEstu"> Matricular estudiante</a> </li>
+							<li> <a href="/LogProfesor/ModificarInfo">Modificar Informacion Personal</a> </li>
+							<li> <a href="/LogProfesor/CambiarContrasena">Cambiar Contraseña</a> </li>
+						{% elif request.user.is_authenticated %}
+							<li><a href="/LogEstudiante/VerHorario"> Ver Horario </a></li>
+							<li><a href="/LogEstudiante/ModificarInfo">Modificar información Personal</a></li>
+							<li><a href="/LogEstudiante/CambiarContrasena">Cambiar Contraseña</a></li>
+							<li><a href="/LogEstudiante/MatricularCurso">Matricular Curso</a></li>
+						{% endif %}
+      				</ul>
+      				<ul class="nav navbar-nav navbar-right">
+        				{% if request.user.is_authenticated %}
+        					<li><span class="glyphicon glyphicon-log-out"></span> {{request.user.firstname}}</li>
+							<li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Cerrar sesión </a></li>
+			        	{% else %}
+			        		<li><a href="/registroEstudiante"><span class="glyphicon glyphicon-user"></span> Regístrate</a></li>
+			        	{% endif %}
+      				</ul>
+    			</div>
+  			</div>
+		</nav>
+		<title> {% block titulo %} Inicio {% endblock %} </title>
+		<center><h1> Encubarte </h1></center><br>
+		{% block contenido %}
+		{% endblock %}
+		{% block footer %}
+		{% endblock %}
+		{%block css%}
+		<link rel="stylesheet" type="text/css" href="/media/css/estilos.css"/>
+		{% endblock%}
+	</head>	
+</html>
