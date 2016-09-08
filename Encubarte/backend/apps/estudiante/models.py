@@ -21,7 +21,7 @@ class Estudiante(models.Model):
 	enviarInfoAlCorreo = models.BooleanField()
 
 	def __str__(self):
-		return self.user.username+" "+self.user.first_name+" "+self.user.last_name
+		return self.user.username+" - "+self.user.first_name+" "+self.user.last_name
 
 
 	class Meta:
@@ -36,11 +36,11 @@ class DatosFamiliaMayor(models.Model):
 	lugar = models.CharField(max_length=50)
 
 	def urlCedula(self, filename):
-		return "documentos/%s/%s"%(self.idEstudiante.user.username, "cedula")
+		return "documentos/%s/%s"%(self.idEstudiante.user.username, "cedula.jpg")
 	cedula = models.FileField(upload_to=urlCedula)
 	
 	def urlFoto(self, filename):
-		return "documentos/%s/%s"%(self.idEstudiante.user.username, "foto")
+		return "documentos/%s/%s"%(self.idEstudiante.user.username, "foto.jpg")
 	foto = models.FileField(upload_to=urlFoto)
 
 	class Meta:
@@ -59,15 +59,15 @@ class DatosFamiliaMenor(models.Model):
 	nombreAcudiente = models.CharField(max_length=50)
 	cedulaAcudiente = models.CharField(max_length=50)
 
-	def url(self,filename):
-		return "documentos/%s/%s"%(self.user.username, "documento")
-	documento = models.FileField(upload_to=url)
-	def url(self,filename):
-		return "documentos/%s/%s"%(self.user.username, "cedula")
-	cedula = models.FileField(upload_to=url)
-	def url(self,filename):
-		return "documentos/%s/%s"%(self.user.username, "foto")
-	foto = models.FileField(upload_to=url)
+	def urlDocumento(self,filename):
+		return "documentos/%s/%s"%(self.idEstudiante.user.username, "documento")
+	documento = models.FileField(upload_to=urlDocumento)
+	def urlCedula(self,filename):
+		return "documentos/%s/%s"%(self.idEstudiante.user.username, "cedula")
+	cedula = models.FileField(upload_to=urlCedula)
+	def urlFoto(self,filename):
+		return "documentos/%s/%s"%(self.idEstudiante.user.username, "foto")
+	foto = models.FileField(upload_to=urlFoto)
 
 	class Meta:
 		verbose_name_plural=u'Datos Familias Menor'

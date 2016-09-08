@@ -1,0 +1,47 @@
+{%extends "base.html"%}
+
+<meta charset="utf-8" /> 
+{% block titulo %}Ver Solicitudes{% endblock %}
+{% block scripts %}
+<script type="text/javascript">
+	function cambiarDisplay(id) {
+		if (!document.getElementById) return false;
+
+		fila = document.getElementById(id);
+		if (fila.style.display != "none") 
+		{
+			fila.style.display = "none"; //ocultar fila 
+		} 
+		else 
+		{
+			fila.style.display = "block"; //mostrar fila 
+  		}
+	}
+</script>
+{% endblock %}
+{% block contenido %}
+	<div class="container">
+		{% if operationSuccess %}
+			<p class="bg-success">Operacion completada con exito.</p>
+		{% endif %}
+
+		<div class="row">
+			<div class="col-md-6">
+				<table align="center" >
+				{% for s in solicitudes %}
+				<tr>
+			        <td onclick="cambiarDisplay('{{s.IDestudiante}}')"> {{s.IDestudiante}} </td>
+			        <td> 
+					<form action="#"  method="post">
+					{% csrf_token %}
+						<input type="hidden" name="id" value="{{s.IDestudiante}}">
+ 						<input type="submit" class="btn" value="Revisar" name="revisarSolicitud">
+					</form>
+					</td>
+			    </tr>
+				{% endfor %}
+				</table>
+			</div>
+		</div>
+	</div>
+{% endblock %}

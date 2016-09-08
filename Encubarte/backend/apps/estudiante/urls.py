@@ -13,7 +13,7 @@ urlpatterns = patterns('Encubarte.backend.apps.estudiante.views',
     #links estudiantes:
     url(r'^/?$', LogEstudiante.as_view(), name='Estudiante'),
     url(r'^CambiarContrasena/?$', CamPass.as_view(), name='Cambiar'),
-    url(r'^ModificarInfo/?$', ModificarInfoEstudiante.as_view(), name='Modificar'),
+    url(r'^ModificarInfo/?', ModificarInfoEstudiante.as_view(), name='Modificar'),
     url(r'^VerHorario/?$', horarioControl.as_view(), name='Horario'),
     url(r'^MatricularCurso/?$', matriculaControl.as_view(), name='Matricular'),
 
@@ -21,5 +21,5 @@ urlpatterns = patterns('Encubarte.backend.apps.estudiante.views',
 
 if settings.DEBUG:
     urlpatterns += patterns('',
-        (r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
+        (r'^frontend/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
     )

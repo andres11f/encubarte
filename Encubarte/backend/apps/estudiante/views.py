@@ -6,15 +6,13 @@ from django.http import HttpResponseRedirect
 from django.forms.models import model_to_dict
 from django.contrib.auth import login, authenticate, logout
 from django.views.generic import base
-#from Encubarte.plataforma.models import Estudiante, DatosFamiliaMayor, DatosFamiliaMenor, Profesor, Horario, Curso, Grupo
-#from Encubarte.plataforma.parametros import parametros
-#from Encubarte.plataforma.forms import EstudianteForm, ProfesorForm, UserForm
 from Encubarte.backend.apps.estudiante.models import Estudiante, DatosFamiliaMayor, DatosFamiliaMenor
 from Encubarte.backend.apps.profesor.models import Profesor
+from Encubarte.backend.apps.administrador.models import Solicitudes, Correcciones
 from Encubarte.backend.apps.generales.models import Horario, Curso, Grupo
 from Encubarte.backend.apps.generales.parametros import parametros
 from Encubarte.backend.apps.generales.forms import UserForm
-from Encubarte.backend.apps.estudiante.forms import EstudianteForm
+from Encubarte.backend.apps.estudiante.forms import EstudianteForm, DatosMayorForm, DatosMenorForm
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator,EmptyPage,InvalidPage
 from django.template.defaulttags import register
@@ -58,8 +56,6 @@ class matriculaControl(base.View):
         cursoID = Curso.objects.get(nombre=cursoMatricular, numeroGrupo=grupoCurso) #IdCurso a partir del nombre del curso y numero de grupo
         horarioNuevo = Horario.objects.filter(idCurso = cursoID)
         HorarioEmpty = False
-
-        
 
         try:
             user = User.objects.get(username = request.user.username)
@@ -136,15 +132,32 @@ class ModificarInfoEstudiante(base.View):
     def get(self, request, *args, **kwargs):
         user = User.objects.get(username = request.user.username)
         estudiante = Estudiante.objects.get(user = user)
+        Tipo = estudiante.tipoDocumento
         generos = parametros["generos"]
         tiposDocumento = parametros["tiposDocumento"]
-        if request.user.is_authenticated():
-            form = EstudianteForm(instance=estudiante)
-            formUser = UserForm(instance=user)
-            return render_to_response('Estudiante/ModificarInfo.html', locals(), context_instance = RequestContext(request))
+        zonas = parametros['zonas']
+        if Tipo == "Cedula":
+            DatosMayor = DatosFamiliaMayor.objects.get(idEstudiante = estudiante)
+            if request.user.is_authenticated():
+                form = EstudianteForm(instance=estudiante)
+                formUser = UserForm(instance=user)
+                formExtra = DatosMayorForm(instance=DatosMayor)
+                return render_to_response('Estudiante/ModificarInfo.html', locals(), context_instance = RequestContext(request))
+        else:
+            DatosMenor = DatosFamiliaMenor.objects.get(idEstudiante = estudiante)
+            if request.user.is_authenticated():
+                form = EstudianteForm(instance=estudiante)
+                formUser = UserForm(instance=user)
+                formExtra = DatosMenorForm(instance=DatosMenor)
+                return render_to_response('Estudiante/ModificarInfo.html', locals(), context_instance = RequestContext(request))
+
+        
 
 
     def post(self, request, *args, **kwargs):
+        generos = parametros["generos"]
+        tiposDocumento = parametros["tiposDocumento"]
+        zonas = parametros['zonas']
         user = User.objects.get(username = request.user.username)
         estudiante = Estudiante.objects.get(user = user)
 
@@ -170,15 +183,54 @@ class ModificarInfoEstudiante(base.View):
         errorGenero = (estudiante.genero not in (parametros["generos"]))
         errorTelefonos = (not re.match("^([0-9]{7,12})$",estudiante.telefonoFijo) or not re.match("^([0-9]{7,12})$",estudiante.telefonoCelular))
 
-        if (errorTipoDocumento or errorFechaNacimiento or errorGenero or errorTelefonos):
-            return render_to_response('registroEstudiante.html', locals(), context_instance = RequestContext(request))
-    
-        #Guardar usuario
-        user.save()
-        estudiante.save()
+        Tipo = estudiante.tipoDocumento
+        if Tipo == "Cedula":
+            DatosMayor = DatosFamiliaMayor.objects.get(idEstudiante = estudiante)
+            DatosMayor.nombreContacto = request.POST['nombreContacto']
+            DatosMayor.telefonoContacto = request.POST['telefonoContacto']
+            DatosMayor.desempeno = request.POST['desempeno']
+            DatosMayor.lugar = request.POST['lugar']
+            DatosMayor.cedula = request.POST['cedula']
+            DatosMayor.foto =request.POST['foto']
+            errorTelefonosFamilia = not re.match("^([0-9]{7,12})$",DatosMayor.telefonoContacto)
 
-        operationSuccess = True
-        return render_to_response('Estudiante/LogEstudiante.html', locals(), context_instance = RequestContext(request))
+            if (errorTipoDocumento or errorFechaNacimiento or errorGenero or errorTelefonos or errorTelefonosFamilia):
+                return render_to_response('Estudiante/LogEstudiante.html', locals(), context_instance = RequestContext(request))
+
+            #Guardar usuario
+            user.save()
+            estudiante.save()
+            DatosMayor.save()
+
+            operationSuccess = True
+            return render_to_response('Estudiante/LogEstudiante.html', locals(), context_instance = RequestContext(request))
+
+        else:
+            DatosMenor = DatosFamiliaMenor.objects.get(idEstudiante = estudiante)
+            DatosMenor.nombrePadre = request.POST['nombrePadre']
+            DatosMenor.nombreMadre = request.POST['nombreMadre']
+            DatosMenor.telefonoPadre = request.POST['telefonoPadre']
+            DatosMenor.telefonoMadre = request.POST['telefonoMadre']
+            DatosMenor.institucionEducativa = request.POST['institucionEducativa']
+            DatosMenor.grupo = request.POST['grupo']
+            DatosMenor.jornada = request.POST['jornada']
+            DatosMenor.nombreAcudiente = request.POST['nombreAcudiente']
+            DatosMenor.cedulaAcudiente = request.POST['cedulaAcudiente']
+            DatosMenor.documento = request.POST['documento']
+            DatosMenor.cedula = request.POST['cedula']
+            DatosMenor.foto = request.POST['foto']
+            errorTelefonosFamilia = (not re.match("^([0-9]{7,12})$",DatosMenor.telefonoPadre) or not re.match("^([0-9]{7,12})$",DatosMenor.telefonoMadre))
+
+            if (errorTipoDocumento or errorFechaNacimiento or errorGenero or errorTelefonos or errorTelefonosFamilia):
+                return render_to_response('Estudiante/LogEstudiante.html', locals(), context_instance = RequestContext(request))
+            
+            #Guardar usuario
+            user.save()
+            estudiante.save()
+            DatosMenor.save()
+
+            operationSuccess = True
+            return render_to_response('Estudiante/LogEstudiante.html', locals(), context_instance = RequestContext(request))
 
 #__________________________________________________________________________________________________________________________________________________#
 #__________________________________________________________________________________________________________________________________________________#
@@ -196,6 +248,13 @@ def get_item(dictionary, key):
 
 def __format__(self, format_spec):
     return format(str(self), format_spec)
+
+def fechaCorrecta(fecha):
+    try:
+        datetime.strptime(fecha, '%Y-%m-%d')
+        return True
+    except:
+        return False
 
 def horarioUsuario(User):
     horas = parametros["horas"]

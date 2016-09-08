@@ -20,11 +20,14 @@
 	</div>
 	{% endif %}
 
-	<form method="POST" action="/LogEstudiante/ModificarInfo" name="ModificarInfo">
+	<form method="POST" action="/LogEstudiante/ModificarInfo" name="ModificarInfo" disabled="true">
 		{% csrf_token %}
 		<center>
-		{{ formUser.as_p }}
-		{{ form.as_p  }}
+		<div>
+			{{ formUser.as_p }}
+			{{ form.as_p }}
+			{{ formExtra.as_p }}
+		</div>
 		<br> <br>
 	    <tr>
 	        <td><input type="submit" value="Cambiar Datos" name="registrarEstudiante"/>

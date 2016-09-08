@@ -6,10 +6,8 @@ from django.http import HttpResponseRedirect
 from django.forms.models import model_to_dict
 from django.contrib.auth import login, authenticate, logout
 from django.views.generic import base
-#from Encubarte.backend.apps.generales.models import Estudiante, DatosFamiliaMayor, DatosFamiliaMenor, Profesor, Horario, Curso, Grupo
-#from Encubarte.backend.apps.generales.parametros import parametros
-#from Encubarte.backend.forms import EstudianteForm, ProfesorForm, UserForm
 from Encubarte.backend.apps.estudiante.models import Estudiante, DatosFamiliaMayor, DatosFamiliaMenor
+from Encubarte.backend.apps.administrador.models import Solicitudes, Correcciones
 #from Encubarte.backend.apps.profesor.models import Profesor
 #from Encubarte.backend.apps.generales.models import Horario, Curso, Grupo
 from Encubarte.backend.apps.generales.parametros import parametros
@@ -189,24 +187,21 @@ class RegistroEstudianteMayor(base.View):
         usuario.first_name = nombres
         usuario.last_name = apellidos
         
-        
         #Guardo estudiante
         estudiante = Estudiante(user = usuario, tipoDocumento = tipoDocumento, fechaNacimiento = fechaNacimiento, genero = genero, direccion = direccion, barrio = barrio, zona = zona, comuna = comuna, 
             telefonoFijo = telefonoFijo, telefonoCelular = telefonoCelular, grupoEtnico = grupoEtnico, condicion = condicion, seguridadSocial = seguridadSocial, enviarInfoAlCorreo = enviarInfoAlCorreo)
-        estudiante.save()
-        print estudiante
-        print "AGUUUUUUUUUUUUUUUUUUUAPANELAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
 
         #Guardo datos particulares del Mayor
-        datosMayor = DatosFamiliaMayor(id=User.objects.all().count() + 1, idEstudiante= estudiante, nombreContacto= nombreAcudiente, telefonoContacto= telefonoAcudiente,
+        datosMayor = DatosFamiliaMayor(id= User.objects.all().count() + 1, idEstudiante= estudiante, nombreContacto= nombreAcudiente, telefonoContacto= telefonoAcudiente,
             desempeno= desempeno, lugar= lugar, cedula= cedula, foto= foto)
-        print "Y AZUCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAR"
-        print datosMayor
-        print "CON LIMMMMMMMMMMMMMMMMMMMOOOOOOOOOOOOOOOOOOOON"
+
+        #Guardar solicitud
+        solicitud = Solicitudes(IDestudiante= estudiante, estado= "Pendiente", Correcciones= False)
 
         usuario.save()
         estudiante.save()  
         datosMayor.save()
+        solicitud.save()
 
         return inicioControl(request, registerSuccess=True)
 
@@ -300,17 +295,23 @@ class RegistroEstudianteMenor(base.View):
         usuario = User.objects.create_user(id=User.objects.all().count() + 1, username=numeroDocumento, email=correoElectronico, password=contrasena)
         usuario.first_name = nombres
         usuario.last_name = apellidos
-        usuario.save()
         
         #Guardo estudiante
         estudiante = Estudiante(user = usuario, tipoDocumento = tipoDocumento, fechaNacimiento = fechaNacimiento, genero = genero, direccion = direccion, barrio = barrio, zona = zona, comuna = comuna, 
             telefonoFijo = telefonoFijo, telefonoCelular = telefonoCelular, grupoEtnico = grupoEtnico, condicion = condicion, seguridadSocial = seguridadSocial, enviarInfoAlCorreo = enviarInfoAlCorreo)
-        estudiante.save()
 
         #Guardo datos Particulares del menor
-        datosMenor = DatosFamiliaMenor(idEstudiante = usuario, nombrePadre= nombrePadre, nombreMadre= nombreMadre, telefonoPadre= telefonoPadre, telefonoMadre= telefonoMadre, institucionEducativa= Colegio, 
+        datosMenor = DatosFamiliaMenor(idEstudiante = estudiante, nombrePadre= nombrePadre, nombreMadre= nombreMadre, telefonoPadre= telefonoPadre, telefonoMadre= telefonoMadre, institucionEducativa= Colegio, 
             grupo= Grado, jornada=jornada, nombreAcudiente=nombreResponsable, cedulaAcudiente= cedulaAcudiente, documento= documento, foto= foto, cedula= cedula)
+        
+        #Guardar solicitud
+        solicitud = Solicitudes(IDestudiante= estudiante, estado= "Pendiente", Correcciones= False)
+
+        usuario.save()
+        estudiante.save()
         datosMenor.save()
+        solicitud.save()
+
 
         return inicioControl(request, registerSuccess=True)
 

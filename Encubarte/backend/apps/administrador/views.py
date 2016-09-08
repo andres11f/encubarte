@@ -6,11 +6,9 @@ from django.http import HttpResponseRedirect
 from django.forms.models import model_to_dict
 from django.contrib.auth import login, authenticate, logout
 from django.views.generic import base
-#from Encubarte.plataforma.models import Estudiante, DatosFamiliaMayor, DatosFamiliaMenor, Profesor, Horario, Curso, Grupo
-#from Encubarte.plataforma.parametros import parametros
-#from Encubarte.plataforma.forms import EstudianteForm, ProfesorForm, UserForm
 from Encubarte.backend.apps.estudiante.models import Estudiante, DatosFamiliaMayor, DatosFamiliaMenor
 from Encubarte.backend.apps.profesor.models import Profesor
+from Encubarte.backend.apps.administrador.models import Solicitudes, Correcciones
 from Encubarte.backend.apps.generales.models import Horario, Curso, Grupo
 from Encubarte.backend.apps.generales.parametros import parametros
 #from Encubarte.backend.apps.generales.forms import UserForm
@@ -169,6 +167,38 @@ def registroHorarioControl(request):
             return render_to_response('Administrador/registroHorario.html', locals(), context_instance = RequestContext(request))
     else:
         return HttpResponseRedirect('/404')
+
+
+class VerSolicitudes(base.View):
+    def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated() and request.user.is_superuser:
+            try:
+                solicitudes = Solicitudes.objects.filter(estado="Pendiente")
+            except Solicitudes.DoesNotExist:
+                solicitudes = None
+            if solicitudes is None:
+                sinSolicitudes = True
+                return render_to_response('Administrador/verSolicitudes.html', locals(), context_instance = RequestContext(request))
+            else:
+                return render_to_response('Administrador/verSolicitudes.html', locals(), context_instance = RequestContext(request))
+        else:
+            return HttpResponseRedirect('/404')
+
+    def post(self, request, *args, **kwargs):
+        if request.user.is_authenticated() and request.user.is_superuser:
+            Estudianteid = request.POST['id'].split(" - ")
+            print "AAAAAAAAAAAAAAAAAAAAALLLLLLLLLLLLLLLLLEEEEEEEEEEEEEEEEUUUUUUUUUUUUUUUUYYYYYYYYYYYYYYAAAAAAAAAAAAAAAA"
+            user = User.objects.get(username = Estudianteid[0])
+            estudiante = Estudiante.objects.get(user = user)
+            tipo = estudiante.tipoDocumento
+            if tipo == "Cedula":
+                DatosMayor = DatosFamiliaMayor.objects.get(idEstudiante = estudiante)
+                return render_to_response('Administrador/revisarSolicitudMayor.html', locals(), context_instance = RequestContext(request))
+            else:
+                DatosMayor = DatosFamiliaMenor.objects.get(idEstudiante = estudiante)
+                return render_to_response('Administrador/revisarSolicitudMenor.html', locals(), context_instance = RequestContext(request))
+        else:
+            return HttpResponseRedirect('/404')
 
 
 #__________________________________________________________________________________________________________________________________________________#

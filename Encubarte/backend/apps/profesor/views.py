@@ -6,9 +6,6 @@ from django.http import HttpResponseRedirect
 from django.forms.models import model_to_dict
 from django.contrib.auth import login, authenticate, logout
 from django.views.generic import base
-#from Encubarte.plataforma.models import Estudiante, DatosFamiliaMayor, DatosFamiliaMenor, Profesor, Horario, Curso, Grupo
-#from Encubarte.plataforma.parametros import parametros
-#from Encubarte.plataforma.forms import EstudianteForm, ProfesorForm, UserForm
 from Encubarte.backend.apps.estudiante.models import Estudiante, DatosFamiliaMayor, DatosFamiliaMenor
 from Encubarte.backend.apps.profesor.models import Profesor
 from Encubarte.backend.apps.generales.models import Horario, Curso, Grupo
