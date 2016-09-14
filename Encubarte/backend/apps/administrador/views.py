@@ -186,17 +186,24 @@ class VerSolicitudes(base.View):
 
     def post(self, request, *args, **kwargs):
         if request.user.is_authenticated() and request.user.is_superuser:
-            Estudianteid = request.POST['id'].split(" - ")
-            print "AAAAAAAAAAAAAAAAAAAAALLLLLLLLLLLLLLLLLEEEEEEEEEEEEEEEEUUUUUUUUUUUUUUUUYYYYYYYYYYYYYYAAAAAAAAAAAAAAAA"
-            user = User.objects.get(username = Estudianteid[0])
-            estudiante = Estudiante.objects.get(user = user)
-            tipo = estudiante.tipoDocumento
-            if tipo == "Cedula":
-                DatosMayor = DatosFamiliaMayor.objects.get(idEstudiante = estudiante)
-                return render_to_response('Administrador/revisarSolicitudMayor.html', locals(), context_instance = RequestContext(request))
-            else:
-                DatosMayor = DatosFamiliaMenor.objects.get(idEstudiante = estudiante)
-                return render_to_response('Administrador/revisarSolicitudMenor.html', locals(), context_instance = RequestContext(request))
+            revisarSolicitud = request.POST["revisarSolicitud"]
+            if revisarSolicitud == "Revisar":
+                Estudianteid = request.POST['id'].split(" - ")
+                user = User.objects.get(username = Estudianteid[0])
+                estudiante = Estudiante.objects.get(user = user)
+                tipo = estudiante.tipoDocumento
+                if tipo == "Cedula":
+                    DatosMayor = DatosFamiliaMayor.objects.get(idEstudiante = estudiante)
+                    return render_to_response('Administrador/revisarSolicitudMayor.html', locals(), context_instance = RequestContext(request))
+                else:
+                    DatosMayor = DatosFamiliaMenor.objects.get(idEstudiante = estudiante)
+                    return render_to_response('Administrador/revisarSolicitudMenor.html', locals(), context_instance = RequestContext(request))
+
+            elif revisarSolicitud == "Aprobar":
+                return render_to_response('Administrador/verSolicitudes.html', locals(), context_instance = RequestContext(request))
+            elif revisarSolicitud == "Rechazar":
+                return render_to_response('Administrador/verSolicitudes.html', locals(), context_instance = RequestContext(request))
+
         else:
             return HttpResponseRedirect('/404')
 

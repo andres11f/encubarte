@@ -26,15 +26,16 @@
 		</form>
 		{%else %}
 
-		<form class="form-horizontal" role="form" method="POST" action="/registroEstudianteMayor/" name="registroEstudianteMayor" enctype="multipart/form-data">
+		<form class="form-horizontal" role="form" method="POST" action="/LogAdministrador/verSolicitudes/" name="LogAdministrador/verSolicitudes" enctype="multipart/form-data">
 			{% csrf_token %}
-			<h3>Ingresa tus datos</h3>
-			<p class="bg-info">Por favor ingresa todos los campos requeridos (*).</p>
+			<h3>Revisa los datos</h3>
+			<p class="bg-info">Por favor selecciona los campos a corregir usando la checkbox debajo del campo.</p>
 
 			<div class="form-group">
 				<label class="control-label col-md-4" for="numeroDocumento">Numero Documento:</label>
 				<div class="col-md-8">
 					<input type="text" name="numeroDocumento" required="true" pattern="[0-9]{8,20}" value="{{estudiante.user.username}}" class="form-control" id="numeroDocumento" disabled/>
+					<input type="checkbox" name="documentoCorreccion" value="{{documentoCorreccion}}">
 				</div>
 			</div>
 
@@ -42,6 +43,7 @@
 				<label class="control-label col-md-4" for="selTipoDocumento">Tipo de Documento:</label>
 				<div class="col-md-8">
 					<input type="text" name="tipoDocumento" value="{{estudiante.tipoDocumento}}" class="form-control" id="selTipoDocumento" /disabled>
+					<input type="checkbox" name="tipoCorreccion" value="{{tipoCorreccion}}">
 				</div>
 			</div>
 
@@ -49,6 +51,7 @@
 				<label class="control-label col-md-4" for="email">Correo Electronico:</label>
 				<div class="col-md-8">
 					<input type="email" name="correoElectronico" required="true" value="{{estudiante.user.email}}" class="form-control" id="email" disabled/>
+					<input type="checkbox" name="correoCorreccion" value="{{correoCorreccion}}">
 				</div>
   			</div>
 
@@ -56,6 +59,7 @@
 				<label class="control-label col-md-4" for="noms">Nombres:</label>
 				<div class="col-md-8">
 					<input type="text" name="nombres" required="true" value="{{estudiante.user.first_name}}" class="form-control" id="noms" disabled/>
+					<input type="checkbox" name="nombresCorreccion" value="{{nombreCorreccion}}">
 				</div>
 			</div>
 
@@ -63,6 +67,7 @@
 				<label class="control-label col-md-4" for="apes">Apellidos:</label>
 				<div class="col-md-8">
 					<input type="text" name="apellidos" required="true" value="{{estudiante.user.last_name}}" class="form-control" id="apes" disabled/>
+					<input type="checkbox" name="apellidosCorreccion" value="{{apellidosCorreccion}}">
 				</div>
 			</div>
 
@@ -70,6 +75,7 @@
 				<label class="control-label col-md-4" for="date">Fecha de nacimiento:</label>
 				<div class="col-md-8">
 					<input type="text" name="fechaNacimiento" required="true" value="{{estudiante.fechaNacimiento}}" class="form-control" id="date" disabled/>
+					<input type="checkbox" name="nacimientoCorreccion" value="{{nacimientoCorreccion}}">
 				</div>
 			</div>
 
@@ -78,6 +84,7 @@
 				<div class="col-md-8">
 					<input type="text" name="genero" required="true" value="{{estudiante.genero}}" class="form-control" id="gen" disabled/>
 					</select>
+					<input type="checkbox" name="generoCorreccion" value="{{generoCorreccion}}">
 				</div>
 			</div>
 
@@ -85,6 +92,7 @@
 				<label class="control-label col-md-4" for="dir">Dirección:</label>
 				<div class="col-md-8">
 					<input type="text" name="direccion" required="true" value="{{estudiante.direccion}}" class="form-control" id="dir" disabled/>
+					<input type="checkbox" name="direccionCorreccion" value="{{direccionCorreccion}}">				
 				</div>
 			</div>
 
@@ -92,6 +100,7 @@
 				<label class="control-label col-md-4" for="barr">Barrio:</label>
 				<div class="col-md-8">
 					<input type="text" name="barrio" required="true" value="{{estudiante.barrio}}" class="form-control" id="barr" disabled/>
+					<input type="checkbox" name="barrioCorreccion" value="{{barrioCorreccion}}">
 				</div>
 			</div>
 
@@ -99,6 +108,7 @@
 				<label class="control-label col-md-4" for="telfijo">Telefono Fijo:</label>
 				<div class="col-md-8">
 					<input type="text" name="telefonoFijo" required="true" value="{{estudiante.telefonoFijo}}" class="form-control" id="telfijo" disabled/>
+					<input type="checkbox" name="fijoCorreccion" value="{{fijoCorreccion}}">
 				</div>
 			</div>
 
@@ -106,6 +116,7 @@
 				<label class="control-label col-md-4" for="telcel">Telefonos Celular:</label>
 				<div class="col-md-8">
 					<input type="text" name="telefonoCelular" required="true" value="{{estudiante.telefonoCelular}}" class="form-control" id="telcel" disabled/>
+					<input type="checkbox" name="celularCorreccion" value="{{celularCorreccion}}">
 				</div>
 			</div>
 
@@ -113,6 +124,7 @@
 				<label class="control-label col-md-4" for="segso">Seguridad social:</label>
 				<div class="col-md-8">
 					<input type="text" name="seguridadSocial" required="true" value="{{estudiante.seguridadSocial}}" class="form-control" id="segso" disabled/>
+					<input type="checkbox" name="seguridadCorreccion" value="{{seguridadCorreccion}}">
 				</div>
 			</div>
 
@@ -120,6 +132,7 @@
 				<label class="control-label col-md-4" for="zon">Zona:</label>
 				<div class="col-md-8">
 					<input type="text" name="zona" required="true" value="{{estudiante.zona}}" class="form-control" id="zon" disabled/>
+					<input type="checkbox" name="zonaCorreccion" value="{{zonaCorreccion}}">
 				</div>
 			</div>
 
@@ -127,6 +140,7 @@
 				<label class="control-label col-md-4" for="comu">Comuna:</label>
 				<div class="col-md-8">
 					<input type="text" name="comuna" required="true" value="{{estudiante.comuna}}" class="form-control" id="comu" disabled/>
+					<input type="checkbox" name="comunaCorreccion" value="{{comunaCorreccion}}">
 				</div>
 			</div>
 
@@ -134,6 +148,7 @@
 				<label class="control-label col-md-4" for="grupe">Grupo etnico:</label>
 				<div class="col-md-8">
 					<input type="text" name="grupoEtnico" required="true" value="{{estudiante.grupoEtnico}}" class="form-control" id="grupe" disabled/>
+					<input type="checkbox" name="grupoCorreccion" value="{{grupoCorreccion}}">
 				</div>
 			</div>
 
@@ -141,6 +156,7 @@
 				<label class="control-label col-md-4" for="cond">Condicion:</label>
 				<div class="col-md-8">
 					<input type="text" name="condicion" required="true" value="{{estudiante.condicion}}" class="form-control" id="cond" disabled/>
+					<input type="checkbox" name="condicionCorreccion" value="{{condicionCorreccion}}">
 				</div>
 			</div>
 
@@ -148,6 +164,7 @@
 				<label class="control-label col-md-4" for="labor">Labor:</label>
 				<div class="col-md-8">
 					<input type="text" name="Labor" value="{{DatosMayor.desempeno}}" class="form-control" id="labor" disabled/>
+					<input type="checkbox" name="laborCorreccion" value="{{laborCorreccion}}">
 				</div>
 			</div>
 
@@ -155,6 +172,7 @@
 				<label class="control-label col-md-4" for="lugar">Lugar:</label>
 				<div class="col-md-8">
 					<input type="text" name="Lugar" value="{{DatosMayor.lugar}}" class="form-control" id="lugar" disabled/>
+					<input type="checkbox" name="desempenoCorreccion" value="{{desempenoCorreccion}}">
 				</div>
 			</div>
 
@@ -162,6 +180,7 @@
 				<label class="control-label col-md-4" for="acud">Nombre Contacto:</label>
 				<div class= "col-md-8">
 					<input type="text" name="Acudiente" requiered="true" value="{{DatosMayor.nombreContacto}}" class="form-control" id="nomacud" disabled/>
+					<input type="checkbox" name="contactoCorreccion" value="{{contactoCorreccion}}">
 				</div>
 			</div>
 
@@ -169,6 +188,7 @@
 				<label class="control-label col-md-4" for="Acudtel">Telefono Contacto:</label>
 				<div class="col-md-8">
 					<input type="text" name="telefonoAcudiente" requiered="true" value="{{DatosMayor.telefonoContacto}}" class="form-control" id="telacud" disabled/>
+					<input type="checkbox" name="telenofoCorreccion" value="{{telefonoCorreccion}}">
 				</div>
 			</div>
 
@@ -176,17 +196,17 @@
 				<label class="control-label col-md-4" for="file">Foto:</label>
 				<div class="col-md-8">
 					<img src="frontend/documentos/{{estudiante.user.username}}/foto.jpg">
-
-					<a href="frontend/documentos/{{estudiante.user.username}}/foto.jpg" target="_blank">"foto.jpg"</a>
-
-					<input type="file" accept=".jpg,.jpeg" name="foto" value="{{foto}}" required="true" class="form-control" id="file10" disabled/>
+					<a href="frontend/documentos/{{estudiante.user.username}}/foto.jpg" target="_blank">foto.jpg</a>
+					<input type="checkbox" name="fotoCorreccion" value="{{fotoCorreccion}}">
 				</div>
 			</div>
 
 			<div class="form-group" id="file2">
 				<label class="control-label col-md-4" for="file">Cedula:</label>
 				<div class="col-md-8">
-					<input type="file" accept=".jpg,.jpeg" name="cedula" value="{{cedula}}" required="true" class="form-control" id="file20" disabled/>
+					<img src="frontend/documentos/{{estudiante.user.username}}/cedula.jpg">
+					<a href="frontend/documentos/{{estudiante.user.username}}/cedula.jpg" target="_blank">cedula.jpg</a>
+					<input type="checkbox" name="cedulaCorreccion" value="{{cedulaCorreccion}}">
 				</div>
 			</div>
 
@@ -200,8 +220,8 @@
 
 			<div class="form-group"> 
  				<div class="col-md-offset-4 col-md-10">
-					<button type="submit" name="Aprobar" class="btn btn-default"> Aprobar </button>
-					<button type="submit" name="Rechazar" class="btn btn-default"> Rechazar </button>
+					<button type="submit" name="revisarSolicitud" value="Aprobar" class="btn btn-default"> Aprobar </button>
+					<button type="submit" name="revisarSolicitud" value="Rechazar" class="btn btn-default"> Rechazar </button>
 				</div>
 			</div>
 

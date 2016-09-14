@@ -5,7 +5,6 @@ from Encubarte.backend.apps.estudiante.models import Estudiante
 from Encubarte.backend.apps.profesor.models import Profesor
 
 
-
 class Curso(models.Model):
 	id = models.AutoField(primary_key=True)
 	nombre = models.CharField(max_length=50)
@@ -33,3 +32,13 @@ class Grupo(models.Model):
 
 	def __str__(self):
 		return "Estudiante: " + self.idEstudiante.user.username + " Curso: " + self.idCurso.nombre + " - " + self.idCurso.idProfesor.user.first_name + " " + self.idCurso.idProfesor.user.last_name
+
+class Roles (models.Model):
+	id = models.AutoField(primary_key=True)
+	IDuser = models.ForeignKey(User)
+	Estudiante = models.BooleanField()
+	Profesor = models.BooleanField()
+	Administrador = models.BooleanField()
+
+	class Meta:
+		verbose_name_plural=u'Roles'

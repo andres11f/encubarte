@@ -36,21 +36,21 @@
 	        			<li><a href="/"> Inicio </a></li>
 	        			
 	        			{% if request.user.is_superuser %}
-	        				<li><a href="LogAdministrador/verSolicitudes">Ver Solicitudes</a></li>
-							<li><a href="LogAdministrador/registroProfesor">Registrar Profesor</a></li>
-							<li><a href="LogAdministrador/registroCurso">Registrar Curso</a></li>
-							<li><a href="LogAdministrador/registroHorario">Registrar Horario</a></li>
-							<li><a href="/admin">Pagina Admin</a></li>
+	        				<li><a href="/LogAdministrador/verSolicitudes/">Ver Solicitudes</a></li>
+							<li><a href="/LogAdministrador/registroProfesor/">Registrar Profesor</a></li>
+							<li><a href="/LogAdministrador/registroCurso/">Registrar Curso</a></li>
+							<li><a href="/LogAdministrador/registroHorario/">Registrar Horario</a></li>
+							<li><a href="/admin/">Pagina Admin</a></li>
 						{% elif request.user.is_staff %}
-							<li> <a href="/listaCursos"> Lista de cursos</a> </li>
-							<li> <a href="LogProfesor/MatricularEstu"> Matricular estudiante</a> </li>
-							<li> <a href="LogProfesor/ModificarInfo">Modificar Informacion Personal</a> </li>
-							<li> <a href="LogProfesor/CambiarContrasena">Cambiar Contraseña</a> </li>
+							<li> <a href="/listaCursos/"> Lista de cursos</a> </li>
+							<li> <a href="/LogProfesor/MatricularEstu/"> Matricular estudiante</a> </li>
+							<li> <a href="/LogProfesor/ModificarInfo/">Modificar Informacion Personal</a> </li>
+							<li> <a href="/LogProfesor/CambiarContrasena/"/>Cambiar Contraseña</a> </li>
 						{% elif request.user.is_authenticated %}
-							<li><a href="LogEstudiante/VerHorario"> Ver Horario </a></li>
-							<li><a href="LogEstudiante/ModificarInfo">Modificar información Personal</a></li>
-							<li><a href="LogEstudiante/CambiarContrasena">Cambiar Contraseña</a></li>
-							<li><a href="LogEstudiante/MatricularCurso">Matricular Curso</a></li>
+							<li><a href="/LogEstudiante/VerHorario/"> Ver Horario </a></li>
+							<li><a href="/LogEstudiante/ModificarInfo/">Modificar información Personal</a></li>
+							<li><a href="/LogEstudiante/CambiarContrasena/">Cambiar Contraseña</a></li>
+							<li><a href="/LogEstudiante/MatricularCurso/">Matricular Curso</a></li>
 						{% endif %}
 						
       				</ul>

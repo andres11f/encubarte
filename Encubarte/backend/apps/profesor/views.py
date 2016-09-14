@@ -55,7 +55,7 @@ class ModificarInfoProfesor(base.View):
         errorGenero = (profesor.genero not in (parametros["generos"]))
 
         if (errorTipoDocumento or errorFechaNacimiento or errorGenero):
-            return render_to_response('registroEstudiante.html', locals(), context_instance = RequestContext(request))
+            return render_to_response('Generales/registroEstudiante.html', locals(), context_instance = RequestContext(request))
     
         #Guardar usuario
         user.save()
