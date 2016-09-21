@@ -15,7 +15,7 @@ class Solicitudes(models.Model):
 class Correcciones(models.Model):
 	id = models.AutoField(primary_key=True)
 	IDestudiante = models.ForeignKey(Estudiante)
-	campo = models.CharField(max_length=20)
+	campo = models.CharField(max_length=50)
 
 	class Meta:
 		verbose_name_plural=u'Correcciones'

@@ -9,7 +9,7 @@ from django.views.generic import base
 from Encubarte.backend.apps.estudiante.models import Estudiante, DatosFamiliaMayor, DatosFamiliaMenor
 from Encubarte.backend.apps.profesor.models import Profesor
 from Encubarte.backend.apps.administrador.models import Solicitudes, Correcciones
-from Encubarte.backend.apps.generales.models import Horario, Curso, Grupo
+from Encubarte.backend.apps.generales.models import Horario, Curso, Grupo, Roles
 from Encubarte.backend.apps.generales.parametros import parametros
 #from Encubarte.backend.apps.generales.forms import UserForm
 from django.contrib.auth.models import User
@@ -27,14 +27,28 @@ class LogAdministrador(base.View):
     def get(self, request, *args, **kwargs):
         return render_to_response('Administrador/LogAdministrador.html', locals(), context_instance = RequestContext(request))
 
-def registroProfesorControl(request):
-    if request.user.is_authenticated() and request.user.is_superuser:
-        generos = parametros["generos"]
-        tiposDocumento = parametros["tiposDocumento"]
-        profesores = Profesor.objects.all()
 
-        if request.method == 'POST':
-            #Toma de datos
+class registroProfesorControl(base.View):
+    def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated() and request.user.is_superuser:
+            generos = parametros["generos"]
+            tiposDocumento = parametros["tiposDocumento"]
+            profesores = Profesor.objects.all()
+            if(request.GET.get('eliminarProfesor')):
+                user = User.objects.get(username = request.GET.get('username'))
+                profesorAEliminar = Profesor.objects.get(user = user)
+                profesorAEliminar.delete()
+            return render_to_response('Administrador/registroProfesor.html', locals(), context_instance = RequestContext(request))
+        else:
+            return HttpResponseRedirect('/404')
+
+    def post(self, request, *args, **kwargs):
+        if request.user.is_authenticated() and request.user.is_superuser:
+            generos = parametros["generos"]
+            tiposDocumento = parametros["tiposDocumento"]
+            profesores = Profesor.objects.all()
+
+             #Toma de datos
             numeroDocumento = request.POST["numeroDocumento"]
             correoElectronico = request.POST["correoElectronico"]
             contrasena = request.POST["contrasena"]
@@ -68,23 +82,32 @@ def registroProfesorControl(request):
             profesor.save();
     
             return inicioControl(request,registerSuccess=True)
-        else:
-            if(request.GET.get('eliminarProfesor')):
-                user = User.objects.get(username = request.GET.get('username'))
-                profesorAEliminar = Profesor.objects.get(user = user)
-                profesorAEliminar.delete()
-            return render_to_response('Administrador/registroProfesor.html', locals(), context_instance = RequestContext(request))
-    else:
-        return HttpResponseRedirect('/404')
 
-def registroCursoControl(request):
-    if request.user.is_authenticated() and request.user.is_superuser:
-        numerosGrupos = parametros["numerosGrupos"]
-        edad = parametros["edad"]
-        profesores = Profesor.objects.all()
-        cursos = Curso.objects.all()
-        
-        if request.method == 'POST':
+        else:
+            return HttpResponseRedirect('/404')
+
+
+class registroCursoControl(base.View):
+    def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated() and request.user.is_superuser:
+            numerosGrupos = parametros["numerosGrupos"]
+            edad = parametros["edad"]
+            profesores = Profesor.objects.all()
+            cursos = Curso.objects.all()
+            if(request.GET.get('eliminarCurso')):               
+                cursoAEliminar = Curso.objects.get(id = request.GET.get('id'))
+                cursoAEliminar.delete()
+            return render_to_response('Administrador/registroCurso.html', locals(), context_instance = RequestContext(request))
+        else:
+            return HttpResponseRedirect('/404')  
+
+
+    def post(self, request, *args, **kwargs):
+        if request.user.is_authenticated() and request.user.is_superuser:
+            umerosGrupos = parametros["numerosGrupos"]
+            edad = parametros["edad"]
+            profesores = Profesor.objects.all()
+            cursos = Curso.objects.all()
             nombreCurso = request.POST["nombreCurso"]
             usernameProfesor = request.POST["profesor"]
             numeroGrupo = request.POST["numeroGrupo"]
@@ -119,21 +142,29 @@ def registroCursoControl(request):
             operationSuccess = True
             return render_to_response('Administrador/registroCurso.html', locals(), context_instance = RequestContext(request))
         else:
-            if(request.GET.get('eliminarCurso')):               
-                cursoAEliminar = Curso.objects.get(id = request.GET.get('id'))
-                cursoAEliminar.delete()
-            return render_to_response('Administrador/registroCurso.html', locals(), context_instance = RequestContext(request))
-    else:
-        return HttpResponseRedirect('/404')
+            return HttpResponseRedirect('/404')     
 
-def registroHorarioControl(request):
-    if request.user.is_authenticated() and request.user.is_superuser:
-        cursos = Curso.objects.all()
-        dias = parametros["diasSemana"]
-        horas = parametros["horas"]
-        horarios = Horario.objects.all().order_by('idCurso')
 
-        if request.method == 'POST':
+class registroHorarioControl(base.View):
+    def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated() and request.user.is_superuser:
+            cursos = Curso.objects.all()
+            dias = parametros["diasSemana"]
+            horas = parametros["horas"]
+            horarios = Horario.objects.all().order_by('idCurso')
+            if(request.GET.get('eliminarHorario')):             
+                horarioAEliminar = Horario.objects.get(id = request.GET.get('id'))
+                horarioAEliminar.delete()
+            return render_to_response('Administrador/registroHorario.html', locals(), context_instance = RequestContext(request))
+        else:
+            return HttpResponseRedirect('/404')
+
+    def post(self, request, *args, **kwargs):
+        if request.user.is_authenticated() and request.user.is_superuser:
+            cursos = Curso.objects.all()
+            dias = parametros["diasSemana"]
+            horas = parametros["horas"]
+            horarios = Horario.objects.all().order_by('idCurso')
             idCurso = request.POST["idCurso"]
             dia = request.POST["dia"]
             horaInicio = request.POST["horaInicio"]
@@ -160,23 +191,16 @@ def registroHorarioControl(request):
             horario.save()
             operationSuccess = True
             return render_to_response('Administrador/registroHorario.html', locals(), context_instance = RequestContext(request))
-        else:
-            if(request.GET.get('eliminarHorario')):             
-                horarioAEliminar = Horario.objects.get(id = request.GET.get('id'))
-                horarioAEliminar.delete()
-            return render_to_response('Administrador/registroHorario.html', locals(), context_instance = RequestContext(request))
-    else:
-        return HttpResponseRedirect('/404')
 
 
 class VerSolicitudes(base.View):
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated() and request.user.is_superuser:
-            try:
-                solicitudes = Solicitudes.objects.filter(estado="Pendiente")
-            except Solicitudes.DoesNotExist:
-                solicitudes = None
-            if solicitudes is None:
+
+            solicitudes = Solicitudes.objects.filter(estado="Pendiente")
+            existenSolicitudes = solicitudes.count()
+
+            if existenSolicitudes == 0:
                 sinSolicitudes = True
                 return render_to_response('Administrador/verSolicitudes.html', locals(), context_instance = RequestContext(request))
             else:
@@ -196,12 +220,150 @@ class VerSolicitudes(base.View):
                     DatosMayor = DatosFamiliaMayor.objects.get(idEstudiante = estudiante)
                     return render_to_response('Administrador/revisarSolicitudMayor.html', locals(), context_instance = RequestContext(request))
                 else:
-                    DatosMayor = DatosFamiliaMenor.objects.get(idEstudiante = estudiante)
+                    DatosMenor = DatosFamiliaMenor.objects.get(idEstudiante = estudiante)
                     return render_to_response('Administrador/revisarSolicitudMenor.html', locals(), context_instance = RequestContext(request))
 
             elif revisarSolicitud == "Aprobar":
+                cedula = request.POST["numeroDocumento"]
+                user = User.objects.get(username = cedula)
+                estudiante = Estudiante.objects.get(user = user)
+
+                rol = Roles.objects.get(user = user)
+                rol.Estudiante = True
+                
+                solicitudEstudiante = Solicitudes.objects.get(IDestudiante=estudiante)
+                solicitudEstudiante.estado = "Aprobado"
+                solicitudEstudiante.Correcciones = False
+
+                rol.save()
+                solicitudEstudiante.save()
+
+                operationSuccess=True
+
                 return render_to_response('Administrador/verSolicitudes.html', locals(), context_instance = RequestContext(request))
+
             elif revisarSolicitud == "Rechazar":
+                numeroDocumento = request.POST["documentoHidden"]
+                tipoDocumento = request.POST["tipodocumentoHidden"]
+                user = User.objects.get(username = numeroDocumento)
+                estudiante = Estudiante.objects.get(user = user)
+
+                if "documentoCorreccion" in request.POST.keys():
+                    corregir = Correcciones(id=User.objects.all().count() + 1, IDestudiante=estudiante, campo="Numero Documento")
+                    corregir.save()
+                if "tipoCorreccion" in request.POST.keys():
+                    corregir = Correcciones(id=User.objects.all().count() + 1, IDestudiante=estudiante, campo="Numero Documento")
+                    corregir.save()
+                if "correoCorreccion" in request.POST.keys():
+                    corregir = Correcciones(id=User.objects.all().count() + 1, IDestudiante=estudiante, campo="Correo Electronico")
+                    corregir.save()
+                if "nombresCorreccion" in request.POST.keys():
+                    corregir = Correcciones(id=User.objects.all().count() + 1, IDestudiante=estudiante, campo="Nombres")
+                    corregir.save()
+                if "apellidosCorreccion" in request.POST.keys():
+                    corregir = Correcciones(id=User.objects.all().count() + 1, IDestudiante=estudiante, campo="Apellidos")
+                    corregir.save()
+                if "nacimientoCorreccion" in request.POST.keys():
+                    corregir = Correcciones(id=User.objects.all().count() + 1, IDestudiante=estudiante, campo="Fecha de Nacimiento")
+                    corregir.save()
+                if "generoCorreccion" in request.POST.keys():
+                    corregir = Correcciones(id=User.objects.all().count() + 1, IDestudiante=estudiante, campo="Genero")
+                    corregir.save()
+                if "direccionCorreccion" in request.POST.keys():
+                    corregir = Correcciones(id=User.objects.all().count() + 1, IDestudiante=estudiante, campo="Direccion")
+                    corregir.save()
+                if "barrioCorreccion" in request.POST.keys():
+                    corregir = Correcciones(id=User.objects.all().count() + 1, IDestudiante=estudiante, campo="Barrio")
+                    corregir.save()
+                if "fijoCorreccion" in request.POST.keys():
+                    corregir = Correcciones(id=User.objects.all().count() + 1, IDestudiante=estudiante, campo="Telefono Fijo")
+                    corregir.save()
+                if "celularCorreccion" in request.POST.keys():
+                    corregir = Correcciones(id=User.objects.all().count() + 1, IDestudiante=estudiante, campo="Telefono Celular")
+                    corregir.save()
+                if "seguridadCorreccion" in request.POST.keys():
+                    corregir = Correcciones(id=User.objects.all().count() + 1, IDestudiante=estudiante, campo="Seguridad Social")
+                    corregir.save()
+                if "zonaCorreccion" in request.POST.keys():
+                    corregir = Correcciones(id=User.objects.all().count() + 1, IDestudiante=estudiante, campo="Zona")
+                    corregir.save()
+                if "comunaCorreccion" in request.POST.keys():
+                    corregir = Correcciones(id=User.objects.all().count() + 1, IDestudiante=estudiante, campo="Comuna")
+                    corregir.save()
+                if "grupoCorreccion" in request.POST.keys():
+                    corregir = Correcciones(id=User.objects.all().count() + 1, IDestudiante=estudiante, campo="Grupo Etnico")
+                    corregir.save()
+                if "condicionCorreccion" in request.POST.keys(): 
+                    corregir = Correcciones(id=User.objects.all().count() + 1, IDestudiante=estudiante, campo="Condicion")
+                    corregir.save()                                       
+
+                if tipoDocumento == "Cedula":
+                    if "laborCorreccion" in request.POST.keys():
+                        corregir = Correcciones(id=User.objects.all().count() + 1, IDestudiante=estudiante, campo="Labor")
+                        corregir.save()
+                    if "lugarCorreccion" in request.POST.keys():
+                        corregir = Correcciones(id=User.objects.all().count() + 1, IDestudiante=estudiante, campo="Lugar Laboral")
+                        corregir.save()
+                    if "contactoCorreccion" in request.POST.keys():
+                        corregir = Correcciones(id=User.objects.all().count() + 1, IDestudiante=estudiante, campo="Nombre Contacto")
+                        corregir.save()
+                    if "telefonoCorreccion" in request.POST.keys():
+                        corregir = Correcciones(id=User.objects.all().count() + 1, IDestudiante=estudiante, campo="Telefono Contacto")
+                        corregir.save()
+                    if "cedulaCorreccion" in request.POST.keys():
+                        corregir = Correcciones(id=User.objects.all().count() + 1, IDestudiante=estudiante, campo="Imagen Cedula")
+                        corregir.save()
+                    if "fotoCorreccion" in request.POST.keys():
+                        corregir = Correcciones(id=User.objects.all().count() + 1, IDestudiante=estudiante, campo="Imagen Foto")
+                        corregir.save()                        
+
+                if tipoDocumento == "Tarjeta de Identidad" or tipoDocumento == "Registro Civil":
+                    if "padreCorreccion" in request.POST.keys():
+                        corregir = Correcciones(id=User.objects.all().count() + 1, IDestudiante=estudiante, campo="Nombre del Padre")
+                        corregir.save()
+                    if "telpaoCorreccion" in request.POST.keys():
+                        corregir = Correcciones(id=User.objects.all().count() + 1, IDestudiante=estudiante, campo="Telenofo del Padre")
+                        corregir.save()
+                    if "madreCorreccion" in request.POST.keys():
+                        corregir = Correcciones(id=User.objects.all().count() + 1, IDestudiante=estudiante, campo="Nombre de la Madre")
+                        corregir.save()
+                    if "telmaCorreccion" in request.POST.keys():
+                        corregir = Correcciones(id=User.objects.all().count() + 1, IDestudiante=estudiante, campo="Telefono de la Madre")
+                        corregir.save()
+                    if "colegioCorreccion" in request.POST.keys():
+                        corregir = Correcciones(id=User.objects.all().count() + 1, IDestudiante=estudiante, campo="Colegio")
+                        corregir.save()
+                    if "gradoCorreccion" in request.POST.keys():
+                        corregir = Correcciones(id=User.objects.all().count() + 1, IDestudiante=estudiante, campo="Grado")
+                        corregir.save()
+                    if "jornadaCorreccion" in request.POST.keys():
+                        corregir = Correcciones(id=User.objects.all().count() + 1, IDestudiante=estudiante, campo="Jornada")
+                        corregir.save()
+                    if "acudienteCorreccion" in request.POST.keys():
+                        corregir = Correcciones(id=User.objects.all().count() + 1, IDestudiante=estudiante, campo="Nombre Acudiente")
+                        corregir.save()
+                    if "cedAcudCorreccion" in request.POST.keys():
+                        corregir = Correcciones(id=User.objects.all().count() + 1, IDestudiante=estudiante, campo="Cedula Acudiente")
+                        corregir.save()
+                    if "cedulaCorreccion" in request.POST.keys():
+                        corregir = Correcciones(id=User.objects.all().count() + 1, IDestudiante=estudiante, campo="Cedula Acudiente")
+                        corregir.save()
+                    if "fotoCorreccion" in request.POST.keys():
+                        corregir = Correcciones(id=User.objects.all().count() + 1, IDestudiante=estudiante, campo="Imagen Foto")
+                        corregir.save()
+                    if "docmenoroCorreccion" in request.POST.keys():
+                        corregir = Correcciones(id=User.objects.all().count() + 1, IDestudiante=estudiante, campo="Imagen Documento del Menor")
+                        corregir.save()
+                        
+                solicitudEstudiante = Solicitudes.objects.get(IDestudiante=estudiante)
+                solicitudEstudiante.estado = "Rechazado"
+                solicitudEstudiante.Correcciones = True
+
+                solicitudEstudiante.save()
+
+                operationSuccess=True
+
+
                 return render_to_response('Administrador/verSolicitudes.html', locals(), context_instance = RequestContext(request))
 
         else:

@@ -28,6 +28,9 @@
 		<div class="row">
 			<div class="col-md-6">
 				<table align="center" >
+				{% if sinSolicitudes %}
+					<p class="bg-success">No tiene solicitudes pendientes.</p>
+				{% endif %}
 				{% for s in solicitudes %}
 				<tr>
 			        <td onclick="cambiarDisplay('{{s.IDestudiante}}')"> {{s.IDestudiante}} </td>

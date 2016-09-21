@@ -11,11 +11,11 @@ admin.autodiscover()
 urlpatterns = patterns('Encubarte.backend.apps.estudiante.views',
     
     #links estudiantes:
-    url(r'^/?$', LogEstudiante.as_view(), name='Estudiante'),
-    url(r'^CambiarContrasena/?$', CamPass.as_view(), name='Cambiar'),
-    url(r'^ModificarInfo/?', ModificarInfoEstudiante.as_view(), name='Modificar'),
-    url(r'^VerHorario/?$', horarioControl.as_view(), name='Horario'),
-    url(r'^MatricularCurso/?$', matriculaControl.as_view(), name='Matricular'),
+    url(r'^$', LogEstudiante.as_view(), name='Estudiante'),
+    url(r'^CambiarContrasena/', CamPass.as_view(), name='Cambiar'),
+    url(r'^ModificarInfo/', ModificarInfoEstudiante.as_view(), name='Modificar'),
+    url(r'^VerHorario/', horarioControl.as_view(), name='Horario'),
+    url(r'^MatricularCurso/', matriculaControl.as_view(), name='Matricular'),
 
 )
 

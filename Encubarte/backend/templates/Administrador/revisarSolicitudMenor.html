@@ -16,6 +16,16 @@
 
 		{% endif %}
 
+		{%if conectado%}
+		<form class="form-horizontal" role="form" method="POST" action="/registroProfesor/" name="registroProfesor">
+			{% csrf_token %}
+			<div class="form-group">
+				<p class="lead">Ya estás registrado y logueado como {{nombreUsuario}}, para crear un nuevo usuario debes cerrar sesión primero</p>
+				<button type="submit" name="logout" class="btn btn-default">Cerrar Sesión</button>
+			</div>
+		</form>
+		{%else %}
+
 		<form class="form-horizontal" role="form" method="POST" action="/LogAdministrador/verSolicitudes/" name="LogAdministrador/verSolicitudes" enctype="multipart/form-data">
 			{% csrf_token %}
 			<h3>Revisa los datos</h3>
@@ -24,7 +34,7 @@
 			<div class="form-group">
 				<label class="control-label col-md-4" for="numeroDocumento">Numero Documento:</label>
 				<div class="col-md-8">
-					<input type="text" name="numeroDocumento" pattern="[0-9]{8,20}" value="{{estudiante.user.username}}" class="form-control" id="numeroDocumento" disabled/>
+					<input type="text" name="numeroDocumento" value="{{estudiante.user.username}}" class="form-control" id="numeroDocumento" disabled/>
 					<input type="hidden" name="documentoHidden" value="{{estudiante.user.username}}" class="form-control" id="documentoHidden">
 					<input type="checkbox" name="documentoCorreccion" value="{{documentoCorreccion}}">
 				</div>
@@ -152,35 +162,75 @@
 				</div>
 			</div>
 
-			<div class="form-group" id="Maylab">
-				<label class="control-label col-md-4" for="labor">Labor:</label>
+			<div class="form-group" id="Menpad">
+				<label class="control-label col-md-4" for="padnom">Nombre Padre:</label>
 				<div class="col-md-8">
-					<input type="text" name="Labor" value="{{DatosMayor.desempeno}}" class="form-control" id="labor" disabled/>
-					<input type="checkbox" name="laborCorreccion" value="{{laborCorreccion}}">
+					<input type="text" name="padre" value="{{DatosMenor.nombrePadre}}" class="form-control" id="padre" disabled/>
+					<input type="checkbox" name="padreCorreccion" value="{{padreCorreccion}}">
 				</div>
 			</div>
 
-			<div class="form-group" id="Maylug">
-				<label class="control-label col-md-4" for="lugar">Lugar:</label>
+			<div class="form-group" id="Menpadtel">
+				<label class="control-label col-md-4" for="padtel">Telefono Padre:</label>
 				<div class="col-md-8">
-					<input type="text" name="Lugar" value="{{DatosMayor.lugar}}" class="form-control" id="lugar" disabled/>
-					<input type="checkbox" name="lugarCorreccion" value="{{lugarCorreccion}}">
+					<input type="text" name="telpa" value="{{DatosMenor.telefonoPadre}}" class="form-control" id="telpa" disabled/>
+					<input type="checkbox" name="telpaCorreccion" value="{{telpaCorreccion}}">
 				</div>
 			</div>
 
-			<div class="form-group" id="acudiente">
-				<label class="control-label col-md-4" for="acud">Nombre Contacto:</label>
+			<div class="form-group" id="Menmad">
+				<label class="control-label col-md-4" for="madnom">Nombre Madre:</label>
+				<div class="col-md-8">
+					<input type="text" name="madre" value="{{DatosMenor.nombreMadre}}" class="form-control" id="madre" disabled/>
+					<input type="checkbox" name="madreCorreccion" value="{{madreCorreccion}}">
+				</div>
+			</div>
+
+			<div class="form-group" id="Menmadtel">
+				<label class="control-label col-md-4" for="madtel">Telefono Madre:</label>
+				<div class="col-md-8">
+					<input type="text" name="telma" value="{{DatosMenor.telefonoMadre}}" class="form-control" id="telma" disabled/>
+					<input type="checkbox" name="telmaCorreccion" value="{{telmaCorreccion}}">
+				</div>
+			</div>
+
+			<div class="form-group" id="Mencol">
+				<label class="control-label col-md-4" for="colegio">Colegio:</label>
+				<div class="col-md-8">
+					<input type="text" name="colegio" value="{{DatosMenor.institucionEducativa}}" class="form-control" id="colegio" disabled/>
+					<input type="checkbox" name="colegioCorreccion" value="{{colegioCorreccion}}">
+				</div>
+			</div>
+
+			<div class="form-group" id="Mengrad">
+				<label class="control-label col-md-4" for="grado">Grado:</label>
+				<div class="col-md-8">
+					<input type="text" name="grado" value="{{DatosMenor.grado}}" class="form-control" id="grado" disabled/>
+					<input type="checkbox" name="gradoCorreccion" value="{{gradoCorreccion}}">
+				</div>
+			</div>
+
+			<div class="form-group" id="Menjor">
+				<label class="control-label col-md-4" for="jornada">Jornada:</label>
+				<div class="col-md-8">
+					<input type="text" name="jornada" value="{{DatosMenor.jornada}}" class="form-control" id="jorna" disabled/>
+					<input type="checkbox" name="jornadaCorreccion" value="{{jornadaCorreccion}}">
+				</div>
+			</div>
+
+			<div class="form-group" id="Nomacudiente">
+				<label class="control-label col-md-4" for="acud">Nombre Acudiente:</label>
 				<div class= "col-md-8">
-					<input type="text" name="Acudiente" requiered="true" value="{{DatosMayor.nombreContacto}}" class="form-control" id="nomacud" disabled/>
-					<input type="checkbox" name="contactoCorreccion" value="{{contactoCorreccion}}">
+					<input type="text" name="acudiente" value="{{DatosMenor.nombreAcudiente}}" class="form-control" id="acudiente" disabled/>
+					<input type="checkbox" name="acudienteCorreccion" value="{{acudienteCorreccion}}">
 				</div>
 			</div>
 
-			<div class="form-group" id="TelAcudiente">
-				<label class="control-label col-md-4" for="Acudtel">Telefono Contacto:</label>
+			<div class="form-group" id="CedAcudiente">
+				<label class="control-label col-md-4" for="Acudtel">Cedula Acudiente:</label>
 				<div class="col-md-8">
-					<input type="text" name="telefonoAcudiente" requiered="true" value="{{DatosMayor.telefonoContacto}}" class="form-control" id="telacud" disabled/>
-					<input type="checkbox" name="telenofoCorreccion" value="{{telefonoCorreccion}}">
+					<input type="text" name="cedAcud" value="{{DatosMenor.cedulaAcudiente}}" class="form-control" id="cedAcud" disabled/>
+					<input type="checkbox" name="cedAcudCorreccion" value="{{cedAcudCorreccion}}">
 				</div>
 			</div>
 
@@ -202,6 +252,15 @@
 				</div>
 			</div>
 
+			<div class="form-group" id="file3">
+				<label class="control-label col-md-4" for="file">Documento Menor:</label>
+				<div class="col-md-8">
+					<img src="frontend/documentos/{{estudiante.user.username}}/documento.jpg">
+					<a href="frontend/documentos/{{estudiante.user.username}}/documento.jpg" target="_blank">documento.jpg</a>
+					<input type="checkbox" name="docmenorCorreccion" value="{{docmenorCorreccion}}">
+				</div>
+			</div>
+
 		    <div class="form-group"> 
 				<div class="col-md-offset-4 col-md-10">
 					<div class="checkbox">
@@ -218,5 +277,6 @@
 			</div>
 
 		</form>
+		{% endif %}
 	</div>
 {% endblock %}

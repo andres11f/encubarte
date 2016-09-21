@@ -9,7 +9,7 @@ from django.views.generic import base
 from Encubarte.backend.apps.estudiante.models import Estudiante, DatosFamiliaMayor, DatosFamiliaMenor
 from Encubarte.backend.apps.administrador.models import Solicitudes, Correcciones
 #from Encubarte.backend.apps.profesor.models import Profesor
-#from Encubarte.backend.apps.generales.models import Horario, Curso, Grupo
+from Encubarte.backend.apps.generales.models import Roles
 from Encubarte.backend.apps.generales.parametros import parametros
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator,EmptyPage,InvalidPage
@@ -26,58 +26,57 @@ from django.core import serializers
 #________________________________________________VISTAS GENERALES__________________________________________________________________________________#
 #__________________________________________________________________________________________________________________________________________________#
 
-def inicioControl(request, registerSuccess=False):
-    conectado=False
-    misionInicio= "blabla"
-    visionInicio= "blublu"
-    quienesSomosInicio= "bleble"
-    if request.user.is_authenticated():
-        conectado=True
-        estudiante= not request.user.is_staff
-        nombre=request.user.first_name + " " + request.user.last_name
-        if estudiante:
-            return render_to_response('Estudiante/LogEstudiante.html',locals(), context_instance = RequestContext(request))
+class inicioControl(base.View):
+    def get(self, request, *args, **kwargs):
+        conectado=False
+        misionInicio= "blabla"
+        visionInicio= "blublu"
+        quienesSomosInicio= "bleble"
+        if request.user.is_authenticated():
+            conectado=True
+            estudiante= not request.user.is_staff
+            nombre=request.user.first_name + " " + request.user.last_name
+            if estudiante:
+                return render_to_response('Estudiante/LogEstudiante.html',locals(), context_instance = RequestContext(request))
+            else:
+                return render_to_response('Generales/inicio.html',locals(), context_instance = RequestContext(request))
         else:
-            return render_to_response('Generales/inicio.html',locals(), context_instance = RequestContext(request))
-    else:
-        return render_to_response ('Generales/inicio.html',locals(), context_instance = RequestContext(request))
+            return render_to_response ('Generales/inicio.html',locals(), context_instance = RequestContext(request))
 
-def loginControl(request):
-    try:
-        username = request.POST['username']
-        password = request.POST['password']
-        if '@' in username:
-            correo = username
-            username = User.objects.get(email=correo).username
 
-        usuario = authenticate(username=username, password=password)
-        if usuario is not None and usuario.is_active:
-            login(request, usuario)
-            usuario = request.user
-            conectado = True
-            #return HttpResponseRedirect("/modulos/")
-            return render_to_response('Modulos/modulos.html', locals(), context_instance = RequestContext(request))
-    except:
+class loginControl(base.View):
+     def post(self, request, *args, **kwargs):
+        try:
+            username = request.POST['username']
+            password = request.POST['password']
+            if '@' in username:
+                correo = username
+                username = User.objects.get(email=correo).username
+
+            usuario = authenticate(username=username, password=password)
+            if usuario is not None and usuario.is_active:
+                login(request, usuario)
+                usuario = request.user
+                conectado = True
+                #return HttpResponseRedirect("/modulos/")
+                return render_to_response('Modulos/modulos.html', locals(), context_instance = RequestContext(request))
+        except:
+            return HttpResponseRedirect('/')
+        loginFailed = True
+        misionInicio= "blue"
+        visionInicio= "red"
+        quienesSomosInicio= "yellow"
+        return render_to_response('Generales/inicio.html', locals(), context_instance = RequestContext(request))
+
+class logoutControl(base.View):
+    def get(self, request, *args, **kwargs):
+        logout(request)
         return HttpResponseRedirect('/')
-    loginFailed = True
-    misionInicio= "blue"
-    visionInicio= "red"
-    quienesSomosInicio= "yellow"
-    return render_to_response('Generales/inicio.html', locals(), context_instance = RequestContext(request))
 
-def logoutControl(request):
-    logout(request)
-    return HttpResponseRedirect('/')
+class notFoundControl(base.View):
+    def get(self, request, *args, **kwargs):
+        return render_to_response('Generales/404.html',locals(),context_instance = RequestContext(request))
 
-def notFoundControl(request):
-    return render_to_response('Generales/404.html',locals(),context_instance = RequestContext(request))
-
-def fechaCorrecta(fecha):
-    try:
-        datetime.strptime(fecha, '%Y-%m-%d')
-        return True
-    except:
-        return False
 
 class CamPass(base.View):
     def get(self, request, *args, **kwargs):
@@ -195,10 +194,14 @@ class RegistroEstudianteMayor(base.View):
         datosMayor = DatosFamiliaMayor(id= User.objects.all().count() + 1, idEstudiante= estudiante, nombreContacto= nombreAcudiente, telefonoContacto= telefonoAcudiente,
             desempeno= desempeno, lugar= lugar, cedula= cedula, foto= foto)
 
+        #Guardar Roles
+        rol= Roles(id=User.objects.all().count() + 1, IDuser= usuario, Estudiante=False, Profesor=False, Administrador=False)
+
         #Guardar solicitud
-        solicitud = Solicitudes(IDestudiante= estudiante, estado= "Pendiente", Correcciones= False)
+        solicitud = Solicitudes(id=User.objects.all().count() + 1, IDestudiante= estudiante, estado= "Pendiente", Correcciones= False)
 
         usuario.save()
+        rol.save()
         estudiante.save()  
         datosMayor.save()
         solicitud.save()
@@ -305,7 +308,7 @@ class RegistroEstudianteMenor(base.View):
             grupo= Grado, jornada=jornada, nombreAcudiente=nombreResponsable, cedulaAcudiente= cedulaAcudiente, documento= documento, foto= foto, cedula= cedula)
         
         #Guardar solicitud
-        solicitud = Solicitudes(IDestudiante= estudiante, estado= "Pendiente", Correcciones= False)
+        solicitud = Solicitudes(id=User.objects.all().count() + 1, IDestudiante= estudiante, estado= "Pendiente", Correcciones= False)
 
         usuario.save()
         estudiante.save()
@@ -357,6 +360,14 @@ def get_item(dictionary, key):
 
 def __format__(self, format_spec):
     return format(str(self), format_spec)
+
+
+def fechaCorrecta(fecha):
+    try:
+        datetime.strptime(fecha, '%Y-%m-%d')
+        return True
+    except:
+        return False
 
 def horarioUsuario(User):
     horas = parametros["horas"]

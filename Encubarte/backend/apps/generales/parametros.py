@@ -9,5 +9,6 @@ parametros = {'generos': ('Masculino', 'Femenino'),
 			  'numerosGrupos' : (1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
 			  'edad' : (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17,18, 19, 20),
 			  'nombreOrganizacion': u'Encubarte',
-			  'estado': ('Aprobado', 'Rechazado', 'Pendiente')}
+			  'estado': ('Aprobado', 'Rechazado', 'Pendiente'),
+			  'GrupoEtnico': ('Afrodescendientes', 'Indigenas', 'Blancos', 'Mestizos', 'Mulatos', 'Zambos')}
 			  

@@ -135,14 +135,16 @@ class MatricularEstudiante(base.View):
             HoraOcupada = True
             return render_to_response('Profesor/MatricularEstudiante.html',  locals(), context_instance = RequestContext(request))
 
-
-def listaCursosControl(request):
-    if request.user.is_authenticated() and request.user.is_staff:
-        idProfesor = Profesor.objects.get(user = request.user)
-        cursos = Curso.objects.filter(idProfesor = idProfesor)
-        print("--------------------CURSOS----------------")
-        print(cursos)
-        return render_to_response('Profesor/listaCursos.html',locals(), context_instance = RequestContext(request))
+class listaCursosControl(base.View):
+    def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated() and request.user.is_staff:
+            idProfesor = Profesor.objects.get(user = request.user)
+            cursos = Curso.objects.filter(idProfesor = idProfesor)
+            print("--------------------CURSOS----------------")
+            print(cursos)
+            return render_to_response('Profesor/listaCursos.html',locals(), context_instance = RequestContext(request))
+        else:
+            return HttpResponseRedirect('/404')
 
 #__________________________________________________________________________________________________________________________________________________#
 #___________________________________________________________OTRAS FUNCIONES________________________________________________________________________#
