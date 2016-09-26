@@ -39,6 +39,7 @@ class Roles (models.Model):
 	Estudiante = models.BooleanField()
 	Profesor = models.BooleanField()
 	Administrador = models.BooleanField()
+	LoginComo = models.CharField(max_length=20, default='None')
 
 	class Meta:
 		verbose_name_plural=u'Roles'

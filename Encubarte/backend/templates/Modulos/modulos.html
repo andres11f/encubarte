@@ -17,36 +17,36 @@
 					<table align="center">
 	           			<tr>
 	               			<td>
-	                    		{% if usuario.is_authenticated %}
+	                    		{% if rol.Estudiante %}
 	                            	<div  role="group" align="center">
-		                                <form name="estudiante" method="get" action="/LogEstudiante/">
+		                                <form name="estudiante" method="post" action="/modulos/">
 		                                    {% csrf_token %}
-		                                    <input name="codigo_modulo" id="codigo_usuario" type="hidden" value="estudiante">
-		                                    <input name="codigo_usuario" id="codigo_usuario" type="hidden" value="{{ usuario.username }}">
+		                                    <input name="codigo_modulo" id="codigo_usuario" type="hidden" value="Estudiante">
+		                                    <input name="codigo_usuario" id="codigo_usuario" type="hidden" value="{{ request.user.username }}">
 		                                    <button type="submit" class="btn btn-success" value="estudiante">Estudiante</button>
 		                                </form>
 	                            	</div>
 	                    		{% endif %}
 		                    </td>
 		                    <td>
-		                        {% if usuario.is_staff %}
+		                        {% if rol.Profesor %}
 		                            <div  role="group" align="center">
-		                                <form name="profesor" method="get" action="/LogProfesor/">
+		                                <form name="profesor" method="post" action="/modulosr/">
 		                                    {% csrf_token %}
-		                                    <input name="codigo_modulo" id="codigo_usuario" type="hidden" value="profesor">
-		                                    <input name="codigo_usuario" id="codigo_usuario" type="hidden" value="{{ usuario.username }}">
+		                                    <input name="codigo_modulo" id="codigo_usuario" type="hidden" value="Profesor">
+		                                    <input name="codigo_usuario" id="codigo_usuario" type="hidden" value="{{ request.user.username }}">
 		                                    <button type="submit" class="btn btn-danger" value="profesor">Profesor</button>
 		                                </form>
 		                            </div>
 		                        {% endif %}
 		                    </td>
 		                    <td>
-		                        {% if usuario.is_superuser %}
+		                        {% if rol.Administrador %}
 		                            <div  role="group" align="center">
-		                                <form name="administrador" method="get" action="/LogAdministrador/">
+		                                <form name="administrador" method="post" action="/modulos/">
 		                                    {% csrf_token %}
-		                                    <input name="codigo_modulo" id="codigo_usuario" type="hidden" value="administrador">
-		                                    <input name="codigo_usuario" id="codigo_usuario" type="hidden" value="{{ usuario.username }}">
+		                                    <input name="codigo_modulo" id="codigo_usuario" type="hidden" value="Administrador">
+		                                    <input name="codigo_usuario" id="codigo_usuario" type="hidden" value="{{ request.user.username }}">
 		                                    <button type="submit" class="btn btn-primary" value="administrador">Administrador</button>
 		                                </form>
 		                            </div>

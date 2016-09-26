@@ -1,4 +1,4 @@
-{%extends "base.html"%}
+{%extends "Administrador/LogAdministrador.html"%}
 
 {% block titulo %}Registro Profesor{% endblock %}
 {% block scripts %}
@@ -57,7 +57,7 @@
 	{% endif %}
 		<div class="row">
 			<div class="col-md-6">
-				<form class="form-horizontal" role="form" method="POST" action="/registroProfesor/" name="registroProfesor">
+				<form class="form-horizontal" role="form" method="POST" action="/LogAdministrador/registroProfesor/" name="registroProfesor">
 					{% csrf_token %}
 					<h3>Ingresa los datos del profesor</h3>
 					<p class="bg-info">Por favor ingresa todos los campos requeridos (*).</p>

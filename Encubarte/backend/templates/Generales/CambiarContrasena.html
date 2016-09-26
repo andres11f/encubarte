@@ -1,8 +1,67 @@
-{% extends "Estudiante/LogEstudiante.html"%}
+{% extends "base.html"%}
 
 <!--{% block titulo %}Encubarte{% endblock %}-->
 
 {% block contenido %}
+	<div class="container-fluid offset1">
+		{% if estudiante %}
+			<nav class="navbar navbar-default">
+	  			<div class="container-fluid">
+	   				<div class="collapse navbar-collapse" id="myNavbar">
+	      				<ul class="nav navbar-nav">
+		        			<li><a href="/LogEstudiante/"> Inicio </a></li>
+							<li><a href="/LogEstudiante/VerHorario"> Ver Horario </a></li>
+							<li><a href="/LogEstudiante/ModificarInfo">Modificar información Personal</a></li>
+							<li><a href="/LogEstudiante/CambiarContrasena">Cambiar Contraseña</a></li>
+							<li><a href="/LogEstudiante/MatricularCurso">Matricular Curso</a></li>
+	      				</ul>
+	    			</div>
+	  			</div>
+			</nav>
+			{% if sinRol %}
+					<nav class="navbar navbar-default">
+			  			<div class="container-fluid">
+			   				<div class="collapse navbar-collapse" id="myNavbar">
+			      				<ul class="nav navbar-nav">
+				        			<li><a href="/LogEstudiante/"> Inicio </a></li>
+									<li><a href="/LogEstudiante/ModificarInfo">Modificar información Personal</a></li>
+			      				</ul>
+			    			</div>
+			  			</div>
+					</nav>
+			{% endif %}
+		{% endif %}
+		{% if profesor %}
+			<nav class="navbar navbar-default">
+	  			<div class="container-fluid">
+	   				<div class="collapse navbar-collapse" id="myNavbar">
+	      				<ul class="nav navbar-nav">
+		        			<li><a href="/LogProfesor/"> Inicio </a></li>
+							<li> <a href="/LogProfesor/listaCursos"> Lista de cursos</a> </li>
+							<li> <a href="/LogProfesor/MatricularEstu"> Matricular estudiante</a> </li>
+							<li> <a href="/LogProfesor/ModificarInfo">Modificar Informacion Personal</a> </li>
+							<li> <a href="/LogProfesor/CambiarContrasena">Cambiar Contraseña</a> </li>
+	      				</ul>
+	    			</div>
+	  			</div>
+			</nav> 
+		{% endif%}
+		{% if administrador %}
+			<nav class="navbar navbar-default">
+	  			<div class="container-fluid">
+	   				<div class="collapse navbar-collapse" id="myNavbar">
+	      				<ul class="nav navbar-nav">
+		        			<li><a href="/LogAdministrador/"> Inicio </a></li>
+							<li><a href="/LogAdministrador/registroProfesor/">Registrar Profesor</a></li>
+							<li><a href="/LogAdministrador/registroCurso/">Registrar Curso</a></li>
+							<li><a href="/LogAdministrador/registroHorario/">Registrar Horario</a></li>
+							<li><a href="/admin">Pagina Admin</a></li>
+	      				</ul>
+	    			</div>
+	  			</div>
+			</nav>
+		{% endif%}
+	</div>
 	<div class="container">
 		<center>
 			<h3>Cambiar Contraseña</h3>

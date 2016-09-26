@@ -3,11 +3,12 @@ from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from django.conf import settings
 import Encubarte.backend.apps.generales
-from Encubarte.backend.apps.generales.views import inicioControl, loginControl, logoutControl, notFoundControl, RegistroEstudiante2, RegistroEstudianteMenor, RegistroEstudianteMayor
+from Encubarte.backend.apps.generales.views import inicioControl, loginControl, logoutControl, notFoundControl, RegistroEstudiante2, RegistroEstudianteMenor, RegistroEstudianteMayor, CamPass
 
 admin.autodiscover()
 
 urlpatterns = patterns('',
+    
     url(r'^admin/', include(admin.site.urls)),
 
     #Links publicos:
@@ -17,11 +18,13 @@ urlpatterns = patterns('',
     url(r'^registroEstudianteMenor/$', RegistroEstudianteMenor.as_view(), name='registrarMenor'),
     url(r'^registroEstudianteMayor/$', RegistroEstudianteMayor.as_view(), name='registrarMayor'),
     url(r'^login/$', loginControl.as_view(), name='login'),
+    url(r'^CambiarContrasena/', CamPass.as_view(), name='Cambiar'),
     #url(r'^login/$', Encubarte.backend.apps.generales.views.loginControl),
     url(r'^modulos/', include('Encubarte.backend.apps.modulos.urls')),
     url(r'^LogEstudiante/', include('Encubarte.backend.apps.estudiante.urls')),
     url(r'^LogProfesor/', include('Encubarte.backend.apps.profesor.urls')),
     url(r'^LogAdministrador/', include('Encubarte.backend.apps.administrador.urls')),
+
     
     #links para usuarios conectados:
     url(r'^logout/$', logoutControl.as_view(), name='logout'),

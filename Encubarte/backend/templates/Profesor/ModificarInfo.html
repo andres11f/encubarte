@@ -1,4 +1,4 @@
-{% extends "base.html"%}
+{% extends "Profesor/LogProfesor.html"%}
 
 {% block contenido %}
 	{%if errorTipoDocumento or errorFechaNacimiento or errorGenero %}
@@ -18,11 +18,11 @@
 	</div>
 	{% endif %}
 
-	<form method="POST" action="/LogProfesor/ModificarInfo" name="ModificarInfo">
+	<form method="POST" action="/LogProfesor/ModificarInfo/" name="ModificarInfo">
 		{% csrf_token %}
 		<center>
-			{{ formUser.as_table }}
-			{{ form.as_table }}
+			{{ formUser.as_p }}
+			{{ form.as_p }}
 			<br>
 		    <tr>
 		        <td><input type="submit" value="Cambiar Datos" name="CamPass"/>

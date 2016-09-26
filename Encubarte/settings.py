@@ -14,7 +14,7 @@ PROJECT_PATH = os.path.realpath(os.path.dirname(__file__))
 
 MANAGERS = ADMINS
 
-#DATABASES = {
+# DATABASES = { 
 #    'default': {
 #
 #        'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -63,7 +63,7 @@ MEDIA_ROOT = os.path.join(PROJECT_PATH,'frontend/')
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
 # Examples: "http://media.lawrence.com/media/", "http://example.com/media/"
-MEDIA_URL = '/media/'
+MEDIA_URL = '/frontend/'
 
 # Absolute path to the directory static files should be collected to.
 # Don't put anything in this directory yourself; store your static files
@@ -152,6 +152,7 @@ INSTALLED_APPS = (
 # the site admins on every HTTP 500 error when DEBUG=False.
 # See http://docs.djangoproject.com/en/dev/topics/logging for
 # more details on how to customize your logging configuration.
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,

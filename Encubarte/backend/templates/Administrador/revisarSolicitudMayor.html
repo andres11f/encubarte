@@ -1,4 +1,4 @@
-{%extends "base.html"%}
+{%extends "Administrador/LogAdministrador.html"%}
 
 {% block titulo %}Datos Estudiante Mayor{% endblock %}
 {% block contenido %}
@@ -187,8 +187,8 @@
 			<div class="form-group" id="file1">
 				<label class="control-label col-md-4" for="file">Foto:</label>
 				<div class="col-md-8">
-					<img src="frontend/documentos/{{estudiante.user.username}}/foto.jpg">
-					<a href="frontend/documentos/{{estudiante.user.username}}/foto.jpg" target="_blank">foto.jpg</a>
+					<!--<img src="{{ MEDIA_URL }}/documentos/{{estudiante.user.username}}/foto.jpg">-->
+					<a href="{{ MEDIA_URL }}/documentos/{{estudiante.user.username}}/foto.jpg" target="_blank">foto.jpg</a>
 					<input type="checkbox" name="fotoCorreccion" value="{{fotoCorreccion}}">
 				</div>
 			</div>
@@ -196,8 +196,8 @@
 			<div class="form-group" id="file2">
 				<label class="control-label col-md-4" for="file">Cedula:</label>
 				<div class="col-md-8">
-					<img src="frontend/documentos/{{estudiante.user.username}}/cedula.jpg">
-					<a href="frontend/documentos/{{estudiante.user.username}}/cedula.jpg" target="_blank">cedula.jpg</a>
+					<!--<img src="{{ MEDIA_URL }}/documentos/{{estudiante.user.username}}/cedula.jpg">-->
+					<a href="{{ MEDIA_URL }}/documentos/{{estudiante.user.username}}/cedula.jpg" target="_blank">cedula.jpg</a>
 					<input type="checkbox" name="cedulaCorreccion" value="{{cedulaCorreccion}}">
 				</div>
 			</div>

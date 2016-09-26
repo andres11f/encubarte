@@ -9,9 +9,6 @@ admin.autodiscover()
 
 urlpatterns = patterns('Encubarte.backend.apps.modulos.views',
 
-    #url(r'^LogEstudiante/?', include('Encubarte.backend.apps.estudiante.urls')),
-    #url(r'^LogProfesor/?', include('Encubarte.backend.apps.profesor.urls')),
-    #url(r'^LogAdministrador/?', include('Encubarte.backend.apps.administrador.urls')),
     url(r'^$', EscogerModulo.as_view(), name='escogerModulo'),
 
 )

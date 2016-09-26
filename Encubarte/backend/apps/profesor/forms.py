@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 class ProfesorForm(forms.ModelForm):
 	class Meta:
 		model = Profesor
-		exclude = ['username']
+		exclude = ['user']
 
 class UserForm(forms.ModelForm):
 	class Meta:

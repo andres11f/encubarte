@@ -80,7 +80,11 @@ class registroProfesorControl(base.View):
             #Guardar profesor
             profesor = Profesor(user = usuario, fechaNacimiento = fechaNacimiento, tipoDocumento = tipoDocumento, genero = genero)
             profesor.save();
-    
+
+            #Guardar Rol
+            rol = Roles(id= Roles.objects.all().count() + 1, IDuser=usuario, Estudiante=False, Profesor=True, Administrador=False)
+            rol.save()
+
             return inicioControl(request,registerSuccess=True)
 
         else:
@@ -109,7 +113,8 @@ class registroCursoControl(base.View):
             profesores = Profesor.objects.all()
             cursos = Curso.objects.all()
             nombreCurso = request.POST["nombreCurso"]
-            usernameProfesor = request.POST["profesor"]
+            userProfesor = request.POST["profesor"].split(" - ")
+            usernameProfesor = userProfesor[0]
             numeroGrupo = request.POST["numeroGrupo"]
             edadMin = request.POST["edadMin"]
             edadMax = request.POST["edadMax"]
@@ -249,110 +254,110 @@ class VerSolicitudes(base.View):
                 estudiante = Estudiante.objects.get(user = user)
 
                 if "documentoCorreccion" in request.POST.keys():
-                    corregir = Correcciones(id=User.objects.all().count() + 1, IDestudiante=estudiante, campo="Numero Documento")
+                    corregir = Correcciones(id=Correcciones.objects.all().count() + 1, IDestudiante=estudiante, campo="Numero Documento")
                     corregir.save()
                 if "tipoCorreccion" in request.POST.keys():
-                    corregir = Correcciones(id=User.objects.all().count() + 1, IDestudiante=estudiante, campo="Numero Documento")
+                    corregir = Correcciones(id=Correcciones.objects.all().count() + 1, IDestudiante=estudiante, campo="Numero Documento")
                     corregir.save()
                 if "correoCorreccion" in request.POST.keys():
-                    corregir = Correcciones(id=User.objects.all().count() + 1, IDestudiante=estudiante, campo="Correo Electronico")
+                    corregir = Correcciones(id=Correcciones.objects.all().count() + 1, IDestudiante=estudiante, campo="Correo Electronico")
                     corregir.save()
                 if "nombresCorreccion" in request.POST.keys():
-                    corregir = Correcciones(id=User.objects.all().count() + 1, IDestudiante=estudiante, campo="Nombres")
+                    corregir = Correcciones(id=Correcciones.objects.all().count() + 1, IDestudiante=estudiante, campo="Nombres")
                     corregir.save()
                 if "apellidosCorreccion" in request.POST.keys():
-                    corregir = Correcciones(id=User.objects.all().count() + 1, IDestudiante=estudiante, campo="Apellidos")
+                    corregir = Correcciones(id=Correcciones.objects.all().count() + 1, IDestudiante=estudiante, campo="Apellidos")
                     corregir.save()
                 if "nacimientoCorreccion" in request.POST.keys():
-                    corregir = Correcciones(id=User.objects.all().count() + 1, IDestudiante=estudiante, campo="Fecha de Nacimiento")
+                    corregir = Correcciones(id=Correcciones.objects.all().count() + 1, IDestudiante=estudiante, campo="Fecha de Nacimiento")
                     corregir.save()
                 if "generoCorreccion" in request.POST.keys():
-                    corregir = Correcciones(id=User.objects.all().count() + 1, IDestudiante=estudiante, campo="Genero")
+                    corregir = Correcciones(id=Correcciones.objects.all().count() + 1, IDestudiante=estudiante, campo="Genero")
                     corregir.save()
                 if "direccionCorreccion" in request.POST.keys():
-                    corregir = Correcciones(id=User.objects.all().count() + 1, IDestudiante=estudiante, campo="Direccion")
+                    corregir = Correcciones(id=Correcciones.objects.all().count() + 1, IDestudiante=estudiante, campo="Direccion")
                     corregir.save()
                 if "barrioCorreccion" in request.POST.keys():
-                    corregir = Correcciones(id=User.objects.all().count() + 1, IDestudiante=estudiante, campo="Barrio")
+                    corregir = Correcciones(id=Correcciones.objects.all().count() + 1, IDestudiante=estudiante, campo="Barrio")
                     corregir.save()
                 if "fijoCorreccion" in request.POST.keys():
-                    corregir = Correcciones(id=User.objects.all().count() + 1, IDestudiante=estudiante, campo="Telefono Fijo")
+                    corregir = Correcciones(id=Correcciones.objects.all().count() + 1, IDestudiante=estudiante, campo="Telefono Fijo")
                     corregir.save()
                 if "celularCorreccion" in request.POST.keys():
-                    corregir = Correcciones(id=User.objects.all().count() + 1, IDestudiante=estudiante, campo="Telefono Celular")
+                    corregir = Correcciones(id=Correcciones.objects.all().count() + 1, IDestudiante=estudiante, campo="Telefono Celular")
                     corregir.save()
                 if "seguridadCorreccion" in request.POST.keys():
-                    corregir = Correcciones(id=User.objects.all().count() + 1, IDestudiante=estudiante, campo="Seguridad Social")
+                    corregir = Correcciones(id=Correcciones.objects.all().count() + 1, IDestudiante=estudiante, campo="Seguridad Social")
                     corregir.save()
                 if "zonaCorreccion" in request.POST.keys():
-                    corregir = Correcciones(id=User.objects.all().count() + 1, IDestudiante=estudiante, campo="Zona")
+                    corregir = Correcciones(id=Correcciones.objects.all().count() + 1, IDestudiante=estudiante, campo="Zona")
                     corregir.save()
                 if "comunaCorreccion" in request.POST.keys():
-                    corregir = Correcciones(id=User.objects.all().count() + 1, IDestudiante=estudiante, campo="Comuna")
+                    corregir = Correcciones(id=Correcciones.objects.all().count() + 1, IDestudiante=estudiante, campo="Comuna")
                     corregir.save()
                 if "grupoCorreccion" in request.POST.keys():
-                    corregir = Correcciones(id=User.objects.all().count() + 1, IDestudiante=estudiante, campo="Grupo Etnico")
+                    corregir = Correcciones(id=Correcciones.objects.all().count() + 1, IDestudiante=estudiante, campo="Grupo Etnico")
                     corregir.save()
                 if "condicionCorreccion" in request.POST.keys(): 
-                    corregir = Correcciones(id=User.objects.all().count() + 1, IDestudiante=estudiante, campo="Condicion")
+                    corregir = Correcciones(id=Correcciones.objects.all().count() + 1, IDestudiante=estudiante, campo="Condicion")
                     corregir.save()                                       
 
                 if tipoDocumento == "Cedula":
                     if "laborCorreccion" in request.POST.keys():
-                        corregir = Correcciones(id=User.objects.all().count() + 1, IDestudiante=estudiante, campo="Labor")
+                        corregir = Correcciones(id=Correcciones.objects.all().count() + 1, IDestudiante=estudiante, campo="Labor")
                         corregir.save()
                     if "lugarCorreccion" in request.POST.keys():
-                        corregir = Correcciones(id=User.objects.all().count() + 1, IDestudiante=estudiante, campo="Lugar Laboral")
+                        corregir = Correcciones(id=Correcciones.objects.all().count() + 1, IDestudiante=estudiante, campo="Lugar Laboral")
                         corregir.save()
                     if "contactoCorreccion" in request.POST.keys():
-                        corregir = Correcciones(id=User.objects.all().count() + 1, IDestudiante=estudiante, campo="Nombre Contacto")
+                        corregir = Correcciones(id=Correcciones.objects.all().count() + 1, IDestudiante=estudiante, campo="Nombre Contacto")
                         corregir.save()
                     if "telefonoCorreccion" in request.POST.keys():
-                        corregir = Correcciones(id=User.objects.all().count() + 1, IDestudiante=estudiante, campo="Telefono Contacto")
+                        corregir = Correcciones(id=Correcciones.objects.all().count() + 1, IDestudiante=estudiante, campo="Telefono Contacto")
                         corregir.save()
                     if "cedulaCorreccion" in request.POST.keys():
-                        corregir = Correcciones(id=User.objects.all().count() + 1, IDestudiante=estudiante, campo="Imagen Cedula")
+                        corregir = Correcciones(id=Correcciones.objects.all().count() + 1, IDestudiante=estudiante, campo="Imagen Cedula")
                         corregir.save()
                     if "fotoCorreccion" in request.POST.keys():
-                        corregir = Correcciones(id=User.objects.all().count() + 1, IDestudiante=estudiante, campo="Imagen Foto")
+                        corregir = Correcciones(id=Correcciones.objects.all().count() + 1, IDestudiante=estudiante, campo="Imagen Foto")
                         corregir.save()                        
 
                 if tipoDocumento == "Tarjeta de Identidad" or tipoDocumento == "Registro Civil":
                     if "padreCorreccion" in request.POST.keys():
-                        corregir = Correcciones(id=User.objects.all().count() + 1, IDestudiante=estudiante, campo="Nombre del Padre")
+                        corregir = Correcciones(id=Correcciones.objects.all().count() + 1, IDestudiante=estudiante, campo="Nombre del Padre")
                         corregir.save()
                     if "telpaoCorreccion" in request.POST.keys():
-                        corregir = Correcciones(id=User.objects.all().count() + 1, IDestudiante=estudiante, campo="Telenofo del Padre")
+                        corregir = Correcciones(id=Correcciones.objects.all().count() + 1, IDestudiante=estudiante, campo="Telenofo del Padre")
                         corregir.save()
                     if "madreCorreccion" in request.POST.keys():
-                        corregir = Correcciones(id=User.objects.all().count() + 1, IDestudiante=estudiante, campo="Nombre de la Madre")
+                        corregir = Correcciones(id=Correcciones.objects.all().count() + 1, IDestudiante=estudiante, campo="Nombre de la Madre")
                         corregir.save()
                     if "telmaCorreccion" in request.POST.keys():
-                        corregir = Correcciones(id=User.objects.all().count() + 1, IDestudiante=estudiante, campo="Telefono de la Madre")
+                        corregir = Correcciones(id=Correcciones.objects.all().count() + 1, IDestudiante=estudiante, campo="Telefono de la Madre")
                         corregir.save()
                     if "colegioCorreccion" in request.POST.keys():
-                        corregir = Correcciones(id=User.objects.all().count() + 1, IDestudiante=estudiante, campo="Colegio")
+                        corregir = Correcciones(id=Correcciones.objects.all().count() + 1, IDestudiante=estudiante, campo="Colegio")
                         corregir.save()
                     if "gradoCorreccion" in request.POST.keys():
-                        corregir = Correcciones(id=User.objects.all().count() + 1, IDestudiante=estudiante, campo="Grado")
+                        corregir = Correcciones(id=Correcciones.objects.all().count() + 1, IDestudiante=estudiante, campo="Grado")
                         corregir.save()
                     if "jornadaCorreccion" in request.POST.keys():
-                        corregir = Correcciones(id=User.objects.all().count() + 1, IDestudiante=estudiante, campo="Jornada")
+                        corregir = Correcciones(id=Correcciones.objects.all().count() + 1, IDestudiante=estudiante, campo="Jornada")
                         corregir.save()
                     if "acudienteCorreccion" in request.POST.keys():
-                        corregir = Correcciones(id=User.objects.all().count() + 1, IDestudiante=estudiante, campo="Nombre Acudiente")
+                        corregir = Correcciones(id=Correcciones.objects.all().count() + 1, IDestudiante=estudiante, campo="Nombre Acudiente")
                         corregir.save()
                     if "cedAcudCorreccion" in request.POST.keys():
-                        corregir = Correcciones(id=User.objects.all().count() + 1, IDestudiante=estudiante, campo="Cedula Acudiente")
+                        corregir = Correcciones(id=Correcciones.objects.all().count() + 1, IDestudiante=estudiante, campo="Cedula Acudiente")
                         corregir.save()
                     if "cedulaCorreccion" in request.POST.keys():
-                        corregir = Correcciones(id=User.objects.all().count() + 1, IDestudiante=estudiante, campo="Cedula Acudiente")
+                        corregir = Correcciones(id=Correcciones.objects.all().count() + 1, IDestudiante=estudiante, campo="Cedula Acudiente")
                         corregir.save()
                     if "fotoCorreccion" in request.POST.keys():
-                        corregir = Correcciones(id=User.objects.all().count() + 1, IDestudiante=estudiante, campo="Imagen Foto")
+                        corregir = Correcciones(id=Correcciones.objects.all().count() + 1, IDestudiante=estudiante, campo="Imagen Foto")
                         corregir.save()
                     if "docmenoroCorreccion" in request.POST.keys():
-                        corregir = Correcciones(id=User.objects.all().count() + 1, IDestudiante=estudiante, campo="Imagen Documento del Menor")
+                        corregir = Correcciones(id=Correcciones.objects.all().count() + 1, IDestudiante=estudiante, campo="Imagen Documento del Menor")
                         corregir.save()
                         
                 solicitudEstudiante = Solicitudes.objects.get(IDestudiante=estudiante)
@@ -377,6 +382,13 @@ class VerSolicitudes(base.View):
 @register.filter
 def get_item(dictionary, key):
     return dictionary.get((key.split(",")[0], key.split(",")[1]))
+
+def fechaCorrecta(fecha):
+    try:
+        datetime.strptime(fecha, '%Y-%m-%d')
+        return True
+    except:
+        return False
 
 def horarioUsuario(User):
     horas = parametros["horas"]

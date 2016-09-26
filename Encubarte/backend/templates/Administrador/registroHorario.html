@@ -1,4 +1,5 @@
-{%extends "base.html"%}
+{%extends "Administrador/LogAdministrador.html"%}
+
 {% block titulo %}Registro Curso{% endblock %}
 {% block scripts %}
 <script type="text/javascript">
@@ -51,7 +52,7 @@
 
 		<div class="row">
 			<div class="col-md-6">
-				<form class="form-horizontal" role="form" method="POST" action="/registroHorario/" name="registroHorario">
+				<form class="form-horizontal" role="form" method="POST" action="/LogAdministrador/registroHorario/" name="registroHorario">
 				{% csrf_token %}
 				<h3>Ingresa los datos del curso</h3>
 

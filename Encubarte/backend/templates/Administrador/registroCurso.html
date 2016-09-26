@@ -1,4 +1,4 @@
-{%extends "base.html"%}
+{%extends "Administrador/LogAdministrador.html"%}
 
 <meta charset="utf-8" /> 
 {% block titulo %}Registro Curso{% endblock %}
@@ -48,7 +48,7 @@
 
 		<div class="row">
 			<div class="col-md-6">
-				<form class="form-horizontal" role="form" method="POST" action="/registroCurso/" name="registroCurso">
+				<form class="form-horizontal" role="form" method="POST" action="/LogAdministrador/registroCurso/" name="registroCurso">
 				{% csrf_token %}
 				<h3>Ingresa los datos del curso</h3>
 
@@ -63,7 +63,7 @@
 					<label class="control-label col-md-4" for="prof">Profesor:</label>
 					<div class="col-md-8">
 						<select class="form-control" name="profesor" required="true" value="{{profesor}}" id="prof">
-							{% for p in profusers%}
+							{% for p in profesores %}
 								<option value="{{p}}">{{p}}</option>
 							{% endfor %}
 						</select>

@@ -16,7 +16,6 @@ urlpatterns = patterns('Encubarte.backend.apps.profesor.views',
     #url(r'^listaCursos/$', Encubarte.backend.apps.profesor.views.listaCursosControl),
     url(r'^MatricularEstu/?$', MatricularEstudiante.as_view(), name='Matricular'),
     url(r'^ModificarInfo/?$', ModificarInfoProfesor.as_view(), name='Modificar'),
-    url(r'^CambiarContrasena/?$', CamPass.as_view(), name='Cambiar'),
 
 )
 

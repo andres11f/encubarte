@@ -9,7 +9,7 @@ from django.views.generic import base
 from Encubarte.backend.apps.estudiante.models import Estudiante, DatosFamiliaMayor, DatosFamiliaMenor
 from Encubarte.backend.apps.profesor.models import Profesor
 from Encubarte.backend.apps.administrador.models import Solicitudes, Correcciones
-from Encubarte.backend.apps.generales.models import Horario, Curso, Grupo
+from Encubarte.backend.apps.generales.models import Horario, Curso, Grupo, Roles
 from Encubarte.backend.apps.generales.parametros import parametros
 from Encubarte.backend.apps.generales.forms import UserForm
 from Encubarte.backend.apps.estudiante.forms import EstudianteForm, DatosMayorForm, DatosMenorForm
@@ -31,7 +31,6 @@ class matriculaControl(base.View):
         if(request.GET.get('VerHorario')):
             cursos = Curso.objects.filter(esCerrado=False)
             curso_grupo = request.GET['horario'].split(" Grupo ")
-            print ("==========================> NoNO <================================")
             cursoMatricular = curso_grupo[0] #nombre a matricular en string
             grupoCurso = curso_grupo[1] #grupo del curso a matricular
             print(cursoMatricular)
@@ -56,17 +55,19 @@ class matriculaControl(base.View):
         cursoID = Curso.objects.get(nombre=cursoMatricular, numeroGrupo=grupoCurso) #IdCurso a partir del nombre del curso y numero de grupo
         horarioNuevo = Horario.objects.filter(idCurso = cursoID)
         HorarioEmpty = False
-
-        try:
-            user = User.objects.get(username = request.user.username)
-            estudiante = Estudiante.objects.get(user = user)
-            gruposEstudiante = Grupo.objects.filter(idEstudiante = estudiante)
-            horariosGrupo = Horario.objects.filter(idCurso__in=gruposEstudiante.values('idCurso'))
-        except horariosGrupo.DoesNotExist:
+        print ("==========================> NoNO <================================")
+        user = User.objects.get(username = request.user.username)
+        estudiante = Estudiante.objects.get(user = user)
+        gruposEstudiante = Grupo.objects.filter(idEstudiante = estudiante)
+        horariosGrupo = Horario.objects.filter(idCurso__in=gruposEstudiante.values('idCurso'))
+        TieneGrupo = gruposEstudiante.count()
+        print ("==========================> NaNa <================================")
+        if TieneGrupo == 0:
             HorarioEmpty = True
 
         CursoDiferente = False
         HorarioLibre = False
+        print HorarioEmpty
 
         if not HorarioEmpty:
             for horario in horarioNuevo:
@@ -136,6 +137,9 @@ class ModificarInfoEstudiante(base.View):
         generos = parametros["generos"]
         tiposDocumento = parametros["tiposDocumento"]
         zonas = parametros['zonas']
+        rol = Roles.objects.get(IDuser= user)
+        if rol.Estudiante == False and rol.Profesor == False and rol.Administrador == False:
+            sinRol = True
         if Tipo == "Cedula":
             DatosMayor = DatosFamiliaMayor.objects.get(idEstudiante = estudiante)
             if request.user.is_authenticated():
@@ -151,14 +155,15 @@ class ModificarInfoEstudiante(base.View):
                 formExtra = DatosMenorForm(instance=DatosMenor)
                 return render_to_response('Estudiante/ModificarInfo.html', locals(), context_instance = RequestContext(request))
 
-        
-
 
     def post(self, request, *args, **kwargs):
         generos = parametros["generos"]
         tiposDocumento = parametros["tiposDocumento"]
         zonas = parametros['zonas']
         user = User.objects.get(username = request.user.username)
+        rol = Roles.objects.get(IDuser= user)
+        if rol.Estudiante == False and rol.Profesor == False and rol.Administrador == False:
+            sinRol = True
         estudiante = Estudiante.objects.get(user = user)
 
         user.first_name = request.POST["first_name"]
@@ -195,15 +200,12 @@ class ModificarInfoEstudiante(base.View):
             errorTelefonosFamilia = not re.match("^([0-9]{7,12})$",DatosMayor.telefonoContacto)
 
             if (errorTipoDocumento or errorFechaNacimiento or errorGenero or errorTelefonos or errorTelefonosFamilia):
-                return render_to_response('Estudiante/LogEstudiante.html', locals(), context_instance = RequestContext(request))
+                return render_to_response('Estudiante/ModificarInfo.html', locals(), context_instance = RequestContext(request))
 
             #Guardar usuario
             user.save()
             estudiante.save()
             DatosMayor.save()
-
-            operationSuccess = True
-            return render_to_response('Estudiante/LogEstudiante.html', locals(), context_instance = RequestContext(request))
 
         else:
             DatosMenor = DatosFamiliaMenor.objects.get(idEstudiante = estudiante)
@@ -222,15 +224,21 @@ class ModificarInfoEstudiante(base.View):
             errorTelefonosFamilia = (not re.match("^([0-9]{7,12})$",DatosMenor.telefonoPadre) or not re.match("^([0-9]{7,12})$",DatosMenor.telefonoMadre))
 
             if (errorTipoDocumento or errorFechaNacimiento or errorGenero or errorTelefonos or errorTelefonosFamilia):
-                return render_to_response('Estudiante/LogEstudiante.html', locals(), context_instance = RequestContext(request))
+                return render_to_response('Estudiante/ModificarInfo.html', locals(), context_instance = RequestContext(request))
             
             #Guardar usuario
             user.save()
             estudiante.save()
             DatosMenor.save()
 
-            operationSuccess = True
-            return render_to_response('Estudiante/LogEstudiante.html', locals(), context_instance = RequestContext(request))
+        # RENOVAR SOLICITUD
+        solicitud = Solicitudes.objects.get(IDestudiante=estudiante)
+        if solicitud.estado == "Rechazado":
+            solicitud.estado = "Pendiente"
+            solicitud.save()
+
+        operationSuccess = True
+        return render_to_response('Estudiante/LogEstudiante.html', locals(), context_instance = RequestContext(request))
 
 #__________________________________________________________________________________________________________________________________________________#
 #__________________________________________________________________________________________________________________________________________________#

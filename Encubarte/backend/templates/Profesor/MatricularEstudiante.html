@@ -1,8 +1,8 @@
-{% extends "base.html" %}
+{% extends "Profesor/LogProfesor.html" %}
 
 {% block contenido %}
 	<div class="container">
-		<form class="form-horizontal" role="form" method="POST" action="/LogProfesor/MatricularEstu" name="MatricularEstudiante">
+		<form class="form-horizontal" role="form" method="POST" action="/LogProfesor/MatricularEstu/" name="MatricularEstudiante">
 			{% csrf_token %}
 			<div class="form-group">
 				<label class="control-label col-md-4" for="cur">Curso:</label>

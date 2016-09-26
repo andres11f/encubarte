@@ -1,41 +1,44 @@
-{% include "Estudiante/LogEstudiante.html"%}
+{%extends "Estudiante/LogEstudiante.html"%}
 
-<!--{% block titulo %}Encubarte{% endblock %}-->
 
-{% block contenido %}
-	<div class="container">
-		<div class="table-responsive">
-			<table class="table">
-				<thead>
-					<tr>
-						<th>Hora</th>
-						{% for d in diasSemana%}
-							<th>{{d}}</th>
+{{ block.super }}
+
+{%block contenido%}
+	<body>
+		<div class="container">
+			<div class="table-responsive">
+				<table class="table">
+					<thead>
+						<tr>
+							<th>Hora</th>
+							{% for d in diasSemana%}
+								<th>{{d}}</th>
+							{% endfor %}
+						</tr>
+				    </thead>
+				    <tbody>
+				    	{% for h in horas%}
+						<tr>
+							<th>{{h}}</th>
+							{% for d in diasSemana%}
+								{% with d|add:","|add:h as tupla %}
+									<td>{{horario|get_item:tupla}}</td>
+								{% endwith %}
+							{% endfor %}
+						</tr>
 						{% endfor %}
-					</tr>
-			    </thead>
-			    <tbody>
-			    	{% for h in horas%}
+					</tbody>
+				</table>
+			</div>
+			<div class="table-responsive">
+				<table class="table">
+					{% for curso in gruposEstudiante%}
 					<tr>
-						<th>{{h}}</th>
-						{% for d in diasSemana%}
-							{% with d|add:","|add:h as tupla %}
-								<td>{{horario|get_item:tupla}}</td>
-							{% endwith %}
-						{% endfor %}
+						<td> {{ curso.idCurso }} </td>
 					</tr>
 					{% endfor %}
-				</tbody>
-			</table>
+				</table>
+			</div>
 		</div>
-		<div class="table-responsive">
-			<table class="table">
-				{% for curso in gruposEstudiante%}
-				<tr>
-					<td> {{ curso.idCurso }} </td>
-				</tr>
-				{% endfor %}
-			</table>
-		</div>
-	</div>
-{% endblock %}
+	</body>
+{%endblock%}

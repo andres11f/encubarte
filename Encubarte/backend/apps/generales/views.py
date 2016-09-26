@@ -33,13 +33,11 @@ class inicioControl(base.View):
         visionInicio= "blublu"
         quienesSomosInicio= "bleble"
         if request.user.is_authenticated():
-            conectado=True
-            estudiante= not request.user.is_staff
-            nombre=request.user.first_name + " " + request.user.last_name
-            if estudiante:
-                return render_to_response('Estudiante/LogEstudiante.html',locals(), context_instance = RequestContext(request))
-            else:
-                return render_to_response('Generales/inicio.html',locals(), context_instance = RequestContext(request))
+            conectado = True
+            user = request.user
+            rol = Roles.objects.get(IDuser=user)
+            nombre = request.user.first_name + " " + request.user.last_name
+            return render_to_response ('Generales/inicio.html',locals(), context_instance = RequestContext(request))
         else:
             return render_to_response ('Generales/inicio.html',locals(), context_instance = RequestContext(request))
 
@@ -56,10 +54,16 @@ class loginControl(base.View):
             usuario = authenticate(username=username, password=password)
             if usuario is not None and usuario.is_active:
                 login(request, usuario)
-                usuario = request.user
+                user = request.user
                 conectado = True
-                #return HttpResponseRedirect("/modulos/")
-                return render_to_response('Modulos/modulos.html', locals(), context_instance = RequestContext(request))
+                rol = Roles.objects.get(IDuser= user)
+                if rol.Estudiante == False and rol.Profesor == False and rol.Administrador == False:
+                    sinRol = True
+                    print "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+                    print sinRol
+                    return render_to_response('Estudiante/LogEstudiante.html', locals(), context_instance = RequestContext(request))
+                else:
+                    return render_to_response('Modulos/modulos.html', locals(), context_instance = RequestContext(request))
         except:
             return HttpResponseRedirect('/')
         loginFailed = True
@@ -80,6 +84,13 @@ class notFoundControl(base.View):
 
 class CamPass(base.View):
     def get(self, request, *args, **kwargs):
+        rol = Roles.objects.get(IDuser=request.user)
+        if rol.LoginComo == "Estudiante":
+            estudiante = True
+        elif rol.LoginComo == "Profesor":
+            profesor == True
+        elif rol.LoginComo == "Administrador":
+            administrador = True
         return render_to_response('Generales/CambiarContrasena.html', locals(), context_instance = RequestContext(request))
 
     def post(self, request, *args, **kwargs):
@@ -195,10 +206,10 @@ class RegistroEstudianteMayor(base.View):
             desempeno= desempeno, lugar= lugar, cedula= cedula, foto= foto)
 
         #Guardar Roles
-        rol= Roles(id=User.objects.all().count() + 1, IDuser= usuario, Estudiante=False, Profesor=False, Administrador=False)
+        rol= Roles(id=Roles.objects.all().count() + 1, IDuser= usuario, Estudiante=False, Profesor=False, Administrador=False)
 
         #Guardar solicitud
-        solicitud = Solicitudes(id=User.objects.all().count() + 1, IDestudiante= estudiante, estado= "Pendiente", Correcciones= False)
+        solicitud = Solicitudes(id=Solicitudes.objects.all().count() + 1, IDestudiante= estudiante, estado= "Pendiente", Correcciones= False)
 
         usuario.save()
         rol.save()
@@ -307,12 +318,16 @@ class RegistroEstudianteMenor(base.View):
         datosMenor = DatosFamiliaMenor(idEstudiante = estudiante, nombrePadre= nombrePadre, nombreMadre= nombreMadre, telefonoPadre= telefonoPadre, telefonoMadre= telefonoMadre, institucionEducativa= Colegio, 
             grupo= Grado, jornada=jornada, nombreAcudiente=nombreResponsable, cedulaAcudiente= cedulaAcudiente, documento= documento, foto= foto, cedula= cedula)
         
+         #Guardar Roles
+        rol= Roles(id=Roles.objects.all().count() + 1, IDuser= usuario, Estudiante=False, Profesor=False, Administrador=False)
+
         #Guardar solicitud
-        solicitud = Solicitudes(id=User.objects.all().count() + 1, IDestudiante= estudiante, estado= "Pendiente", Correcciones= False)
+        solicitud = Solicitudes(id=Solicitudes.objects.all().count() + 1, IDestudiante= estudiante, estado= "Pendiente", Correcciones= False)
 
         usuario.save()
         estudiante.save()
         datosMenor.save()
+        rol.save()
         solicitud.save()
 
 

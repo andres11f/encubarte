@@ -1,4 +1,5 @@
-{% include "base.html" %}
+{% extends "Estudiante/LogEstudiante.html" %}
+
 {% block contenido %}
 	{%if errorTipoDocumento or errorFechaNacimiento or errorGenero or errorTelefonos %}
 	<div class="container">
@@ -20,7 +21,12 @@
 	</div>
 	{% endif %}
 
-	<form method="POST" action="/LogEstudiante/ModificarInfo" name="ModificarInfo" disabled="true">
+	{% if operationSucess %}
+		<p> {{nombre}}, tus cambios se realizaron satisfactoriamente. </p>
+		<br>
+	{%endif%} 
+
+	<form method="POST" action="/LogEstudiante/ModificarInfo/" name="ModificarInfo">
 		{% csrf_token %}
 		<center>
 		<div>
@@ -30,7 +36,7 @@
 		</div>
 		<br> <br>
 	    <tr>
-	        <td><input type="submit" value="Cambiar Datos" name="registrarEstudiante"/>
+	        <td><input type="submit" value="Cambiar Datos" name="modificarInfo"/>
 	    </tr>
 		<p class="text-info"><h5> Por favor ingrese todos los campos requeridos (*)</h5></p>
 		</center>

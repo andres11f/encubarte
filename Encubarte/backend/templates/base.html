@@ -21,6 +21,7 @@
 			<script type="text/javascript" src="/media/js/prueba.js"> </script>
 
 		{% endblock %}
+
 		<nav class="navbar navbar-default">
   			<div class="container-fluid">
     			<div class="navbar-header">
@@ -31,47 +32,36 @@
       				</button>
       			<a class="navbar-brand" href="#">Encubarte</a>
     			</div>
-   					<div class="collapse navbar-collapse" id="myNavbar">
-      				<ul class="nav navbar-nav">
-	        			<li><a href="/"> Inicio </a></li>
-	        			
-	        			{% if request.user.is_superuser %}
-	        				<li><a href="/LogAdministrador/verSolicitudes/"> Ver Solicitudes </a></li>
-							<li><a href="/LogAdministrador/registroProfesor/"> Registrar Profesor </a></li>
-							<li><a href="/LogAdministrador/registroCurso/"> Registrar Curso </a></li>
-							<li><a href="/LogAdministrador/registroHorario/"> Registrar Horario </a></li>
-							<li><a href="/admin/">Pagina Admin</a></li>
-						{% elif request.user.is_staff %}
-							<li> <a href="/listaCursos/"> Lista de cursos</a> </li>
-							<li> <a href="/LogProfesor/MatricularEstu/"> Matricular estudiante</a> </li>
-							<li> <a href="/LogProfesor/ModificarInfo/">Modificar Informacion Personal</a> </li>
-							<li> <a href="/LogProfesor/CambiarContrasena/"/>Cambiar Contraseña</a> </li>
-						{% elif request.user.is_authenticated %}
-							<li><a href="/LogEstudiante/VerHorario/"> Ver Horario </a></li>
-							<li><a href="/LogEstudiante/ModificarInfo/">Modificar información Personal</a></li>
-							<li><a href="/LogEstudiante/CambiarContrasena/">Cambiar Contraseña</a></li>
-							<li><a href="/LogEstudiante/MatricularCurso/">Matricular Curso</a></li>
-						{% endif %}
-						
-      				</ul>
+				<div class="collapse navbar-collapse" id="myNavbar">
       				<ul class="nav navbar-nav navbar-right">
         				{% if request.user.is_authenticated %}
-							<li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Cerrar sesión </a></li>
+        					<li><a href="/CambiarContrasena/"> Cambiar Contraseña </a></li>
+							<li><a href="/logout/"> <span class="glyphicon glyphicon-log-out"></span> Cerrar sesión </a></li>
 			        	{% else %}
-			        		<li><a href="/registroEstudiante"><span class="glyphicon glyphicon-user"></span> Regístrate</a></li>
+			        		<li><a href="/"> Inicio </a></li>
+			        		<li><a href="/registroEstudiante/"><span class="glyphicon glyphicon-user"></span> Regístrate</a></li>
 			        	{% endif %}
       				</ul>
-    			</div>
+				</div>
   			</div>
 		</nav>
+
 		<title> {% block titulo %} Inicio {% endblock %} </title>
 		<center><h1> Encubarte </h1></center><br>
+
+		{% block extrahead %}
+		{% endblock %}
+		
+	</head>	
+	<body>
 		{% block contenido %}
 		{% endblock %}
+
 		{% block footer %}
 		{% endblock %}
+
 		{%block css%}
 		<link rel="stylesheet" type="text/css" href="/frontend/css/estilos.css"/>
 		{% endblock%}
-	</head>	
+	</body>
 </html>
