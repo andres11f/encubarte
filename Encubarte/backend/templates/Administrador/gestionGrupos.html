@@ -1,0 +1,39 @@
+{%extends "Administrador/LogAdministrador.html"%}
+
+{% block titulo %}Lista de Grupos{% endblock %}
+
+{% block contenido %}
+	<div class="row">
+		<div class="col-md-6">
+			<table align="center" >
+			{% for c in cursos%}
+				<tr>
+		        	<td onclick="cambiarDisplay('{{c.id}}')">{{c}}</td>
+		    	</tr>
+		    	<tr id="{{c.id}}" style="display:none">
+					<td> 
+					<form action="/LogAdministrador/gestionGrupos/"  method="post">
+					{% csrf_token %}
+						<input type="hidden" name="id" value="{{c.id}}">
+						<input type="submit" class="btn" value="Ver Estudiantes" name="verEstudiantes">
+					</form>
+					</td>
+				</tr>
+			{% endfor %}
+			</table>
+		</div>
+	</div>
+
+	{% if visualizarEstudiantes %}
+		<div class="col-md-20">
+			<table align="center" >
+				{% for g in grupo%}
+				<tr>
+			        <td onclick="cambiarDisplay('{{c.id}}')">{{g}}</td>
+			    </tr>
+				{% endfor %}
+			</table>
+		</div>
+	{% endif %}
+	
+{% endblock %}

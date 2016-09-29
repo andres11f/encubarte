@@ -16,11 +16,21 @@
 			<!-- Latest compiled and minified JavaScript -->
 			<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
 
-			<script type="text/javascript" src="/media/bootstrap/js/bootstrap.min.js"> </script>
-			<script type="text/javascript" src="/media/js/angular.min.js"> </script>
-			<script type="text/javascript" src="/media/js/prueba.js"> </script>
-
+			<script type="text/javascript" src="/frontend/bootstrap/js/bootstrap.min.js"> </script>
 		{% endblock %}
+		
+		{%block scripts%}
+			<script type="text/javascript" src="/frontend/js/angular.min.js"> </script>
+			<script type="text/javascript" src="/frontend/js/prueba.js"> </script>
+			<script type="text/javascript" src="/frontend/js/Generales.js"> </script>
+		{% endblock%}
+
+			
+		{%block css%}
+			<link rel="stylesheet" type="text/css" href="/frontend/css/estilos.css"/>
+		{% endblock%}
+
+		
 
 		<nav class="navbar navbar-default">
   			<div class="container-fluid">
@@ -51,6 +61,8 @@
 
 		{% block extrahead %}
 		{% endblock %}
+
+		<!--<center><img src="frontend/images/Encu3.jpg" alt="Jellyfish"></center><br>-->
 		
 	</head>	
 	<body>
@@ -59,9 +71,5 @@
 
 		{% block footer %}
 		{% endblock %}
-
-		{%block css%}
-		<link rel="stylesheet" type="text/css" href="/frontend/css/estilos.css"/>
-		{% endblock%}
 	</body>
 </html>

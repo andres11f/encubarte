@@ -1,0 +1,39 @@
+{%extends "base.html"%}
+
+{% block titulo %}Inicio{% endblock %}
+
+{% block contenido %}
+	<div class="container">
+		<div class="row">
+	  		{% if correoNoExiste %}
+			<div class="alert alert-danger">
+  				<strong>Error!</strong> Este correo no se encuentra registrado en nuestra base de datos.
+			</div>
+			{% endif %}
+			{% if operationSuccess %}
+			<p class="bg-success">Su nueva contraseña ha sido enviada a su correo satisfactoriamente.</p>
+			{% endif %}
+	  		<div class="col-md-4">
+				<center>
+					<h3> Ingresa tu correo electronico </h3>
+				</center>
+				<form method="POST" action="/RecuperarContrasena/" name="RecuperarContrasena" class="form-horizontal" role="form">
+	    		{% csrf_token %}
+					<div class="form-group">
+						<div class="col-md-12">
+							<input type="text" class="form-control" id="usr" placeholder="email" name="username" required="true">
+						</div>
+					</div>
+					<center>
+					<div class="form-group"> 
+						<div class=" col-md-10">
+							<button type="submit" class="btn btn-default" name="recuperar"> Enviar contraseña </button>
+						</div>
+					</div>
+					</center>
+				</form>
+			</div>
+		</div>
+
+{% endblock %}
+

@@ -1,0 +1,42 @@
+{%extends "Administrador/LogAdministrador.html"%}
+{% block titulo %}Lista de Estudiantes{% endblock %}
+
+{% block contenido %}
+
+	{% if operationSuccess %}
+		<p class="bg-success">Operacion completada con exito.</p>
+	{% endif %}
+
+	<div class="row">
+		<div class="col-md-6">
+			<table align="center">
+			{% for e in estudiantes%}
+				<tr>
+		        	<td onclick="cambiarDisplay('{{e.user.username}}')">{{ e }}</td>
+		    	</tr>
+		    	<tr id="{{e.user.username}}" style="display:none">
+					<td>
+					{% if e.user.is_active %}
+						<form action="/LogAdministrador/gestionUsuarios/"  method="post">
+						{% csrf_token %}
+							<input type="hidden" name="id" value="{{ e.user.username }}">
+							<label><input type="checkbox" name="desactivar" value="{{desactivar}}"> Desactivar Usuario</label>
+							<input type="submit" class="btn" value="Guardar Cambios" name="Cambiar">
+						</form>
+					{% else %}
+						<form action="/LogAdministrador/gestionUsuarios/"  method="post">
+						{% csrf_token %}
+							<input type="hidden" name="id" value="{{ e.user.username }}">
+							<label><input type="checkbox" name="activar" value="{{activar}}"> Activar Usuario</label>
+							<input type="submit" class="btn" value="Guardar Cambios" name="Cambiar">
+						</form>
+					{% endif %}
+					</td>
+					</td>
+				</tr>
+			{% endfor %}
+			</table>
+		</div>
+	</div>
+	
+{% endblock %}

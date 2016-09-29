@@ -2,124 +2,194 @@
 
 <meta charset="utf-8" /> 
 {% block titulo %}Registro Curso{% endblock %}
-{% block scripts %}
-<script type="text/javascript">
-	function cambiarDisplay(id) {
-		if (!document.getElementById) return false;
 
-		fila = document.getElementById(id);
-		if (fila.style.display != "none") 
-		{
-			fila.style.display = "none"; //ocultar fila 
-		} 
-		else 
-		{
-			fila.style.display = ""; //mostrar fila 
-  		}
-	}
-</script>
-{% endblock %}
 {% block contenido %}
-	<div class="container">
-	{%if errorProfesor or errorNumeroGrupo or errorCursoYaExiste %}
-		<div class="alert alert-warning">
-    		<strong>Atención!</strong> Corrige los siguientes errores para continuar:
-  		</div>
-  		{% if errorProfesor %}
-  		<div class="alert alert-danger">
-  				<strong>Error!</strong> El profesor no existe en la base de datos o no es valido.	
-  		</div>
-  		{% endif %}
-  		{% if errorNumeroGrupo %}
-  		<div class="alert alert-danger">
-  				<strong>Error!</strong> El numero del grupo no es valido. 		
-  		</div>
-  		{% endif %}
-  		{% if errorCursoYaExiste %}
-  		<div class="alert alert-danger">
-  				<strong>Error!</strong> Este curso ya esta asignado a este profesor con este grupo.		
-  		</div>
-  		{% endif %}
-	{% endif %}
 
-	{% if operationSuccess %}
-		<p class="bg-success">Operacion completada con exito.</p>
-	{% endif %}
+	<div class="container">
+		{%if errorProfesor or errorNumeroGrupo or errorCursoYaExiste or CursoConHorario%}
+			<div class="alert alert-warning">
+	    		<strong>Atención!</strong> Corrige los siguientes errores para continuar:
+	  		</div>
+	  		{% if errorProfesor %}
+	  		<div class="alert alert-danger">
+	  				<strong>Error!</strong> El profesor no existe en la base de datos o no es valido.	
+	  		</div>
+	  		{% endif %}
+	  		{% if errorNumeroGrupo %}
+	  		<div class="alert alert-danger">
+	  				<strong>Error!</strong> El numero del grupo no es valido. 		
+	  		</div>
+	  		{% endif %}
+	  		{% if errorCursoYaExiste %}
+	  		<div class="alert alert-danger">
+	  				<strong>Error!</strong> Este curso ya esta asignado a este profesor con este grupo.		
+	  		</div>
+	  		{% endif %}
+	  		{% if CursoConHorario %}
+	  		<div class="alert alert-danger">
+	  				<strong>Error!</strong> Este curso tiene un horario asignado.		
+	  		</div>
+	  		{% endif %}
+		{% endif %}
+
+		{% if operationSuccess %}
+			<p class="bg-success">Operacion completada con exito.</p>
+		{% endif %}
 
 		<div class="row">
-			<div class="col-md-6">
-				<form class="form-horizontal" role="form" method="POST" action="/LogAdministrador/registroCurso/" name="registroCurso">
-				{% csrf_token %}
-				<h3>Ingresa los datos del curso</h3>
 
-				<div class="form-group">
-					<label class="control-label col-md-4" for="name">Nombre:</label>
-					<div class="col-md-8">
-						<input type="text" name="nombreCurso" required="true" value="{{nombreCurso}}" class="form-control" id="name">
-					</div>
-				</div>
+			{% if nuevoCurso %}
+				<div class="col-md-6">
+					<form class="form-horizontal" role="form" method="POST" action="/LogAdministrador/registroCurso/" name="registroCurso">
+					{% csrf_token %}
+					<h3>Ingresa los datos del curso</h3>
 
-				<div class="form-group">
-					<label class="control-label col-md-4" for="prof">Profesor:</label>
-					<div class="col-md-8">
-						<select class="form-control" name="profesor" required="true" value="{{profesor}}" id="prof">
-							{% for p in profesores %}
-								<option value="{{p}}">{{p}}</option>
-							{% endfor %}
-						</select>
-					</div>
-				</div>
-
-				<div class="form-group">
-					<label class="control-label col-md-4" for="numg">Numero Grupo:</label>
-					<div class="col-md-8">
-						<select class="form-control" name="numeroGrupo" required="true" value="{{numeroGrupo}}" id="numg">
-							{% for n in numerosGrupos%}
-						        <option>{{n}}</option>
-						    {% endfor %}
-						</select>
-					</div>
-				</div>
-
-				<div class="form-group">
-					<label class="control-label col-md-4" for="numg">Edad Minima:</label>
-					<div class="col-md-8">
-						<select class="form-control" name="edadMin" required="true" value="{{edad}}" id="Emin">
-							{% for e in edad %}
-						        <option>{{e}}</option>
-						    {% endfor %}
-						</select>
-					</div>
-				</div>
-
-				<div class="form-group">
-					<label class="control-label col-md-4" for="numg">Edad Maxima:</label>
-					<div class="col-md-8">
-						<select class="form-control" name="edadMax" required="true" value="{{edad}}" id="Emax">
-							{% for e in edad %}
-						        <option>{{e}}</option>
-						    {% endfor %}
-						</select>
-					</div>
-				</div>
-
-				<div class="form-group"> 
-					<div class="col-md-offset-4 col-md-10">
-						<div class="checkbox">
-							<label><input type="checkbox" name="esCursoCerrado" value="{{esCursoCerrado}}"> Es un curso cerrado</label>
+					<div class="form-group">
+						<label class="control-label col-md-4" for="name">Nombre:</label>
+						<div class="col-md-8">
+							<input type="text" name="nombreCurso" required="true" value="{{nombreCurso}}" class="form-control" id="name">
 						</div>
 					</div>
-				</div>
 
-				<div class="form-group"> 
- 					<div class="col-md-offset-4 col-md-10">
-						<button type="submit" name="registrar" class="btn btn-default">Registrar Curso</button>
+					<div class="form-group">
+						<label class="control-label col-md-4" for="prof">Profesor:</label>
+						<div class="col-md-8">
+							<select class="form-control" name="profesor" required="true" value="{{profesor}}" id="prof">
+								{% for p in profesores %}
+									<option value="{{p}}">{{p}}</option>
+								{% endfor %}
+							</select>
+						</div>
 					</div>
+
+					<div class="form-group">
+						<label class="control-label col-md-4" for="numg">Numero Grupo:</label>
+						<div class="col-md-8">
+							<select class="form-control" name="numeroGrupo" required="true" value="{{numeroGrupo}}" id="numg">
+								{% for n in numerosGrupos%}
+							        <option>{{n}}</option>
+							    {% endfor %}
+							</select>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="control-label col-md-4" for="numg">Edad Minima:</label>
+						<div class="col-md-8">
+							<select class="form-control" name="edadMin" required="true" value="{{edad}}" id="Emin">
+								{% for e in edad %}
+							        <option>{{e}}</option>
+							    {% endfor %}
+							</select>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="control-label col-md-4" for="numg">Edad Maxima:</label>
+						<div class="col-md-8">
+							<select class="form-control" name="edadMax" required="true" value="{{edad}}" id="Emax">
+								{% for e in edad %}
+							        <option>{{e}}</option>
+							    {% endfor %}
+							</select>
+						</div>
+					</div>
+
+					<div class="form-group"> 
+						<div class="col-md-offset-4 col-md-10">
+							<div class="checkbox">
+								<label><input type="checkbox" name="esCursoCerrado" value="{{esCursoCerrado}}"> Es un curso cerrado</label>
+							</div>
+						</div>
+					</div>
+
+					<div class="form-group"> 
+	 					<div class="col-md-offset-4 col-md-10">
+							<button type="submit" name="registrar" value="registrar" class="btn btn-default">Registrar Curso</button>
+						</div>
+					</div>
+
+					</form>
+
 				</div>
+			{% endif %}
 
-				</form>
+			{% if modificarCurso %}
+				<div class="col-md-6">
+					<form class="form-horizontal" role="form" method="POST" action="/LogAdministrador/registroCurso/" name="registroCurso">
+					{% csrf_token %}
+					<h3>Ingresa los datos del curso</h3>
 
-			</div>
+					<div class="form-group">
+						<label class="control-label col-md-4" for="name">Nombre:</label>
+						<div class="col-md-8">
+							<input type="text" name="nombreCurso" required="true" value="{{cursoAmodificar.nombre}}" class="form-control" id="name">
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="control-label col-md-4" for="prof">Profesor:</label>
+						<div class="col-md-8">
+							<select class="form-control" name="profesor" required="true" value="{{cursoAmodificar.idprofesor}}" id="prof">
+								{% for p in profesores %}
+									<option value="{{p}}">{{p}}</option>
+								{% endfor %}
+							</select>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="control-label col-md-4" for="numg">Numero Grupo:</label>
+						<div class="col-md-8">
+							<select class="form-control" name="numeroGrupo" required="true" value="{{cursoAmodificar.numeroGrupo}}" id="numg">
+								{% for n in numerosGrupos%}
+							        <option>{{n}}</option>
+							    {% endfor %}
+							</select>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="control-label col-md-4" for="numg">Edad Minima:</label>
+						<div class="col-md-8">
+							<select class="form-control" name="edadMin" required="true" value="{{edad}}" id="Emin">
+								{% for e in edad %}
+							        <option>{{e}}</option>
+							    {% endfor %}
+							</select>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="control-label col-md-4" for="numg">Edad Maxima:</label>
+						<div class="col-md-8">
+							<select class="form-control" name="edadMax" required="true" value="{{edad}}" id="Emax">
+								{% for e in edad %}
+							        <option>{{e}}</option>
+							    {% endfor %}
+							</select>
+						</div>
+					</div>
+
+					<div class="form-group"> 
+						<div class="col-md-offset-4 col-md-10">
+							<div class="checkbox">
+								<label><input type="checkbox" name="esCursoCerrado" value="{{cursoAmodificar.esCerrado}}"> Es un curso cerrado</label>
+							</div>
+						</div>
+					</div>
+
+					<div class="form-group"> 
+	 					<div class="col-md-offset-4 col-md-10">
+							<button type="submit" name="registrar" value="modificar" class="btn btn-default">Modificar Curso</button>
+						</div>
+					</div>
+
+					</form>
+
+				</div>
+			{% endif %}
+
 			<div class="col-md-6">
 				<table align="center" >
 				{% for c in cursos%}
@@ -130,6 +200,7 @@
 					<td> 
 					<form action="#"  method="get">
 						<input type="hidden" name="id" value="{{c.id}}">
+						<input type="submit" class="btn" value="Modificar Curso" name="modificarCurso">
  						<input type="submit" onclick="return confirm('Esta seguro que desea eliminar este curso?')" class="btn" value="Eliminar Curso" name="eliminarCurso">
 					</form>
 					</td>

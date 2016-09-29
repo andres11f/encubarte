@@ -31,7 +31,7 @@
 		                    <td>
 		                        {% if rol.Profesor %}
 		                            <div  role="group" align="center">
-		                                <form name="profesor" method="post" action="/modulosr/">
+		                                <form name="profesor" method="post" action="/modulos/">
 		                                    {% csrf_token %}
 		                                    <input name="codigo_modulo" id="codigo_usuario" type="hidden" value="Profesor">
 		                                    <input name="codigo_usuario" id="codigo_usuario" type="hidden" value="{{ request.user.username }}">

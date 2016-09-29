@@ -1,24 +1,9 @@
 {%extends "Administrador/LogAdministrador.html"%}
 
 {% block titulo %}Registro Profesor{% endblock %}
-{% block scripts %}
-<script type="text/javascript">
-	function cambiarDisplay(id) {
-		if (!document.getElementById) return false;
 
-		fila = document.getElementById(id);
-		if (fila.style.display != "none") 
-		{
-			fila.style.display = "none"; //ocultar fila 
-		} 
-		else 
-		{
-			fila.style.display = ""; //mostrar fila 
-  		}
-	}
-</script>
-{% endblock %}
 {% block contenido %}
+
 	<div class="container">
 	{%if errorNumeroDocumento or errorCorreoElectronico or errorContrasena or errorFechaNacimiento or errorTipoDocumento or errorGenero %}
 		<div class="alert alert-warning">
@@ -26,7 +11,6 @@
   		</div>
   		{% if errorNumeroDocumento %}
   		<div class="alert alert-danger">
-  				<strong>Error!</strong> El número de documento que seleccionaste ya está en uso o no es un número.		
   		</div>
   		{% endif %}
   		{% if errorCorreoElectronico %}
@@ -52,6 +36,11 @@
   		{% if errorGenero %}
   		<div class="alert alert-danger">
   				<strong>Error!</strong> No seleccionaste un género correcto.		
+  		</div>
+  		{% endif %}
+  		{% if ProfesorConCurso %}
+  		<div class="alert alert-danger">
+  				<strong>Error!</strong> Este usuario tiene asignado cursos.		
   		</div>
   		{% endif %}
 	{% endif %}

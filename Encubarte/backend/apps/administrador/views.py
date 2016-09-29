@@ -37,7 +37,11 @@ class registroProfesorControl(base.View):
             if(request.GET.get('eliminarProfesor')):
                 user = User.objects.get(username = request.GET.get('username'))
                 profesorAEliminar = Profesor.objects.get(user = user)
-                profesorAEliminar.delete()
+                cursos = Curso.objects.filter(idProfesor=profesorAEliminar).count()
+                if cursos == 0:
+                    profesorAEliminar.delete()
+                else:
+                    ProfesorConCurso=True
             return render_to_response('Administrador/registroProfesor.html', locals(), context_instance = RequestContext(request))
         else:
             return HttpResponseRedirect('/404')
@@ -98,9 +102,19 @@ class registroCursoControl(base.View):
             edad = parametros["edad"]
             profesores = Profesor.objects.all()
             cursos = Curso.objects.all()
+            nuevoCurso = True
             if(request.GET.get('eliminarCurso')):               
                 cursoAEliminar = Curso.objects.get(id = request.GET.get('id'))
-                cursoAEliminar.delete()
+                horarios = Horario.objects.get(idCurso=cursoAEliminar).count()
+                if horarios == 0:
+                    cursoAEliminar.delete()
+                else:
+                    CursoConHorario=True
+            if(request.GET.get('modificarCurso')):
+                nuevoCurso = False
+                modificarCurso = True
+                cursoAmodificar = Curso.objects.get(id = request.GET.get('id'))
+
             return render_to_response('Administrador/registroCurso.html', locals(), context_instance = RequestContext(request))
         else:
             return HttpResponseRedirect('/404')  
@@ -108,43 +122,48 @@ class registroCursoControl(base.View):
 
     def post(self, request, *args, **kwargs):
         if request.user.is_authenticated() and request.user.is_superuser:
-            umerosGrupos = parametros["numerosGrupos"]
-            edad = parametros["edad"]
-            profesores = Profesor.objects.all()
-            cursos = Curso.objects.all()
-            nombreCurso = request.POST["nombreCurso"]
-            userProfesor = request.POST["profesor"].split(" - ")
-            usernameProfesor = userProfesor[0]
-            numeroGrupo = request.POST["numeroGrupo"]
-            edadMin = request.POST["edadMin"]
-            edadMax = request.POST["edadMax"]
+            accion = request.POST["registrar"]
+            print accion
+            if accion == "registrar":
+                numerosGrupos = parametros["numerosGrupos"]
+                edad = parametros["edad"]
+                profesores = Profesor.objects.all()
+                cursos = Curso.objects.all()
+                nombreCurso = request.POST["nombreCurso"]
+                userProfesor = request.POST["profesor"].split(" - ")
+                usernameProfesor = userProfesor[0]
+                numeroGrupo = request.POST["numeroGrupo"]
+                edadMin = request.POST["edadMin"]
+                edadMax = request.POST["edadMax"]
 
-            esCerrado = False
-            if "esCursoCerrado" in request.POST.keys(): esCerrado = True
+                esCerrado = False
+                if "esCursoCerrado" in request.POST.keys(): esCerrado = True
 
-            #validaciones
-            try:
-                user = User.objects.get(username = usernameProfesor)
-                profesor = Profesor.objects.get(user = user)
-            except Profesor.DoesNotExist or User.DoesNotExist:
-                profesor = None
+                #validaciones
+                try:
+                    user = User.objects.get(username = usernameProfesor)
+                    profesor = Profesor.objects.get(user = user)
+                except Profesor.DoesNotExist or User.DoesNotExist:
+                    profesor = None
 
-            errorProfesor = profesor is None
-            errorNumeroGrupo = (int(numeroGrupo) not in parametros["numerosGrupos"])
+                errorProfesor = profesor is None
+                errorNumeroGrupo = (int(numeroGrupo) not in parametros["numerosGrupos"])
 
-            try:
-                tmp = Curso.objects.get(nombre = nombreCurso, idProfesor = profesor, numeroGrupo = numeroGrupo)
-            except Curso.DoesNotExist:
-                tmp = None
-            errorCursoYaExiste = tmp is not None
+                try:
+                    tmp = Curso.objects.get(nombre = nombreCurso, idProfesor = profesor, numeroGrupo = numeroGrupo)
+                except Curso.DoesNotExist:
+                    tmp = None
+                errorCursoYaExiste = tmp is not None
 
-            if (errorProfesor or errorNumeroGrupo or errorCursoYaExiste):
-                return render_to_response('Administrador/registroCurso.html', locals(), context_instance = RequestContext(request))
+                if (errorProfesor or errorNumeroGrupo or errorCursoYaExiste):
+                    return render_to_response('Administrador/registroCurso.html', locals(), context_instance = RequestContext(request))
 
-            #guardo objeto en base de datos
-            curso = Curso(nombre = nombreCurso, idProfesor = profesor, numeroGrupo = numeroGrupo, esCerrado = esCerrado)#Profesor.objects.get(nombre = profesor))
-            curso.save()
-            operationSuccess = True
+                #guardo objeto en base de datos
+                curso = Curso(nombre = nombreCurso, idProfesor = profesor, numeroGrupo = numeroGrupo, esCerrado = esCerrado)#Profesor.objects.get(nombre = profesor))
+                curso.save()
+                operationSuccess = True
+            elif accion == "modificar":
+                "AAAAAAAAAAAAAAAAAAAAAAAAAAAGUAPANELA"
             return render_to_response('Administrador/registroCurso.html', locals(), context_instance = RequestContext(request))
         else:
             return HttpResponseRedirect('/404')     
@@ -157,45 +176,56 @@ class registroHorarioControl(base.View):
             dias = parametros["diasSemana"]
             horas = parametros["horas"]
             horarios = Horario.objects.all().order_by('idCurso')
+            nuevoHorario = True
             if(request.GET.get('eliminarHorario')):             
                 horarioAEliminar = Horario.objects.get(id = request.GET.get('id'))
                 horarioAEliminar.delete()
+            elif(request.GET.get('modificarHorario')):
+                nuevoHorario = False
+                modificarHorario = True
+                horario = Horario.objects.get(id=request.GET["id"])
             return render_to_response('Administrador/registroHorario.html', locals(), context_instance = RequestContext(request))
         else:
             return HttpResponseRedirect('/404')
 
     def post(self, request, *args, **kwargs):
         if request.user.is_authenticated() and request.user.is_superuser:
-            cursos = Curso.objects.all()
-            dias = parametros["diasSemana"]
-            horas = parametros["horas"]
-            horarios = Horario.objects.all().order_by('idCurso')
-            idCurso = request.POST["idCurso"]
-            dia = request.POST["dia"]
-            horaInicio = request.POST["horaInicio"]
-            horaFinal = request.POST["horaFin"]
+            accion = request.POST["registrar"]
+            if accion == "registrar":
+                cursos = Curso.objects.all()
+                dias = parametros["diasSemana"]
+                horas = parametros["horas"]
+                horarios = Horario.objects.all().order_by('idCurso')
+                idCurso = request.POST["idCurso"]
+                dia = request.POST["dia"]
+                horaInicio = request.POST["horaInicio"]
+                horaFinal = request.POST["horaFin"]
 
-            #validaciones
-            try:
-                curso = Curso.objects.get(id = idCurso)
-            except Curso.DoesNotExist:
-                curso = None
+                #validaciones
+                try:
+                    curso = Curso.objects.get(id = idCurso)
+                except Curso.DoesNotExist:
+                    curso = None
 
-            errorCurso = curso is None
-            errorDia = dia not in parametros["diasSemana"]
-            errorHora = (horaInicio not in parametros["horas"] or horaFinal not in parametros["horas"])
-            horaInicioFormato = datetime.strptime(horaInicio, '%H:%M').time()
-            horaFinFormato = datetime.strptime(horaFinal, '%H:%M').time()
-            errorHoraFin = horaFinFormato < horaInicioFormato
+                errorCurso = curso is None
+                errorDia = dia not in parametros["diasSemana"]
+                errorHora = (horaInicio not in parametros["horas"] or horaFinal not in parametros["horas"])
+                horaInicioFormato = datetime.strptime(horaInicio, '%H:%M').time()
+                horaFinFormato = datetime.strptime(horaFinal, '%H:%M').time()
+                errorHoraFin = horaFinFormato < horaInicioFormato
 
-            if (errorCurso or errorDia or errorHora or errorHoraFin):
-                return render_to_response('Administrador/registroHorario.html', locals(), context_instance = RequestContext(request))
+                if (errorCurso or errorDia or errorHora or errorHoraFin):
+                    return render_to_response('Administrador/registroHorario.html', locals(), context_instance = RequestContext(request))
 
-            #guardo objeto
-            horario = Horario(idCurso = curso, dia = dia, horaInicio = horaInicioFormato, horaFin = horaFinFormato)
-            horario.save()
-            operationSuccess = True
+                #guardo objeto
+                horario = Horario(idCurso = curso, dia = dia, horaInicio = horaInicioFormato, horaFin = horaFinFormato)
+                horario.save()
+                operationSuccess = True
+            elif accion == "modificar":
+                print "SIIIIIIIIIIIIIIIIIRRRRRRRRRRRRRRRRRRRVVVVVVVVVVVVVVVVVVVVVVEEEEEEEEEEEEEEEEEEEEEE"
             return render_to_response('Administrador/registroHorario.html', locals(), context_instance = RequestContext(request))
+        else:
+            return HttpResponseRedirect('/404')
 
 
 class VerSolicitudes(base.View):
@@ -371,6 +401,54 @@ class VerSolicitudes(base.View):
 
                 return render_to_response('Administrador/verSolicitudes.html', locals(), context_instance = RequestContext(request))
 
+        else:
+            return HttpResponseRedirect('/404')
+
+
+class gestionEstudiantesControl(base.View):
+    def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated() and request.user.is_superuser:
+            estudiantes = Estudiante.objects.all()
+            return render_to_response('Administrador/gestionUsuarios.html', locals(), context_instance = RequestContext(request))
+        else:
+            return HttpResponseRedirect('/404')
+
+
+
+    def post(self, request, *args, **kwargs):
+        if request.user.is_authenticated() and request.user.is_superuser:
+            user = User.objects.get(username=request.POST['id'])
+            estudiantes = Estudiante.objects.all()
+            if user.is_active:
+                user.is_active = False
+                user.save()
+            else:
+                user.is_active = True
+                user.save()
+
+            operationSuccess=True
+            return render_to_response('Administrador/gestionUsuarios.html', locals(), context_instance = RequestContext(request))
+        else:
+            return HttpResponseRedirect('/404')
+
+
+class gestionGruposControl(base.View):
+    def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated() and request.user.is_superuser:
+            cursos = Curso.objects.all()
+            return render_to_response('Administrador/gestionGrupos.html', locals(), context_instance = RequestContext(request))
+        else:
+            return HttpResponseRedirect('/404')
+
+
+
+    def post(self, request, *args, **kwargs):
+        if request.user.is_authenticated() and request.user.is_superuser:
+            cursos = Curso.objects.all()
+            curso = Curso.objects.get(id=request.POST["id"])
+            grupo = Grupo.objects.filter(idCurso=curso)
+            visualizarEstudiantes = True
+            return render_to_response('Administrador/gestionGrupos.html', locals(), context_instance = RequestContext(request))
         else:
             return HttpResponseRedirect('/404')
 

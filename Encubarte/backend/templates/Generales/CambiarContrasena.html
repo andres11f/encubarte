@@ -3,6 +3,9 @@
 <!--{% block titulo %}Encubarte{% endblock %}-->
 
 {% block contenido %}
+	{% if operationSuccess %}
+		<p class="bg-success">Los cambios se realizaron satisfactoriamente.</p>
+	{% endif %}
 	<div class="container-fluid offset1">
 		{% if estudiante %}
 			<nav class="navbar navbar-default">
@@ -65,7 +68,7 @@
 	<div class="container">
 		<center>
 			<h3>Cambiar Contraseña</h3>
-			<form class="form-horizontal" role="form" method="POST" action="/LogEstudiante/CambiarContrasena" name="CamPass">
+			<form class="form-horizontal" role="form" method="POST" action="/CambiarContrasena/" name="CamPass">
 				{% csrf_token %}
 				<div class="form-group">
 					<label class="control-label col-md-4" for="cpwd">Actual Contraseña:</label>

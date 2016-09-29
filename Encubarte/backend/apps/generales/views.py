@@ -14,11 +14,14 @@ from Encubarte.backend.apps.generales.parametros import parametros
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator,EmptyPage,InvalidPage
 from django.template.defaulttags import register
+from django.core.mail import EmailMessage
 import re, math, os, ast
 import pdb
 from datetime import timedelta, datetime, date
 from django import template
 import itertools
+import string
+from random import choice
 
 from django.core import serializers
 
@@ -103,7 +106,7 @@ class CamPass(base.View):
                 request.user.set_password(NewPassword)
                 request.user.save()
                 operationSuccess = True
-                return render_to_response('Generales/inicio.html', locals(), context_instance = RequestContext(request))
+                return render_to_response('Generales/CambiarContrasena.html', locals(), context_instance = RequestContext(request))
             else:
                 ChangedFailed = True
                 return render_to_response('Generales/CambiarContrasena.html', locals(), context_instance = RequestContext(request))
@@ -359,6 +362,33 @@ class RegistroEstudiante2(base.View):
             nombreUsuario = request.user.username
             return render_to_response('Generales/registroEstudiante.html', locals(), context_instance = RequestContext(request))
 
+
+class RecuperarPass(base.View):
+    def get(self, request, *args, **kwargs):
+        return render_to_response('Generales/RecuperarContrasena.html', locals(), context_instance = RequestContext(request))
+
+    def post(self, request, *args, **kwargs):
+        correo = request.POST['username']
+        correoNoExiste=False
+        try:
+            user = User.objects.get(email=correo)
+        except:
+            correoNoExiste= True
+
+        if not correoNoExiste:
+            Newpassword = GenCode()
+            print Newpassword
+            user.set_password(Newpassword)
+            #user.password = Newpassword
+            user.save()
+            email = EmailMessage('Recuperar Contrasena', 'Usuario '+ user.first_name + user.last_name + ' su nueva contrasena es: ' + Newpassword + '\n\nLe recomendamos cambiar la contrasena por una de su preferencia inmediatamente ingrese a la plataforma.', to = [correo] )
+            email.send()
+
+            operationSuccess = True
+        
+        return render_to_response('Generales/RecuperarContrasena.html', locals(), context_instance = RequestContext(request))
+
+
 #__________________________________________________________________________________________________________________________________________________#
 #__________________________________________________________________________________________________________________________________________________#
 #__________________________________________________________________________________________________________________________________________________#
@@ -367,6 +397,10 @@ class RegistroEstudiante2(base.View):
 #__________________________________________________________________________________________________________________________________________________#
 #___________________________________________________________OTRAS FUNCIONES________________________________________________________________________#
 #__________________________________________________________________________________________________________________________________________________#
+
+def GenCode():
+    codigo = ''.join([choice(string.letters + string.digits) for i in range(10)])
+    return codigo
 
 @register.filter
 def get_item(dictionary, key):

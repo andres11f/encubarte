@@ -33,14 +33,14 @@
 
 			<div class="form-group">
 				<label class="control-label col-md-4" for="numeroDocumento">Numero Documento:</label>
-				<div class="col-md-8">
+				<div class="col-md-6">
 					<input type="text" name="numeroDocumento" required="true" pattern="[0-9]{8,20}" value="{{numeroDocumento}}" class="form-control" id="numeroDocumento">
 				</div>
 			</div>
 
 			<div class="form-group">
 				<label class="control-label col-md-4" for="selTipoDocumento">Tipo de Documento:</label>
-				<div class="col-md-8">
+				<div class="col-md-6">
 					<select class="form-control" name="tipoDocumento" value="{{tipoDocumento}}" id="selTipoDocumento" onchange="ExtraDates()">
 						{% for t in  tiposDocumento%}
 				        	<option>{{t}}</option>
@@ -51,49 +51,49 @@
 
 			<div class="form-group">
 				<label class="control-label col-md-4" for="pwd">Contraseña:</label>
-				<div class="col-md-8"> 
+				<div class="col-md-6"> 
 					<input type="password" name="contrasena" class="form-control" id="pwd">
 				</div>
 			</div>
 
 			<div class="form-group">
 				<label class="control-label col-md-4" for="pwd2">Repite la Contraseña:</label>
-				<div class="col-md-8"> 
+				<div class="col-md-6"> 
 					<input type="password" name="contrasena2" class="form-control" id="pwd2">
 				</div>
 			</div>
 
 			<div class="form-group">
 				<label class="control-label col-md-4" for="email">Correo Electronico:</label>
-				<div class="col-md-8">
+				<div class="col-md-6">
 					<input type="email" name="correoElectronico" required="true" value="{{correoElectronico}}" class="form-control" id="email">
 				</div>
   			</div>
 
   			<div class="form-group">
 				<label class="control-label col-md-4" for="noms">Nombres:</label>
-				<div class="col-md-8">
+				<div class="col-md-6">
 					<input type="text" name="nombres" required="true" value="{{nombres}}" class="form-control" id="noms">
 				</div>
 			</div>
 
 			<div class="form-group">
 				<label class="control-label col-md-4" for="apes">Apellidos:</label>
-				<div class="col-md-8">
+				<div class="col-md-6">
 					<input type="text" name="apellidos" required="true" value="{{apellidos}}" class="form-control" id="apes">
 				</div>
 			</div>
 
 			<div class="form-group">
 				<label class="control-label col-md-4" for="date">Fecha de nacimiento:</label>
-				<div class="col-md-8">
+				<div class="col-md-6">
 					<input type="date" name="fechaNacimiento" required="true" value="{{fechaNacimiento}}" class="form-control" id="date">
 				</div>
 			</div>
 
 			<div class="form-group">
 				<label class="control-label col-md-4" for="gen">Género:</label>
-				<div class="col-md-8">
+				<div class="col-md-6">
 					<select class="form-control" name="genero" value="{{genero}}" id="gen">
 					{% for g in  generos%}
 				        <option>{{g}}</option>
@@ -104,42 +104,42 @@
 
 			<div class="form-group">
 				<label class="control-label col-md-4" for="dir">Dirección:</label>
-				<div class="col-md-8">
+				<div class="col-md-6">
 					<input type="text" name="direccion" required="true" value="{{direccion}}" class="form-control" id="dir">
 				</div>
 			</div>
 
 			<div class="form-group">
 				<label class="control-label col-md-4" for="barr">Barrio:</label>
-				<div class="col-md-8">
+				<div class="col-md-6">
 					<input type="text" name="barrio" required="true" value="{{barrio}}" class="form-control" id="barr">
 				</div>
 			</div>
 
 			<div class="form-group">
 				<label class="control-label col-md-4" for="telfijo">Telefono Fijo:</label>
-				<div class="col-md-8">
+				<div class="col-md-6">
 					<input type="text" name="telefonoFijo" required="true" value="{{telefonoFijo}}" class="form-control" id="telfijo">
 				</div>
 			</div>
 
 			<div class="form-group">
 				<label class="control-label col-md-4" for="telcel">Telefonos Celular:</label>
-				<div class="col-md-8">
+				<div class="col-md-6">
 					<input type="text" name="telefonoCelular" required="true" value="{{telefonoCelular}}" class="form-control" id="telcel">
 				</div>
 			</div>
 
 			<div class="form-group">
 				<label class="control-label col-md-4" for="segso">Seguridad social:</label>
-				<div class="col-md-8">
+				<div class="col-md-6">
 					<input type="text" name="seguridadSocial" required="true" value="{{seguridadSocial}}" class="form-control" id="segso">
 				</div>
 			</div>
 
 			<div class="form-group">
 				<label class="control-label col-md-4" for="zon">Zona:</label>
-				<div class="col-md-8">
+				<div class="col-md-6">
 					<select class="form-control" name="zona" value="{{zona}}" id="zon">
 					{% for z in zonas%}
 				        <option>{{z}}</option>
@@ -150,63 +150,63 @@
 
 			<div class="form-group">
 				<label class="control-label col-md-4" for="comu">Comuna:</label>
-				<div class="col-md-8">
+				<div class="col-md-6">
 					<input type="text" name="comuna" required="true" value="{{comuna}}" class="form-control" id="comu">
 				</div>
 			</div>
 
 			<div class="form-group">
 				<label class="control-label col-md-4" for="grupe">Grupo etnico:</label>
-				<div class="col-md-8">
+				<div class="col-md-6">
 					<input type="text" name="grupoEtnico" required="true" value="{{grupoEtnico}}" class="form-control" id="grupe">
 				</div>
 			</div>
 
 			<div class="form-group">
 				<label class="control-label col-md-4" for="cond">Condicion:</label>
-				<div class="col-md-8">
+				<div class="col-md-6">
 					<input type="text" name="condicion" required="true" value="{{condicion}}" class="form-control" id="cond">
 				</div>
 			</div>
 
 			<div class="form-group" id="Maylab">
 				<label class="control-label col-md-4" for="labor">Labor:</label>
-				<div class="col-md-8">
+				<div class="col-md-6">
 					<input type="text" name="Labor" value="{{Labor}}" class="form-control" id="labor">
 				</div>
 			</div>
 
 			<div class="form-group" id="Maylug">
 				<label class="control-label col-md-4" for="lugar">Lugar:</label>
-				<div class="col-md-8">
+				<div class="col-md-6">
 					<input type="text" name="Lugar" value="{{Lugar}}" class="form-control" id="lugar">
 				</div>
 			</div>
 
 			<div class="form-group" id="acudiente">
 				<label class="control-label col-md-4" for="acud">Nombre Acudiente:</label>
-				<div class= "col-md-8">
+				<div class= "col-md-6">
 					<input type="text" name="Acudiente" requiered="true" value="{{Acudiente}}" class="form-control" id="nomacud">
 				</div>
 			</div>
 
 			<div class="form-group" id="TelAcudiente">
 				<label class="control-label col-md-4" for="Acudtel">Telefono Acudiente:</label>
-				<div class="col-md-8">
+				<div class="col-md-6">
 					<input type="text" name="telefonoAcudiente" requiered="true" value="{{telefonoAcudiente}}" class="form-control" id="telacud">
 				</div>
 			</div>
 
 			<div class="form-group" id="file1">
 				<label class="control-label col-md-4" for="file">Foto:</label>
-				<div class="col-md-8">
+				<div class="col-md-6">
 					<input type="file" accept=".jpg,.jpeg" name="foto" value="{{foto}}" required="true" class="form-control" id="file10">
 				</div>
 			</div>
 
 			<div class="form-group" id="file2">
 				<label class="control-label col-md-4" for="file">Cedula:</label>
-				<div class="col-md-8">
+				<div class="col-md-6">
 					<input type="file" accept=".jpg,.jpeg" name="cedula" value="{{cedula}}" required="true" class="form-control" id="file20">
 				</div>
 			</div>

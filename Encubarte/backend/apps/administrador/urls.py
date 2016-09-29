@@ -3,7 +3,7 @@ from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from django.conf import settings
 import Encubarte.backend.apps.administrador.views
-from Encubarte.backend.apps.administrador.views import LogAdministrador, VerSolicitudes, registroHorarioControl, registroCursoControl, registroProfesorControl
+from Encubarte.backend.apps.administrador.views import LogAdministrador, VerSolicitudes, registroHorarioControl, registroCursoControl, registroProfesorControl, gestionEstudiantesControl, gestionGruposControl
 from Encubarte.backend.apps.generales.views import CamPass
 
 admin.autodiscover()
@@ -15,6 +15,8 @@ urlpatterns = patterns('Encubarte.backend.apps.administrador.views',
     url(r'^registroProfesor/', registroProfesorControl.as_view(), name='registroProfesor'),
     #url(r'^registroProfesor/', Encubarte.backend.apps.administrador.views.registroProfesorControl),
     url(r'^registroCurso/$', registroCursoControl.as_view(), name='registroCurso'),
+    url(r'^gestionUsuarios/$', gestionEstudiantesControl.as_view(), name='registroCurso'),
+    url(r'^gestionGrupos/$', gestionGruposControl.as_view(), name='registroCurso'),
     #url(r'^registroCurso/', Encubarte.backend.apps.administrador.views.registroCursoControl),
     url(r'^registroHorario/', registroHorarioControl.as_view(), name='registroHorario'),
     #url(r'^registroHorario/', Encubarte.backend.apps.administrador.views.registroHorarioControl),

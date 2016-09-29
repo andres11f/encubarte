@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
+#from django.contrib.auth.views import password_reser
 from django.conf import settings
 import Encubarte.backend.apps.generales
-from Encubarte.backend.apps.generales.views import inicioControl, loginControl, logoutControl, notFoundControl, RegistroEstudiante2, RegistroEstudianteMenor, RegistroEstudianteMayor, CamPass
+from Encubarte.backend.apps.generales.views import inicioControl, loginControl, logoutControl, notFoundControl, RegistroEstudiante2, RegistroEstudianteMenor, RegistroEstudianteMayor, CamPass, RecuperarPass
 
 admin.autodiscover()
 
@@ -19,6 +20,7 @@ urlpatterns = patterns('',
     url(r'^registroEstudianteMayor/$', RegistroEstudianteMayor.as_view(), name='registrarMayor'),
     url(r'^login/$', loginControl.as_view(), name='login'),
     url(r'^CambiarContrasena/', CamPass.as_view(), name='Cambiar'),
+    url(r'^RecuperarContrasena/', RecuperarPass.as_view(), name='RecuperarPass'),
     #url(r'^login/$', Encubarte.backend.apps.generales.views.loginControl),
     url(r'^modulos/', include('Encubarte.backend.apps.modulos.urls')),
     url(r'^LogEstudiante/', include('Encubarte.backend.apps.estudiante.urls')),
