@@ -123,12 +123,11 @@ class registroCursoControl(base.View):
     def post(self, request, *args, **kwargs):
         if request.user.is_authenticated() and request.user.is_superuser:
             accion = request.POST["registrar"]
-            print accion
+            numerosGrupos = parametros["numerosGrupos"]
+            edad = parametros["edad"]
+            profesores = Profesor.objects.all()
+            cursos = Curso.objects.all()
             if accion == "registrar":
-                numerosGrupos = parametros["numerosGrupos"]
-                edad = parametros["edad"]
-                profesores = Profesor.objects.all()
-                cursos = Curso.objects.all()
                 nombreCurso = request.POST["nombreCurso"]
                 userProfesor = request.POST["profesor"].split(" - ")
                 usernameProfesor = userProfesor[0]
@@ -159,11 +158,22 @@ class registroCursoControl(base.View):
                     return render_to_response('Administrador/registroCurso.html', locals(), context_instance = RequestContext(request))
 
                 #guardo objeto en base de datos
-                curso = Curso(nombre = nombreCurso, idProfesor = profesor, numeroGrupo = numeroGrupo, esCerrado = esCerrado)#Profesor.objects.get(nombre = profesor))
+                curso = Curso(nombre = nombreCurso, idProfesor = profesor, numeroGrupo = numeroGrupo, edadMinima=edadMin, edadMaxima=edadMax, esCerrado = esCerrado)#Profesor.objects.get(nombre = profesor))
                 curso.save()
                 operationSuccess = True
             elif accion == "modificar":
+                cursoModificado = Curso.objects.get(id = request.POST["idcurso"])
+                cursoModificado.idProfesor = request.POST["profesor"]
+                cursoModificado.numeroGrupo = request.POST["numeroGrupo"]
+                cursoModificado.edadMinima = request.POST["edadMin"]
+                cursoModificado.edadMaxima = request.POST["edadMax"]
+                cursoModificado.esCerrado = request.POST["esCursoCerrado"]
+
+                cursoModificado.save()
                 "AAAAAAAAAAAAAAAAAAAAAAAAAAAGUAPANELA"
+            elif accion == "cancelar":
+                nuevoCurso = True
+                "PEEEEEEEEEEEEEEEENDDDDDDDDDDDDEEEEEEEEEEEEEEEEEEEEEEEEJOOOOOOOOOOOOOOOOOO"
             return render_to_response('Administrador/registroCurso.html', locals(), context_instance = RequestContext(request))
         else:
             return HttpResponseRedirect('/404')     
@@ -191,6 +201,10 @@ class registroHorarioControl(base.View):
     def post(self, request, *args, **kwargs):
         if request.user.is_authenticated() and request.user.is_superuser:
             accion = request.POST["registrar"]
+            cursos = Curso.objects.all()
+            dias = parametros["diasSemana"]
+            horas = parametros["horas"]
+            horarios = Horario.objects.all().order_by('idCurso')
             if accion == "registrar":
                 cursos = Curso.objects.all()
                 dias = parametros["diasSemana"]
@@ -208,6 +222,7 @@ class registroHorarioControl(base.View):
                     curso = None
 
                 errorCurso = curso is None
+
                 errorDia = dia not in parametros["diasSemana"]
                 errorHora = (horaInicio not in parametros["horas"] or horaFinal not in parametros["horas"])
                 horaInicioFormato = datetime.strptime(horaInicio, '%H:%M').time()
@@ -222,7 +237,16 @@ class registroHorarioControl(base.View):
                 horario.save()
                 operationSuccess = True
             elif accion == "modificar":
+                horarioModificado = Horario.objects.get(id = request.POST['idcurso'])
+                horarioModificado.dia = request.POST['dia']
+                horarioModificado.horaInicio = request.POST['horaInicio']
+                horarioModificado.horaFin = request.POST['horaFin']
+
+                horarioModificado.save()
                 print "SIIIIIIIIIIIIIIIIIRRRRRRRRRRRRRRRRRRRVVVVVVVVVVVVVVVVVVVVVVEEEEEEEEEEEEEEEEEEEEEE"
+            elif accion == "cancelar":
+                nuevoHorario = True
+                "PEEEEEEEEEEEEEEEENDDDDDDDDDDDDEEEEEEEEEEEEEEEEEEEEEEEEJOOOOOOOOOOOOOOOOOO"
             return render_to_response('Administrador/registroHorario.html', locals(), context_instance = RequestContext(request))
         else:
             return HttpResponseRedirect('/404')
@@ -269,6 +293,11 @@ class VerSolicitudes(base.View):
                 solicitudEstudiante = Solicitudes.objects.get(IDestudiante=estudiante)
                 solicitudEstudiante.estado = "Aprobado"
                 solicitudEstudiante.Correcciones = False
+
+                correcciones = Correcciones.objects.filter(IDestudiante=estudiante)
+
+                for c in correcciones:
+                    c.delete()
 
                 rol.save()
                 solicitudEstudiante.save()

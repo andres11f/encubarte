@@ -46,5 +46,10 @@
 				<strong>Error!</strong> Numero de documento erroneo
 			</div>
 		{% endif%}
+		{% if edadNopermitida %}
+			<div class="alert alert-danger">
+				<strong>Error!</strong> El estudiante no posee la edad para matricularse a este curso.
+			</div>
+		{% endif%}
 	</div>
 {% endblock %}

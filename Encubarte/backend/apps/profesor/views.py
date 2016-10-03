@@ -97,43 +97,46 @@ class MatricularEstudiante(base.View):
         CursoDiferente = False
         HorarioLibre = False
 
-        if not HorarioEmpty:
-            for horario in horarioNuevo:
-                hora_ini = horario.horaInicio
-                hora_final = horario.horaFin
-                for h in horariosGrupo:
-                    hora_IC = h.horaInicio # hora inicio cursos matriculados
-                    hora_FC = h.horaFin #hora fin cursos matriculados
-                    if h.idCurso != horario.idCurso:
-                        CursoDiferente = True
-                        Libre = Hora_Libre(hora_IC, hora_FC, hora_ini, hora_final)
-                        if h.dia == horario.dia:
-                            if Libre:
-                                HorarioLibre = True
-                            else:
-                                HorarioLibre = False
-                                break
-                        else:
-                            HorarioLibre = True
-                    else:
-                        CursoDiferente = False
-                        break
-        else:
-            CursoDiferente = True
-            HorarioLibre = True
+        edad = Edad(estudiante.fechaNacimiento)
 
+        if edad >= horarioNuevo.idCurso.edadMinima and edad <= horarioNuevo.idCurso.edadMaxima:
+            if not HorarioEmpty:
+                for horario in horarioNuevo:
+                    hora_ini = horario.horaInicio
+                    hora_final = horario.horaFin
+                    for h in horariosGrupo:
+                        hora_IC = h.horaInicio # hora inicio cursos matriculados
+                        hora_FC = h.horaFin #hora fin cursos matriculados
+                        if h.idCurso != horario.idCurso:
+                            CursoDiferente = True
+                            Libre = Hora_Libre(hora_IC, hora_FC, hora_ini, hora_final)
+                            if h.dia == horario.dia:
+                                if Libre:
+                                    HorarioLibre = True
+                                else:
+                                    HorarioLibre = False
+                                    break
+                            else:
+                                HorarioLibre = True
+                        else:
+                            CursoDiferente = False
+                            break
+            else:
+                CursoDiferente = True
+                HorarioLibre = True
+        else:
+            edadNopermitida = True
 
         if CursoDiferente and HorarioLibre:
             MatriculaSuccess = True
             grupo = Grupo(idEstudiante= estudiante , idCurso= cursoID)
             grupo.save()
-            return render_to_response('Profesor/MatricularEstudiante.html',  locals(), context_instance = RequestContext(request))
         elif not CursoDiferente:
                 CursandoCurso = True
-                return render_to_response('Profesor/MatricularEstudiante.html',  locals(), context_instance = RequestContext(request))
         else:
             HoraOcupada = True
-            return render_to_response('Profesor/MatricularEstudiante.html',  locals(), context_instance = RequestContext(request))
+
+        return render_to_response('Profesor/MatricularEstudiante.html',  locals(), context_instance = RequestContext(request))    
 
 class listaCursosControl(base.View):
     def get(self, request, *args, **kwargs):
@@ -189,15 +192,15 @@ def Hora_Libre(curso_ini, curso_fin, hora_ini, hora_fin):
     return libre
 
 def Edad(fechaNacimiento):
-    Fecha_Actual = datetime.now()
-    Fecha_Dia = Fecha_Actual.days
+    Fecha_Actual = datetime.date.today()
+    Fecha_Dia = Fecha_Actual.day
     Fecha_Mes = Fecha_Actual.month
     Fecha_Ano = Fecha_Actual.year
-    Edad = fechaNacimiento.year - Fecha_Ano
+    Edad = Fecha_Ano - fechaNacimiento.year
     if fechaNacimiento.month == Fecha_Mes:
-        if fechaNacimiento.days >= Fecha_Dia:
+        if fechaNacimiento.day <= Fecha_Dia:
             Edad = Edad + 1
-    elif fechaNacimiento.month > Fecha_Mes:
+    elif fechaNacimiento.month < Fecha_Mes:
         Edad = Edad + 1
 
     return Edad

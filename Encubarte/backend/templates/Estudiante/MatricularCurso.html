@@ -34,8 +34,7 @@
 							<td> 
 								<form method="POST" action="/LogEstudiante/MatricularCurso/">
 								{% csrf_token %}
-									<input type="hidden" name="idCurso" value="{{horario.idCurso.nombre}}">
-									<input type="hidden" name="idGrupo" value="{{horario.idCurso.numeroGrupo}}">
+									<input type="hidden" name="idHorario" value="{{horario.id}}">
 							</td>
 						</tr>
 					{% endfor %}
@@ -49,17 +48,22 @@
 
 				{% if MatriculaSuccess %}
 					<div class="alert alert-success">
-	    				<strong>Exito!</strong> Su matricula se realizo satisfactoriamente
+	    				<strong>Exito!</strong> Su matricula se realizo satisfactoriamente.
 	  				</div>
 				{% endif%}
 				{% if HoraOcupada %}
 					<div class="alert alert-danger">
-	    				<strong>Error!</strong> Usted no tiene el horario disponible
+	    				<strong>Error!</strong> Usted no tiene el horario disponible.
 	  				</div>
 				{% endif%}
 				{% if CursandoCurso %}
 					<div class="alert alert-danger">
-	    				<strong>Error!</strong> Usted ya se encuentra matriculado a este curso
+	    				<strong>Error!</strong> Usted ya se encuentra matriculado a este curso.
+	  				</div>
+				{% endif%}
+				{% if edadNopermitida %}
+					<div class="alert alert-danger">
+	    				<strong>Error!</strong> Usted no posee la edad para matricularse a este curso.
 	  				</div>
 				{% endif%}
 				{% endblock %}

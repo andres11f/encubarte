@@ -10,6 +10,8 @@ class Curso(models.Model):
 	nombre = models.CharField(max_length=50)
 	idProfesor = models.ForeignKey(Profesor)
 	numeroGrupo = models.IntegerField()
+	edadMinima = models.IntegerField(default='0')
+	edadMaxima =models.IntegerField(default='0')
 	esCerrado = models.BooleanField()
 	
 	def __str__(self):

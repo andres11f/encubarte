@@ -18,7 +18,8 @@ from django.core.paginator import Paginator,EmptyPage,InvalidPage
 from django.template.defaulttags import register
 import re, math, os, ast
 import pdb
-from datetime import timedelta, datetime, date
+#from datetime import timedelta, datetime, date
+import datetime
 from django import template
 import itertools
 
@@ -50,18 +51,17 @@ class matriculaControl(base.View):
     def post(self, request, *args, **kwargs):
         cursos = Curso.objects.filter(esCerrado=False)
         horarios = Horario.objects.all()
-        cursoMatricular = request.POST['idCurso'] #nombre a matricular en string
-        grupoCurso = request.POST['idGrupo'] #grupo del curso a matricular
-        cursoID = Curso.objects.get(nombre=cursoMatricular, numeroGrupo=grupoCurso) #IdCurso a partir del nombre del curso y numero de grupo
-        horarioNuevo = Horario.objects.filter(idCurso = cursoID)
+        #cursoMatricular = request.POST['idCurso'] #nombre a matricular en string
+        #grupoCurso = request.POST['idGrupo'] #grupo del curso a matricular
+        #cursoID = Curso.objects.get(id=request.POST['idCurso']) #IdCurso a partir del nombre del curso y numero de grupo
+        horarioNuevo = Horario.objects.get(id = request.POST['idHorario'])
+        print horarioNuevo
         HorarioEmpty = False
-        print ("==========================> NoNO <================================")
         user = User.objects.get(username = request.user.username)
         estudiante = Estudiante.objects.get(user = user)
         gruposEstudiante = Grupo.objects.filter(idEstudiante = estudiante)
         horariosGrupo = Horario.objects.filter(idCurso__in=gruposEstudiante.values('idCurso'))
         TieneGrupo = gruposEstudiante.count()
-        print ("==========================> NaNa <================================")
         if TieneGrupo == 0:
             HorarioEmpty = True
 
@@ -69,22 +69,19 @@ class matriculaControl(base.View):
         HorarioLibre = False
         print HorarioEmpty
 
-        if not HorarioEmpty:
-            for horario in horarioNuevo:
-                hora_ini = horario.horaInicio
-                hora_final = horario.horaFin
+        edad = Edad(estudiante.fechaNacimiento)
+
+        if edad >= horarioNuevo.idCurso.edadMinima and edad <= horarioNuevo.idCurso.edadMaxima:
+            if not HorarioEmpty:
+                hora_ini = horarioNuevo.horaInicio
+                hora_final = horarioNuevo.horaFin
                 for h in horariosGrupo:
-                    print(horariosGrupo)
                     hora_IC = h.horaInicio # hora inicio cursos matriculados
                     hora_FC = h.horaFin #hora fin cursos matriculados
-                    if h.idCurso != horario.idCurso:
+                    if h.idCurso != horarioNuevo.idCurso:
                         CursoDiferente = True
                         Libre = Hora_Libre(hora_IC, hora_FC, hora_ini, hora_final)
-                        print(h.idCurso)
-                        print(horario.idCurso)
-                        print(h.dia)
-                        print(horario.dia)
-                        if h.dia == horario.dia:
+                        if h.dia == horarioNuevo.dia:
                             if Libre:
                                 HorarioLibre = True
                             else:
@@ -95,21 +92,22 @@ class matriculaControl(base.View):
                     else:
                         CursoDiferente = False
                         break
+            else:
+                CursoDiferente = True
+                HorarioLibre = True
         else:
-            CursoDiferente = True
-            HorarioLibre = True
+            edadNopermitida = True
 
         if CursoDiferente and HorarioLibre:
             MatriculaSuccess = True
             grupo = Grupo(idEstudiante= estudiante , idCurso= cursoID)
             grupo.save()
-            return render_to_response('Estudiante/MatricularCurso.html',  locals(), context_instance = RequestContext(request))
         elif not CursoDiferente:
                 CursandoCurso = True
-                return render_to_response('Estudiante/MatricularCurso.html',  locals(), context_instance = RequestContext(request))
         else:
             HoraOcupada = True
-            return render_to_response('Estudiante/MatricularCurso.html',  locals(), context_instance = RequestContext(request))
+        
+        return render_to_response('Estudiante/MatricularCurso.html',  locals(), context_instance = RequestContext(request))   
 
 class horarioControl(base.View):
     def get(self, request, *args, **kwargs):
@@ -335,15 +333,15 @@ def Hora_Libre(curso_ini, curso_fin, hora_ini, hora_fin):
     return libre
 
 def Edad(fechaNacimiento):
-    Fecha_Actual = datetime.now()
-    Fecha_Dia = Fecha_Actual.days
+    Fecha_Actual = datetime.date.today()
+    Fecha_Dia = Fecha_Actual.day
     Fecha_Mes = Fecha_Actual.month
     Fecha_Ano = Fecha_Actual.year
-    Edad = fechaNacimiento.year - Fecha_Ano
+    Edad = Fecha_Ano - fechaNacimiento.year
     if fechaNacimiento.month == Fecha_Mes:
-        if fechaNacimiento.days >= Fecha_Dia:
+        if fechaNacimiento.day <= Fecha_Dia:
             Edad = Edad + 1
-    elif fechaNacimiento.month > Fecha_Mes:
+    elif fechaNacimiento.month < Fecha_Mes:
         Edad = Edad + 1
 
     return Edad

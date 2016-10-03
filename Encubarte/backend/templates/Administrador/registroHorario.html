@@ -105,11 +105,8 @@
 					<div class="form-group">
 						<label class="control-label col-md-4" for="curso">Curso:</label>
 						<div class="col-md-8">
-							<select class="form-control" name="idCurso" required="true" id="curso">
-								{% for c in cursos%}
-					        		<option value="{{c.id}}" selected="{{horario.idCurso}}">{{c}}</option>
-					        	{% endfor %}
-							</select>
+							<input type="text" name="curso" required="true" value="{{horario.idCurso}}" class="form-control" id="curso" disabled/>
+							<input type="hidden" name="idcurso" required="true" value="{{horario.id}}" class="form-control" id="idcurso">
 						</div>
 					</div>
 
@@ -118,7 +115,7 @@
 						<div class="col-md-8">
 							<select class="form-control" name="dia" required="true" value="{{dia}}" id="day">
 								{% for d in dias%}
-					        		<option selected="{{horario.dia}}">{{d}}</option>
+					        		<option selected="{{dia}}">{{d}}</option>
 					        	{% endfor %}
 							</select>
 						</div>
@@ -129,7 +126,7 @@
 						<div class="col-md-8">
 							<select class="form-control" name="horaInicio" required="true" value="{{horaInicio}}" id="horini">
 								{% for h in horas%}
-					        		<option selected="{{horario.horaInicio}}">{{h}}</option>
+					        		<option selected="{{horaInicio}}">{{h}}</option>
 					        	{% endfor %}
 							</select>
 						</div>
@@ -140,7 +137,7 @@
 						<div class="col-md-8">
 							<select class="form-control" name="horaFin" required="true" value="{{horaFin}}" id="horfin">
 								{% for h in horas%}
-					        		<option selected="{{horario.horaFin}}">{{h}}</option>
+					        		<option selected="{{horaFin}}">{{h}}</option>
 					        	{% endfor %}
 							</select>
 						</div>
@@ -148,7 +145,8 @@
 
 					<div class="form-group"> 
 						<div class="col-md-offset-4 col-md-10">
-							<button type="submit" name="registrar" value="modificar" class="btn btn-default">Modificar Horario</button>
+							<button type="submit" name="registrar" value="modificar" class="btn btn-default">Modificar</button>
+							<button type="submit" name="registrar" value="cancelar" class="btn btn-default">Cancelar</button>
 						</div>
 					</div>
 
