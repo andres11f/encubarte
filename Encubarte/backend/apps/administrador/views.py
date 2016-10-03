@@ -283,11 +283,11 @@ class VerSolicitudes(base.View):
                     return render_to_response('Administrador/revisarSolicitudMenor.html', locals(), context_instance = RequestContext(request))
 
             elif revisarSolicitud == "Aprobar":
-                cedula = request.POST["numeroDocumento"]
-                user = User.objects.get(username = cedula)
+                documento = request.POST["documentoHidden"]
+                user = User.objects.get(username = documento)
                 estudiante = Estudiante.objects.get(user = user)
 
-                rol = Roles.objects.get(user = user)
+                rol = Roles.objects.get(IDuser = user)
                 rol.Estudiante = True
                 
                 solicitudEstudiante = Solicitudes.objects.get(IDestudiante=estudiante)
